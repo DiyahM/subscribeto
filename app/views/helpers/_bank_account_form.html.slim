@@ -1,0 +1,60 @@
+<script type="text/javascript" src="https://js.balancedpayments.com/v1/balanced.js"></script>
+
+#add-bank-modal.modal.hide.fade
+  .modal-header
+    button.close type="button" data-dismiss="modal" aria-hiden="true" x
+    h3 Bank Account Details
+  .modal-body
+    form id="bank_account"
+      label for="name" Name on account
+      input type="text" name="name"
+      label for="account_number" Bank Account Number
+      input type="text" name="account_number"
+      label for="bank_code" Bank Code (Routing number in the USA)
+      input type="text" name="bank_code"
+      br
+      button.btn onclick="submitBankData(event)" Add Account
+
+javascript:
+  var marketplaceUri = '/v1/marketplaces/TEST-MP31remI2FLs6BgdqfmWe5BR';
+
+  balanced.init(marketplaceUri);
+
+  function callback(response) {
+    switch (response.status) {
+        case 400:
+          // missing field - check response.error for details
+          alert("missing field" + JSON.stringify(response.error));
+          break;
+        case 409:
+          alert("bank code invalid");
+          // some of the data didn't make sense, check the bank code is valid
+          break
+        case 404:
+          alert("marketplace uri is incorrect");
+          // your marketplace URI is incorrect
+          break;
+        case 201:
+          alert("success");
+          // WOO HOO!
+          // response.data.uri == uri of the card or bank account resource
+          //$.post('/url/to/create_account', response.data);
+    }
+  }
+
+  function submitBankData(e) {
+    e.preventDefault();
+    console.log("submit button pushed");
+    //var form = $('#bank_account');
+
+    var bankAccountData = {
+        name: $('#bank_account').find('[name="name"]').val(),
+        account_number: $('#bank_account').find('[name="account_number"]').val(),
+        bank_code: $('#bank_account').find('[name="bank_code"]').val()
+    };
+
+    $('#add-bank-modal').modal('hide');
+    balanced.bankAccount.create(bankAccountData, callback);
+  }
+
+

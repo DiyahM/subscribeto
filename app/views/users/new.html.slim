@@ -8,18 +8,8 @@ h3 Sign Up
           li
             = message
   .form-horizontal
-    .control-group
-      = f.label :email, class: "control-label"
-      .controls
-        = f.text_field :email
-    .control-group
-      = f.label :password, class: "control-label"
-      .controls
-        = f.password_field :password
-    .control-group
-      = f.label :password_confirmation, class: "control-label"
-      .controls
-        = f.password_field :password_confirmation
+    = render "#{@user.current_step}_step", :f => f
     .control-group
       .controls
-        = f.submit "Create an account", class: "btn"
+        = f.submit "Back", :name => "back_button", class:"btn" unless @user.first_step?
+        = f.submit "Next", class: "btn"    

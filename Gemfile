@@ -22,6 +22,8 @@ group :test, :development do
   gem 'database_cleaner'
   gem 'rb-fsevent'
   gem 'guard-rspec'
+  gem 'shoulda-matchers'
 end
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'jquery-rails'
+gem 'balance'

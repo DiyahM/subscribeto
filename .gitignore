@@ -4,3 +4,4 @@
 /tmp
 /bin
 /log
+heroku_env.rb

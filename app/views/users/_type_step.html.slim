@@ -1,0 +1,15 @@
+h3 Welcome #{@user.name}
+p
+  h4 Lets Get Started
+
+hr
+h5 
+  | We just need a few more details to get you setup
+  br
+  | Are you selling your products as a person or business?
+
+= f.radio_button :account_type, "person", :checked => true
+= label :account_type, "Person"
+= f.radio_button :account_type, "business"
+= label :account_type, "Business"
+
