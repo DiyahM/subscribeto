@@ -14,7 +14,8 @@ group :assets do
   gem 'therubyracer'
 end
 
-group :test, :development do
+group :test do
+  gem 'pry'
   gem "rspec-rails", "~> 2.0"
   gem 'turnip'
   gem 'capybara'
@@ -23,7 +24,9 @@ group :test, :development do
   gem 'rb-fsevent'
   gem 'guard-rspec'
   gem 'shoulda-matchers'
+  gem 'vcr'
+  gem 'webmock', '~> 1.9.0'
 end
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'jquery-rails'
-gem 'balance'
+gem 'balanced'

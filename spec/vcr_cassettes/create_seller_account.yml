@@ -1,0 +1,143 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://0a3cddcaa79e11e2931a026ba7f8ec28:@api.balancedpayments.com/v1/merchants
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - balanced-ruby/0.7.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 19 Apr 2013 01:53:43 GMT
+      Server:
+      - ngx_openresty/1.2.6.3
+      X-Balanced-Guru:
+      - OHMf7361d94a89311e2933b026ba7cac9da
+      X-Balanced-Host:
+      - balanced-api-05
+      X-Balanced-Marketplace:
+      - TEST-MPjx7blKrLG1S7a5DC1W8sO
+      X-Balanced-Merchant:
+      - TEST-MRjaqhEhHOmmuSRUBHQI4m4
+      X-Balanced-Version:
+      - 1b6a09877af259cef266e08be9f882e21bd76576
+      Content-Length:
+      - '3661'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: "{\n  \"first_uri\": \"/v1/merchants?limit=10&offset=0\", \n  \"_type\":
+        \"page\", \n  \"items\": [\n    {\n      \"phone_number\": \"+16505551212\",
+        \n      \"city\": \"Nowhere\", \n      \"_type\": \"merchant\", \n      \"name\":
+        \"William Henry Cavendish III\", \n      \"type\": \"person\", \n      \"created_at\":
+        \"2013-04-17T20:33:19.159873Z\", \n      \"uri\": \"/v1/merchants/TEST-MRjaqhEhHOmmuSRUBHQI4m4\",
+        \n      \"accounts_uri\": \"/v1/merchants/TEST-MRjaqhEhHOmmuSRUBHQI4m4/accounts\",
+        \n      \"_uris\": {}, \n      \"meta\": {\n        \"meta data\": \"goes
+        here\"\n      }, \n      \"street_address\": \"123 Fake St\", \n      \"country_code\":
+        \"USA\", \n      \"postal_code\": \"90210\", \n      \"balance\": 0, \n      \"email_address\":
+        \"whc@example.org\", \n      \"id\": \"TEST-MRjaqhEhHOmmuSRUBHQI4m4\", \n
+        \     \"marketplace\": {\n        \"in_escrow\": 0, \n        \"_type\": \"marketplace\",
+        \n        \"domain_url\": \"example.com\", \n        \"name\": \"Test Marketplace\",
+        \n        \"_uris\": {\n          \"callbacks_uri\": {\n            \"_type\":
+        \"page\", \n            \"key\": \"callbacks\"\n          }, \n          \"holds_uri\":
+        {\n            \"_type\": \"page\", \n            \"key\": \"holds\"\n          },
+        \n          \"events_uri\": {\n            \"_type\": \"page\", \n            \"key\":
+        \"events\"\n          }, \n          \"bank_accounts_uri\": {\n            \"_type\":
+        \"page\", \n            \"key\": \"bank_accounts\"\n          }, \n          \"refunds_uri\":
+        {\n            \"_type\": \"page\", \n            \"key\": \"refunds\"\n          },
+        \n          \"debits_uri\": {\n            \"_type\": \"page\", \n            \"key\":
+        \"debits\"\n          }, \n          \"transactions_uri\": {\n            \"_type\":
+        \"page\", \n            \"key\": \"transactions\"\n          }, \n          \"accounts_uri\":
+        {\n            \"_type\": \"page\", \n            \"key\": \"accounts\"\n
+        \         }, \n          \"credits_uri\": {\n            \"_type\": \"page\",
+        \n            \"key\": \"credits\"\n          }, \n          \"cards_uri\":
+        {\n            \"_type\": \"page\", \n            \"key\": \"cards\"\n          }\n
+        \       }, \n        \"owner_account_uri\": \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/accounts/ACjxCVVQ12fOe0hyocKjStQ\",
+        \n        \"support_email_address\": \"support@example.com\", \n        \"uri\":
+        \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO\", \n        \"events_uri\":
+        \"/v1/events\", \n        \"bank_accounts_uri\": \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/bank_accounts\",
+        \n        \"support_phone_number\": \"+16505551234\", \n        \"refunds_uri\":
+        \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/refunds\", \n        \"meta\":
+        {}, \n        \"debits_uri\": \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/debits\",
+        \n        \"callbacks_uri\": \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/callbacks\",
+        \n        \"holds_uri\": \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/holds\",
+        \n        \"transactions_uri\": \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/transactions\",
+        \n        \"accounts_uri\": \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/accounts\",
+        \n        \"id\": \"TEST-MPjx7blKrLG1S7a5DC1W8sO\", \n        \"credits_uri\":
+        \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/credits\", \n        \"cards_uri\":
+        \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/cards\"\n      }, \n      \"api_keys_uri\":
+        \"/v1/merchants/TEST-MRjaqhEhHOmmuSRUBHQI4m4/api_keys\"\n    }\n  ], \n  \"previous_uri\":
+        null, \n  \"uri\": \"/v1/merchants?limit=10&offset=0\", \n  \"_uris\": {\n
+        \   \"first_uri\": {\n      \"_type\": \"page\", \n      \"key\": \"first\"\n
+        \   }, \n    \"next_uri\": {\n      \"_type\": \"page\", \n      \"key\":
+        \"next\"\n    }, \n    \"previous_uri\": {\n      \"_type\": \"page\", \n
+        \     \"key\": \"previous\"\n    }, \n    \"last_uri\": {\n      \"_type\":
+        \"page\", \n      \"key\": \"last\"\n    }\n  }, \n  \"limit\": 10, \n  \"offset\":
+        0, \n  \"total\": 1, \n  \"next_uri\": null, \n  \"last_uri\": \"/v1/merchants?limit=10&offset=0\"\n}"
+    http_version: 
+  recorded_at: Fri, 19 Apr 2013 01:54:14 GMT
+- request:
+    method: post
+    uri: https://0a3cddcaa79e11e2931a026ba7f8ec28:@api.balancedpayments.com/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/accounts
+    body:
+      encoding: UTF-8
+      string: '{"email_address":"test@example.com","name":"Timmy Q. CopyPasta","meta":null}'
+    headers:
+      User-Agent:
+      - balanced-ruby/0.7.0
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+  response:
+    status:
+      code: 409
+      message: CONFLICT
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 19 Apr 2013 01:53:44 GMT
+      Server:
+      - ngx_openresty/1.2.6.3
+      X-Balanced-Guru:
+      - OHMf7bb361ea89311e2b51a026ba7d31e6f
+      X-Balanced-Host:
+      - balanced-api-06
+      X-Balanced-Marketplace:
+      - TEST-MPjx7blKrLG1S7a5DC1W8sO
+      X-Balanced-Merchant:
+      - TEST-MRjaqhEhHOmmuSRUBHQI4m4
+      X-Balanced-Version:
+      - 1b6a09877af259cef266e08be9f882e21bd76576
+      Content-Length:
+      - '468'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: "{\n  \"status\": \"Conflict\", \n  \"category_code\": \"duplicate-email-address\",
+        \n  \"additional\": null, \n  \"status_code\": 409, \n  \"category_type\":
+        \"logical\", \n  \"extras\": {\n    \"account_uri\": \"/v1/marketplaces/TEST-MPjx7blKrLG1S7a5DC1W8sO/accounts/AC7KEnCCPg0AiiZUAlS1e28g\"\n
+        \ }, \n  \"request_id\": \"OHMf7bb361ea89311e2b51a026ba7d31e6f\", \n  \"description\":
+        \"Account with email address \\\"test@example.com\\\" already exists. Your
+        request id is OHMf7bb361ea89311e2b51a026ba7d31e6f.\"\n}"
+    http_version: 
+  recorded_at: Fri, 19 Apr 2013 01:54:15 GMT
+recorded_with: VCR 2.4.0

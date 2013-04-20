@@ -11,7 +11,30 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130410195246) do
+ActiveRecord::Schema.define(:version => 20130420010152) do
+
+  create_table "plans", :force => true do |t|
+    t.string   "plan_code"
+    t.string   "plan_name"
+    t.text     "plan_description"
+    t.integer  "price"
+    t.string   "frequency"
+    t.string   "image_url"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  create_table "sites", :force => true do |t|
+    t.string   "company_name"
+    t.string   "logo"
+    t.string   "headline"
+    t.text     "description"
+    t.string   "website_url"
+    t.string   "facebook"
+    t.string   "twitter"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email"
@@ -26,6 +49,8 @@ ActiveRecord::Schema.define(:version => 20130410195246) do
     t.string   "city"
     t.string   "postal_code"
     t.string   "street_address"
+    t.string   "uri"
+    t.string   "bank_uri"
   end
 
 end

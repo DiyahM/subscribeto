@@ -1,0 +1,31 @@
+h1 Listing sites
+
+table
+  tr
+    th Company name
+    th Logo
+    th Headline
+    th Description
+    th Website url
+    th Facebook
+    th Twitter
+    th
+    th
+    th
+
+  - @sites.each do |site|
+    tr
+      td = site.company_name
+      td = site.logo
+      td = site.headline
+      td = site.description
+      td = site.website_url
+      td = site.facebook
+      td = site.twitter
+      td = link_to 'Show', site
+      td = link_to 'Edit', edit_user_site_path(site)
+      td = link_to 'Destroy', site, :confirm => 'Are you sure?', :method => :delete
+
+br
+
+= link_to 'New Site', new_user_site_path(current_user)

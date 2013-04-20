@@ -1,19 +1,16 @@
 <script type="text/javascript" src="https://js.balancedpayments.com/v1/balanced.js"></script>
 
-#add-bank-modal.modal.hide.fade
-  .modal-header
-    button.close type="button" data-dismiss="modal" aria-hiden="true" x
-    h3 Bank Account Details
-  .modal-body
-    form id="bank_account"
-      label for="name" Name on account
-      input type="text" name="name"
-      label for="account_number" Bank Account Number
-      input type="text" name="account_number"
-      label for="bank_code" Bank Code (Routing number in the USA)
-      input type="text" name="bank_code"
-      br
-      button.btn onclick="submitBankData(event)" Add Account
+#results
+form id="bank_account"
+  h3 Bank Account Details
+  label for="name" Name on Account
+  input type="text" name="name" value="Levain Bakery LLC"
+  label for="account_number" Bank Account Number
+  input type="text" name="account_number" value="28304871049"
+  label for="bank_code" Bank Code (Routing number in the USA)
+  input type="text" name="bank_code" value="121042882"
+  br
+  button.btn onclick="submitBankData(event)" Add Account
 
 javascript:
   var marketplaceUri = '/v1/marketplaces/TEST-MP31remI2FLs6BgdqfmWe5BR';
@@ -24,21 +21,25 @@ javascript:
     switch (response.status) {
         case 400:
           // missing field - check response.error for details
-          alert("missing field" + JSON.stringify(response.error));
+          $('#results').html("<h5> Received the following errors " + JSON.stringify(response.error) + ".<br> Please correct and resubmit your information.</h5>");
+          $('#bank_account').show();
           break;
         case 409:
-          alert("bank code invalid");
+           $('#results').html("<h5> Received the following errors " + JSON.stringify(response.error) + ".<br> Please correct and resubmit your information.</h5>");
+          $('#bank_account').show();
           // some of the data didn't make sense, check the bank code is valid
           break
         case 404:
-          alert("marketplace uri is incorrect");
+           $('#results').html("<h5> Received the following errors " + JSON.stringify(response.error) + ".<br> Please correct and resubmit your information.</h5>");
+          $('#bank_account').show();
           // your marketplace URI is incorrect
           break;
         case 201:
-          alert("success");
           // WOO HOO!
           // response.data.uri == uri of the card or bank account resource
           //$.post('/url/to/create_account', response.data);
+          $.post('/users/add_bank_account', {"bank_uri": response.data.uri});
+          window.location = "/users/#{current_user.id}/plans";
     }
   }
 
@@ -53,7 +54,8 @@ javascript:
         bank_code: $('#bank_account').find('[name="bank_code"]').val()
     };
 
-    $('#add-bank-modal').modal('hide');
+    $('#bank_account').hide();
+    $('#results').html("<h5> Thank you. Please wait as we verify your information </h5>");
     balanced.bankAccount.create(bankAccountData, callback);
   }
 

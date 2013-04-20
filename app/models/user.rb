@@ -1,11 +1,17 @@
 class User < ActiveRecord::Base
   has_secure_password
+  has_many :plans
+  has_one :site
   attr_accessible :name, :email, :password, :password_confirmation, :account_type, :phone_number, 
     :tax_id, :dob, :city, :postal_code, :street_address
-  validates :name, :email, :password, :password_confirmation, :account_type, :phone_number, 
+  validates :name, :email, :account_type, :phone_number, 
     :postal_code, :street_address, presence: true
+  validates :password, :password_confirmation, presence: true, if: :validate_password?
   validates :email, uniqueness: true
 
+  def validate_password?
+    password.present? || password_confirmation.present?
+  end
   attr_writer :current_step
   
   def current_step

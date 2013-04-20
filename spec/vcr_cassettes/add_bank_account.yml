@@ -1,0 +1,50 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.balancedpayments.com/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - balanced-ruby/0.7.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - '*/*'
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 19 Apr 2013 22:54:41 GMT
+      Server:
+      - ngx_openresty/1.2.6.3
+      X-Balanced-Guru:
+      - OHM1ea5469ca94411e2b3c2026ba7cd33d0
+      X-Balanced-Host:
+      - balanced-api-02
+      X-Balanced-Version:
+      - a44b5e5e65b41a4219975a9f83a29e5161145b5e
+      Content-Length:
+      - '581'
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: "{\n  \"first_uri\": \"/?limit=10&offset=0\", \n  \"_type\": \"page\",
+        \n  \"items\": [\n    {\n      \"uri\": \"/v1\"\n    }\n  ], \n  \"previous_uri\":
+        null, \n  \"uri\": \"/?limit=10&offset=0\", \n  \"_uris\": {\n    \"first_uri\":
+        {\n      \"_type\": \"page\", \n      \"key\": \"first\"\n    }, \n    \"next_uri\":
+        {\n      \"_type\": \"page\", \n      \"key\": \"next\"\n    }, \n    \"previous_uri\":
+        {\n      \"_type\": \"page\", \n      \"key\": \"previous\"\n    }, \n    \"last_uri\":
+        {\n      \"_type\": \"page\", \n      \"key\": \"last\"\n    }\n  }, \n  \"limit\":
+        10, \n  \"offset\": 0, \n  \"total\": 1, \n  \"next_uri\": null, \n  \"last_uri\":
+        \"/?limit=10&offset=0\"\n}"
+    http_version: 
+  recorded_at: Fri, 19 Apr 2013 22:54:43 GMT
+recorded_with: VCR 2.4.0

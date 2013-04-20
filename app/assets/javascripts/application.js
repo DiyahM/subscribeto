@@ -13,6 +13,4 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
-//= require bootstrap-formhelpers-phone
-//= require bootstrap-formhelpers-phone.format
 //= require_tree .

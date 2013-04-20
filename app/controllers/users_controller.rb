@@ -14,6 +14,7 @@ class UsersController < ApplicationController
     elsif @user.last_step?
       if @user.all_valid?
         @user.save
+        payments_service.create_seller(@user.id)
         session[:user_id] = @user.id
       end
     else
@@ -23,7 +24,7 @@ class UsersController < ApplicationController
     if @user.new_record?
       render "new"
     else
-      session[:user_step] = session[:user_step] = nil
+      session[:user_step] = session[:user_params] = nil
       flash[:notice] = "Thank you for signing up"
       redirect_to pages_banking_path
     end
@@ -31,5 +32,11 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find(params[:id])
+  end
+
+  def add_bank_account
+    puts "Add bank_account"
+    #payments_service.add_bank_account(current_user.id, params[:bank_uri]) 
+    #redirect_to user_plans_path(current_user)
   end
 end

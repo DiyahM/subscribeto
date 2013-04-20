@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Company name:
+  = @site.company_name
+p
+  strong Logo:
+  = @site.logo
+p
+  strong Headline:
+  = @site.headline
+p
+  strong Description:
+  = @site.description
+p
+  strong Website url:
+  = @site.website_url
+p
+  strong Facebook:
+  = @site.facebook
+p
+  strong Twitter:
+  = @site.twitter
+
+= link_to 'Edit', edit_user_site_path(@site)
+'|
+= link_to 'Back', user_sites_path(current_user)
