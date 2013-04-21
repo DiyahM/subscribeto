@@ -1,0 +1,19 @@
+p#notice = notice
+p
+  = "Order ID: #{@order.id}"
+  br
+  = "Order Date: #{@order.created_at}"
+  br
+  = "Plan: #{@order.plan.plan_name} $#{@order.plan.price} #{@order.plan.frequency}"
+  hr
+  | Customer Information
+  br
+  = "Customer Name: #{@order.customer.first_name} #{@order.customer.last_name}"
+  br
+  = "Phone Number: #{@order.customer.phone_number}"
+  br
+  = "Email: #{@order.customer.email}"
+p
+  = link_to 'Edit', edit_user_order_path(current_user, @order)
+  |  | 
+  = link_to 'View All Orders', user_orders_path(current_user)

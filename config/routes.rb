@@ -1,10 +1,11 @@
 Subscribeto::Application.routes.draw do
-
-
+  resources :customers
   resources :sessions
+
   resources :users do
     resources :plans
     resources :sites
+    resources :orders
   end
 
   match "/signup" => "users#new"
@@ -13,5 +14,5 @@ Subscribeto::Application.routes.draw do
   get "pages/home"
   post "users/add_bank_account"
 
-  root :to => "pages#home"
+  #root :to => "public#index"
 end

@@ -1,5 +1,10 @@
-h1 New plan
+.row
+  .span1
+    = link_to '<- Back', user_plans_path(current_user)
+.row
+  .span4
+    h3 Add a New Subscription Plan
+hr
 
 == render 'form'
 
-= link_to 'Back', user_plans_path(current_user)

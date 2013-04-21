@@ -1,0 +1,32 @@
+.row
+  .span3
+    a.btn.btn-success href=new_user_order_path 
+      | + Add Order
+  .span4.offset1 
+    .input-append style="float:right"
+      input.span2#appendedInputButtons type="text"
+      button.btn type="button" Search
+.row
+  .span4
+    h3 Orders
+
+table.table.table-striped
+  tr
+    th Order id
+    th Customer
+    th Next Payment Due
+    th Status
+    th
+
+  - @orders.each do |order|
+    tr
+      td = order.id
+      td = "#{order.customer.first_name} #{order.customer.last_name}" 
+      td = "2/2/2014"
+      td = "Overdue"
+      td 
+        = link_to 'View', user_order_path(current_user, order), class: "btn btn-mini btn-space" 
+        = link_to 'Edit', edit_user_order_path(current_user, order), class: "btn btn-mini btn-space"
+        = link_to 'Delete', user_order_path(current_user, order), class: "btn btn-mini btn-space",
+          :confirm => 'Are you sure?', :method => :delete
+

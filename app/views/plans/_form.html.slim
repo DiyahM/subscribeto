@@ -1,4 +1,4 @@
-= form_for [current_user, @plan] do |f|
+= form_for [current_user, @plan], html: {class: "form-horizontal"} do |f|
   - if @plan.errors.any?
     #error_explanation
       h2 = "#{pluralize(@plan.errors.count, "error")} prohibited this plan from being saved:"
@@ -6,22 +6,30 @@
         - @plan.errors.full_messages.each do |message|
           li = message
 
-  .field
-    = f.label :plan_code
-    = f.text_field :plan_code
-  .field
-    = f.label :plan_name
-    = f.text_field :plan_name
-  .field
-    = f.label :plan_description
-    = f.text_area :plan_description
-  .field
-    = f.label :price
-    = f.number_field :price
-  .field
-    = f.label :frequency
-    = f.text_field :frequency
-  .field
-    = f.label :image_url
-    = f.text_field :image_url
-  .actions = f.submit 'Save'
+  .control-group
+    = f.label "Plan id", class: "control-label"
+    .controls
+      = f.text_field :plan_code, class: "input-small"
+  .control-group
+    = f.label :image_url, class: "control-label"
+    .controls
+      = f.text_field :image_url, class: "input-xxlarge"
+      span class="help-block" Image is used for branded payment pages for plan
+  .control-group
+    = f.label :plan_name, class: "control-label"
+    .controls
+      = f.text_field :plan_name, class: "input-large"
+  .control-group
+    = f.label :price, class: "control-label"
+    .controls
+      = f.text_field :price, class: "input-small"
+  .control-group
+    = f.label :frequency, class: "control-label"
+    .controls
+      = f.select :frequency, ['weekly', 'monthly', 'quarterly', 'yearly']
+  .control-group
+    = f.label :plan_description, class: "control-label"
+    .controls
+      = f.text_area :plan_description, rows: "5", class: "input-xxlarge"
+  .actions style="margin-left:80%" 
+    = f.submit 'Add', class: "btn btn-success btn-large"

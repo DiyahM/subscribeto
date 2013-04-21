@@ -1,0 +1,52 @@
+.navbar-inner {
+  background: white;
+  border-bottom: 1px solid #e9e9e9;
+  box-shadow: 10 1px 10px rgba(255,255,255,.1);
+}
+
+#mainContent {
+  font-size: 13px;
+  padding: 40px 40px 80px;
+  min-height: 300px;
+  width: 90%;
+  margin-bottom: 10px;
+  box-shadow: 1px 2px 3px #DDD;
+  background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#container {
+  width: 900px;
+  min-height: 790px;
+  margin: 30px auto 80px auto;
+  padding-top: 105px;
+  overflow: hidden;
+}
+
+a.btn-success{
+  color: white;
+}
+h1 {
+  color: #5a5a5a;
+}
+
+.form-horizontal label {
+  color: #5a5a5a;
+  font-weight: normal;
+  line-height: 25px;
+}
+
+.form-horizontal input[type="text"], input[type="password"] {
+  
+}
+
+.btn-space {
+  margin-right: 10px;
+}
+
+.navbar .nav > li > a {
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 29px 10px 31px;
+}

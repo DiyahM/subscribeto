@@ -1,24 +1,24 @@
-h3 Almost there #{@user.name}
+h3 Almost done. Just need a little info about your business
+hr
 .control-group
-  = f.label :name, class: "control-label"
+  = f.label :account_type, class: "control-label"
   .controls
-    = f.text_field :name, value: @user.name
-.control-group
-  = f.label :email, class: "control-label"
-  .controls
-    = f.text_field :email, value: @user.email
+    = f.select :account_type, ['person', 'business']
 .control-group
   = f.label :phone_number, class: "control-label"
   .controls
-    = f.text_field :phone_number, class: "input-medium"
+    = f.text_field :phone_number, placeholder: "+15555555555"
+    span class="help-block" Please use format +15555555555 for phone numbers including area codes
 .control-group
   = f.label :tax_id, "EIN", class: "control-label"
   .controls
     = f.text_field :tax_id
+    span class="help-block" EIN required for businesses only. Leave blank if account_type is person.
 .control-group
   = f.label :dob, "Date of Birth", class: "control-label"
   .controls
-    = f.text_field :dob
+    = f.text_field :dob, placeholder: "yyyy-mm"
+    span class="help-block" Please use format yyyy-mm for date of birth
 .control-group
   = f.label :street_address, class: "control-label"
   .controls

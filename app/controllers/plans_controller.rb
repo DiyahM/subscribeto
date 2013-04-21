@@ -2,12 +2,7 @@ class PlansController < ApplicationController
   # GET /plans
   # GET /plans.json
   def index
-    @plans = Plan.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @plans }
-    end
+    @plans = current_user.plans
   end
 
   # GET /plans/1
@@ -44,7 +39,8 @@ class PlansController < ApplicationController
 
     respond_to do |format|
       if @plan.save
-        format.html { redirect_to @plan, notice: 'Plan was successfully created.' }
+        current_user.plans << @plan
+        format.html { redirect_to user_plans_path, notice: 'Plan was successfully created.' }
         format.json { render json: @plan, status: :created, location: @plan }
       else
         format.html { render action: "new" }

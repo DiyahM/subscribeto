@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :plans
   has_one :site
+  has_many :orders
   attr_accessible :name, :email, :password, :password_confirmation, :account_type, :phone_number, 
     :tax_id, :dob, :city, :postal_code, :street_address
   validates :name, :email, :account_type, :phone_number, 
@@ -19,7 +20,7 @@ class User < ActiveRecord::Base
   end
   
   def steps
-    %w[initial type merchant_data]
+    %w[initial merchant_data]
   end
 
   def next_step
