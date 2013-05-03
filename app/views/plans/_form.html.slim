@@ -11,11 +11,6 @@
     .controls
       = f.text_field :plan_code, class: "input-small"
   .control-group
-    = f.label :image_url, class: "control-label"
-    .controls
-      = f.text_field :image_url, class: "input-xxlarge"
-      span class="help-block" Image is used for branded payment pages for plan
-  .control-group
     = f.label :plan_name, class: "control-label"
     .controls
       = f.text_field :plan_name, class: "input-large"
@@ -26,10 +21,28 @@
   .control-group
     = f.label :frequency, class: "control-label"
     .controls
-      = f.select :frequency, ['weekly', 'monthly', 'quarterly', 'yearly']
+      = f.select :frequency, ['monthly']
+  .control-group
+    = f.label :service_start, class: "control-label"
+    .controls
+      = f.select :service_start, ['on order date', 'next billing cycle']
+  .control-group
+    = f.label :bill_cycle_start, class: "control-label"
+    .controls
+      = f.select :bill_cycle_start, ['first day of month', '15th day of month', 'monthly from date ordered']
+  .control-group
+    = f.label "Generate Bill", class: "control-label"
+    .controls
+      = f.select :bill_cycle_type, ["in advance to services", "after services performed"]
+  .control-group
+    = f.label :payment_due, class: "control-label"
+    .controls
+      = f.number_field :payment_due, class: "input-small"
+      |  days after bill generated (grace period length)
   .control-group
     = f.label :plan_description, class: "control-label"
     .controls
       = f.text_area :plan_description, rows: "5", class: "input-xxlarge"
-  .actions style="margin-left:80%" 
+  .actions style="margin-left:60%" 
+    a.btn.btn-large.btn-space href=user_orders_path(current_user) Cancel 
     = f.submit 'Add', class: "btn btn-success btn-large"

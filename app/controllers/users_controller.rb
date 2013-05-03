@@ -1,32 +1,16 @@
 class UsersController < ApplicationController
   def new
-    session[:user_params] ||= {}
-    @user = User.new(session[:user_params])
-    @user.current_step = session[:user_step]
+    @user = User.new()
   end
 
   def create
-    session[:user_params].deep_merge!(params[:user]) if params[:user]
-    @user = User.new(session[:user_params])
-    @user.current_step = session[:user_step]
-    if params[:back_button]
-      @user.previous_step
-    elsif @user.last_step?
-      if @user.all_valid?
-        @user.save
-        payments_service.create_seller(@user.id)
-        session[:user_id] = @user.id
-      end
-    else
-      @user.next_step
-    end
-    session[:user_step] = @user.current_step
-    if @user.new_record?
-      render "new"
-    else
-      session[:user_step] = session[:user_params] = nil
+    @user = User.new(params[:user])
+    if @user.save
+      session[:user_id] = @user.id
       flash[:notice] = "Thank you for signing up"
-      redirect_to pages_banking_path
+      redirect_to dashboard_path
+    else
+      render "new"
     end
   end
 

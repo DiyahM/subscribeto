@@ -6,7 +6,12 @@
         - @order.errors.full_messages.each do |message|
           li = message
 
-  = f.collection_select :plan_id, current_user.plans, :id, :plan_name
+  .field
+    = f.label "Order Start Date"
+    = f.date_select :start_date
+  .field
+    = f.label "Choose a plan"
+    = f.collection_select :plan_id, current_user.plans, :id, :plan_name
   = f.fields_for :customer do |builder|
     .field
       = builder.label :first_name
@@ -21,4 +26,6 @@
       = builder.label :phone_number
       = builder.text_field :phone_number
 
-  .actions = f.submit 'Save'
+  .actions
+    a.btn.btn-large.btn-space href=user_orders_path(current_user) Cancel
+    = f.submit 'Save', class: "btn btn-large btn-success"

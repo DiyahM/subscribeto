@@ -1,2 +1,17 @@
-h1 Sessions#new
-p Find me in app/views/sessions/new.html.slim
+h3 Login
+= form_tag sessions_path do
+  .form-horizontal
+    .control-group
+      .control-label
+        = label_tag :email
+      .controls
+        = text_field_tag :email, params[:email]
+    .control-group
+      .control-label
+        = label_tag :password
+      .controls
+        = password_field_tag :password
+    .control-group
+      .controls
+        .actions
+          = submit_tag "Login", class: "btn btn-success"

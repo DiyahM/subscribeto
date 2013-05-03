@@ -9,8 +9,7 @@
             = message
       | Please correct errors and resubmit
   .form-horizontal
-    = render "#{@user.current_step}_step", :f => f
+    = render "initial_step", :f => f
     .control-group
       .controls
-        = f.submit "Back", :name => "back_button", class:"btn btn-large btn-space" unless @user.first_step?
-        = f.submit "Next", class: "btn btn-large"    
+        = f.submit "Sign Up", class: "btn btn-success"    

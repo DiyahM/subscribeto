@@ -1,3 +1,31 @@
+.slate {
+  padding: 10px 20px;
+  border: 1px solid #F8F8F8;
+  margin-bottom: 20px;
+}
+
+.stat-column {
+  width: 13%;
+  float: left;
+  text-align: center;
+  display: block;
+  color: #999;
+  margin: 0 4%;
+  padding: 12px 2%;
+}
+
+.stat-column span.number{
+  font-size: 32px;
+  font-weight: normal;
+  font-family: "Oxygen", sans-serif;
+  margin: 14px 0 10px 0;
+}
+.stat-column span{
+  font-weight: normal;
+  font-family: "Oxygen", sans-serif;
+  font-size: 14px;
+  display: block;
+}
 .navbar-inner {
   background: white;
   border-bottom: 1px solid #e9e9e9;
@@ -41,6 +69,12 @@ h1 {
   
 }
 
+.checklist {
+  font-size:2.5em;
+}
+.checklist li{
+  line-height:1.5em;
+}
 .btn-space {
   margin-right: 10px;
 }

@@ -8,7 +8,8 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.json
   def show
-    @order = Order.includes(:customer, :plan).find(params[:id])
+    @order = Order.includes(:customer, :plan, :payment_due).find(params[:id])
+    @invoice = @order.payment_due.last
   end
 
   # GET /orders/new
@@ -45,7 +46,7 @@ class OrdersController < ApplicationController
 
     respond_to do |format|
       if @order.update_attributes(params[:order])
-        format.html { redirect_to @order, notice: 'Order was successfully updated.' }
+        format.html { redirect_to user_order_path(current_user, @order), notice: 'Order was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -61,7 +62,7 @@ class OrdersController < ApplicationController
     @order.destroy
 
     respond_to do |format|
-      format.html { redirect_to orders_url }
+      format.html { redirect_to user_orders_url(current_user) }
       format.json { head :no_content }
     end
   end

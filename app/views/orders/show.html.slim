@@ -1,18 +1,40 @@
 p#notice = notice
 p
-  = "Order ID: #{@order.id}"
+  strong 
+    = "Order# #{@order.id}"
   br
   = "Order Date: #{@order.created_at}"
   br
   = "Plan: #{@order.plan.plan_name} $#{@order.plan.price} #{@order.plan.frequency}"
   hr
-  | Customer Information
+  strong
+    | Customer Information
   br
   = "Customer Name: #{@order.customer.first_name} #{@order.customer.last_name}"
   br
   = "Phone Number: #{@order.customer.phone_number}"
   br
   = "Email: #{@order.customer.email}"
+  hr
+p
+  strong Draft Invoice
+  hr
+  | Billing Cycle:  
+  = time_tag(@invoice.bill_cycle_start, format: "%B %d %Y")
+  |  - 
+  = time_tag(@invoice.bill_cycle_end, format: "%B %d %Y")
+  br
+  | Next Payment Due: 
+  = time_tag(@invoice.due_date, format: "%B %d %Y")
+  br
+  | Amount Due in cents:
+  = @invoice.amount
+  br
+  | Last Payment Received: None
+  hr
+p
+  button.btn.btn-info.btn-space Generate PDF Invoice
+  button.btn.btn-info.btn-space Email Invoice
 p
   = link_to 'Edit', edit_user_order_path(current_user, @order)
   |  | 

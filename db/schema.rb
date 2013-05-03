@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130421184854) do
+ActiveRecord::Schema.define(:version => 20130422224958) do
 
   create_table "customers", :force => true do |t|
     t.string   "first_name"
@@ -28,6 +28,25 @@ ActiveRecord::Schema.define(:version => 20130421184854) do
     t.datetime "updated_at", :null => false
     t.integer  "user_id"
     t.integer  "plan_id"
+    t.datetime "start_date"
+  end
+
+  create_table "payment_dues", :force => true do |t|
+    t.integer  "amount"
+    t.boolean  "paid"
+    t.integer  "order_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.datetime "bill_cycle_start"
+    t.datetime "bill_cycle_end"
+    t.datetime "due_date"
+  end
+
+  create_table "payment_recvds", :force => true do |t|
+    t.integer  "payment_amount"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+    t.integer  "order_id"
   end
 
   create_table "plans", :force => true do |t|
@@ -37,9 +56,14 @@ ActiveRecord::Schema.define(:version => 20130421184854) do
     t.integer  "price"
     t.string   "frequency"
     t.string   "image_url"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.integer  "user_id"
+    t.string   "service_start"
+    t.string   "bill_cycle_start"
+    t.string   "bill_cycle_type"
+    t.integer  "payment_due"
+    t.integer  "orders_count",     :default => 0
   end
 
   create_table "sites", :force => true do |t|

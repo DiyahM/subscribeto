@@ -3,10 +3,11 @@ class User < ActiveRecord::Base
   has_many :plans
   has_one :site
   has_many :orders
+  has_many :customers, through: :orders
+  has_many :payment_dues, through: :orders
   attr_accessible :name, :email, :password, :password_confirmation, :account_type, :phone_number, 
     :tax_id, :dob, :city, :postal_code, :street_address
-  validates :name, :email, :account_type, :phone_number, 
-    :postal_code, :street_address, presence: true
+  validates :email, presence: true
   validates :password, :password_confirmation, presence: true, if: :validate_password?
   validates :email, uniqueness: true
 

@@ -1,13 +1,18 @@
-h1 Listing customers
+.row
+  .span4.offset4 
+    .input-append style="float:right"
+      input.span2#appendedInputButtons type="text"
+      button.btn type="button" Search
+.row
+  .span4
+    h3 Customers
 
-table
+table.table.table-striped
   tr
     th First name
     th Last name
     th Email
     th Phone number
-    th
-    th
     th
 
   - @customers.each do |customer|
@@ -16,10 +21,9 @@ table
       td = customer.last_name
       td = customer.email
       td = customer.phone_number
-      td = link_to 'Show', customer
-      td = link_to 'Edit', edit_customer_path(customer)
-      td = link_to 'Destroy', customer, :confirm => 'Are you sure?', :method => :delete
+      td 
+        = link_to 'Email', "mailto:#{customer.email}", class: "btn btn-mini btn-space"
+        = link_to 'Call', "tel:#{customer.phone_number}", class: "btn btn-mini btn-space"
+        = link_to 'View', customer, class: "btn btn-mini btn-space"
+        = link_to 'Edit', edit_customer_path(customer), class: "btn btn-mini"
 
-br
-
-= link_to 'New Customer', new_customer_path

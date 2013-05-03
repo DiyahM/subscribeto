@@ -1,0 +1,34 @@
+.row
+  .span4
+    a.btn.btn-success.btn-space href="#"
+      | + New Invoice
+    a.btn href="#"
+      | Generate Batch Invoices
+  .span4.offset 
+    .input-append style="float:right"
+      input.span2#appendedInputButtons type="text"
+      button.btn type="button" Search
+.row
+  .span4
+    h3 Invoices
+table.table.table-striped
+  tr
+    th Invoice #
+    th Customer Name
+    th Amount Due
+    th Due Date
+    th Status
+    th
+
+  - @invoices.each do |invoice|
+    tr
+      td = invoice.id 
+      td = "#{invoice.order.customer.first_name} #{invoice.order.customer.last_name}" 
+      td = invoice.amount 
+      td = time_tag invoice.due_date, format: "%B %d %Y" 
+      td Unsent
+      td
+        = link_to 'Send invoice', "#", class: "btn btn-mini btn-space"
+        = link_to 'View', "#", class: "btn btn-mini btn-space"
+        = link_to 'Edit', "#", class: "btn btn-mini btn-space"
+

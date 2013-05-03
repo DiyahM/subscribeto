@@ -1,14 +1,14 @@
 .row
-  .span3
-    a.btn.btn-success href=new_user_order_path 
+  .span4
+    a.btn.btn-success.btn-space href=new_user_order_path 
       | + Add Order
-  .span4.offset1 
+  .span4 
     .input-append style="float:right"
       input.span2#appendedInputButtons type="text"
       button.btn type="button" Search
 .row
   .span4
-    h3 Orders
+    h3 Order History
 
 table.table.table-striped
   tr
@@ -22,9 +22,10 @@ table.table.table-striped
     tr
       td = order.id
       td = "#{order.customer.first_name} #{order.customer.last_name}" 
-      td = "2/2/2014"
-      td = "Overdue"
+      td = time_tag(order.payment_due.last.due_date, format: "%B %d, %Y")
+      td Invoice not sent
       td 
+        = link_to 'Invoice', "#", class: "btn btn-mini btn-space"
         = link_to 'View', user_order_path(current_user, order), class: "btn btn-mini btn-space" 
         = link_to 'Edit', edit_user_order_path(current_user, order), class: "btn btn-mini btn-space"
         = link_to 'Delete', user_order_path(current_user, order), class: "btn btn-mini btn-space",

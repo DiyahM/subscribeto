@@ -1,8 +1,8 @@
-h1 Editing order
+h3 Editing order
 
 == render 'form'
 
-= link_to 'Show', @order
+= link_to 'Show', user_order_path(current_user, @order)
 '|
-= link_to 'Back', orders_path
+= link_to 'Back', user_orders_path(current_user)
 
