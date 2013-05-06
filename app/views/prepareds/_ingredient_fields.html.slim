@@ -1,0 +1,29 @@
+tr.nested-fields
+  = f.inputs do
+    td
+      = f.input :raw, :label => false, :as => :select,
+        :collection => Raw.all.map{ |b| [b.name, b.id, {'data-price'=>b.price}] },
+        :include_blank => false
+    td
+      = f.input :quantity, :label => false, :input_html => { step:'.25', onchange:'calculate_cost(this)' }
+    td
+      = text_field_tag "cost", "", :disabled => true, class: "price"
+    td
+      = link_to_remove_association "remove ingredient", f
+
+javascript:
+  var calculate_total = function() {
+    var total = 0;
+    $(".price").each(function(){
+      var subtotal = parseFloat($(this).val());
+      if (isNaN(subtotal))
+        subtotal = 0;
+      total += subtotal;
+    });
+    return total;
+  }
+  var calculate_cost = function(td) {
+    var price = $(td).closest('tr').find('select option:selected').data('price');
+    $(td).closest('tr').find("input[disabled]").val($(td).val()*price);;
+    $('input[disabled]:first').val(calculate_total());
+  }

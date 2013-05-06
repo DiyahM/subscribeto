@@ -1,0 +1,27 @@
+= semantic_form_for [current_user, @item] do |f|
+  - if @item.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@item.errors.count, "error")} prohibited this item from being saved:"
+      ul
+        - @item.errors.full_messages.each do |message|
+          li = message
+    
+  #product-details style="margin-left:7%"
+    = f.input :item_type, :as => :hidden, :value => "Raw Goods"
+    #vendor-details
+      .row-fluid
+        .span4
+          = f.input :vendor_name, :as => :autocomplete, :url => autocomplete_vendor_name_user_items_path,
+            :input_html => { class: "span4", id_element: "#item_vendor_id" }
+          = f.input :vendor_id, :as => :hidden, :input_html => { :name => "item[vendor_id]" }
+        .span2
+          button.btn.btn-success style="margin:24px -80px;padding:5px" Add New Vendor
+      .row-fluid
+        = f.input :pricing_unit, :label => "Purchased by", :as => :select,
+          :collection => ["count", "pound", "ounce", "case", "gram", "kilogram", "liter", "loaf", "pint", "quart"],
+          :include_blank => false
+
+    = f.inputs :spec_number, :name, :image_url, :price, :description
+      
+  = f.action :submit, :label => "Add New", :button_html => { class: "btn btn-success btn-large" } 
+

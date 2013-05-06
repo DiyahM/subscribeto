@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130422224958) do
+ActiveRecord::Schema.define(:version => 20130506034209) do
 
   create_table "customers", :force => true do |t|
     t.string   "first_name"
@@ -23,12 +23,35 @@ ActiveRecord::Schema.define(:version => 20130422224958) do
     t.integer  "order_id"
   end
 
+  create_table "ingredients", :force => true do |t|
+    t.integer  "raw_id"
+    t.integer  "prepared_id"
+    t.decimal  "quantity",    :precision => 8, :scale => 3
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  create_table "items", :force => true do |t|
+    t.integer  "price"
+    t.string   "image_url"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+    t.integer  "user_id"
+    t.integer  "orders_count", :default => 0
+    t.string   "item_type"
+    t.string   "spec_number"
+    t.string   "name"
+    t.text     "description"
+    t.string   "pricing_unit"
+    t.integer  "vendor_id"
+  end
+
   create_table "orders", :force => true do |t|
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "user_id"
-    t.integer  "plan_id"
     t.datetime "start_date"
+    t.integer  "item_id"
   end
 
   create_table "payment_dues", :force => true do |t|
@@ -47,23 +70,6 @@ ActiveRecord::Schema.define(:version => 20130422224958) do
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.integer  "order_id"
-  end
-
-  create_table "plans", :force => true do |t|
-    t.string   "plan_code"
-    t.string   "plan_name"
-    t.text     "plan_description"
-    t.integer  "price"
-    t.string   "frequency"
-    t.string   "image_url"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
-    t.integer  "user_id"
-    t.string   "service_start"
-    t.string   "bill_cycle_start"
-    t.string   "bill_cycle_type"
-    t.integer  "payment_due"
-    t.integer  "orders_count",     :default => 0
   end
 
   create_table "sites", :force => true do |t|
@@ -93,6 +99,17 @@ ActiveRecord::Schema.define(:version => 20130422224958) do
     t.string   "street_address"
     t.string   "uri"
     t.string   "bank_uri"
+  end
+
+  create_table "vendors", :force => true do |t|
+    t.string   "name"
+    t.string   "contact_name"
+    t.text     "address"
+    t.string   "phone"
+    t.string   "email"
+    t.text     "notes"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
 end

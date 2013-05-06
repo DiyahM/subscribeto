@@ -1,7 +1,7 @@
 class Order < ActiveRecord::Base
-  attr_accessible :user_id, :customer_attributes, :plan_id, :payment_due_attributes, :start_date
+  attr_accessible :user_id, :customer_attributes, :item_id, :payment_due_attributes, :start_date
   has_one :customer
-  belongs_to :plan, counter_cache: true
+  belongs_to :item, counter_cache: true
   belongs_to :user
   has_many :payment_recvd
   has_many :payment_due
@@ -49,43 +49,43 @@ class Order < ActiveRecord::Base
 
   def create_payment_due
     bill = PaymentDue.new
-    bill.amount = self.plan.price
+    bill.amount = self.item.price
 
     #set billing cycle start date
-    if self.plan.service_start == "on order date"
+    if self.item.service_start == "on order date"
       bill.bill_cycle_start = self.start_date
     else
       bill.bill_cycle_start = self.start_date + 1.month
-      if self.plan.bill_cycle_start == "first day of month"
+      if self.item.bill_cycle_start == "first day of month"
         bill.bill_cycle_start = bill.bill_cycle_start.change(day:1)
-      elsif self.plan.bill_cycle_start == "15th day of month"
+      elsif self.item.bill_cycle_start == "15th day of month"
         bill.bill_cycle_start = bill.bill_cycle_start.change(day:15)
       end
     end
 
     #set billing cycle end date
     bill.bill_cycle_end = bill.bill_cycle_start + 1.month
-    if self.plan.bill_cycle_start == "first day of month"
+    if self.item.bill_cycle_start == "first day of month"
       bill.bill_cycle_end = bill.bill_cycle_end.change(day:1) - 1.day
-    elsif self.plan.bill_cycle_start == "15th day of month"
+    elsif self.item.bill_cycle_start == "15th day of month"
       bill.bill_cycle_end = bill_cycle_end.change(day:15) - 1.day
-    elsif self.plan.bill_cycle_start == "monthly from date ordered"
+    elsif self.item.bill_cycle_start == "monthly from date ordered"
       bill.bill_cycle_end -= 1.day
     end
 
     #set payment date
-    if self.plan.bill_cycle_type == "in advance to services"
-      bill.due_date = self.created_at + self.plan.payment_due.day
+    if self.item.bill_cycle_type == "in advance to services"
+      bill.due_date = self.created_at + self.item.payment_due.day
     else
-      bill.due_date = bill.bill_cycle_end + self.plan.payment_due.day
+      bill.due_date = bill.bill_cycle_end + self.item.payment_due.day
     end 
 
     #set payment amount
     days = (bill.bill_cycle_end - bill.bill_cycle_start)/1.day
     if days > 27
-      bill.amount = self.plan.price
+      bill.amount = self.item.price
     else
-      bill.amount = days * (self.plan.price/30)
+      bill.amount = days * (self.item.price/30)
     end
     
     

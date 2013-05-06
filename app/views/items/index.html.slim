@@ -1,0 +1,16 @@
+.row-fluid
+  .span7
+    h2 Inventory
+  .span4
+    a.btn.btn-space.btn-info href=new_user_raw_path(current_user) + Add Raw Good
+    a.btn.btn-info href=new_user_prepared_path(current_user) + Add Finished Good
+.row-fluid
+  table.table
+    tr
+      th Name
+      th Type 
+
+    - @items.each do |item|
+      tr
+        td = item.name
+        td = item.item_type

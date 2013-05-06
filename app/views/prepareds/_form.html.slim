@@ -1,0 +1,46 @@
+= semantic_form_for [current_user, @item] do |f|
+  - if @item.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@item.errors.count, "error")} prohibited this item from being saved:"
+      ul
+        - @item.errors.full_messages.each do |message|
+          li = message
+    
+  .tabbable.tabs-left
+    ul.nav.nav-tabs
+      li#product-link.active
+        a href="#product-details" data-toggle="tab" Item Details
+      li#ingredient-link
+        a href="#ingredient-details" data-toggle="tab" Ingredients
+      li#cost-link
+        a href="#cost-details" data-toggle="tab" Costing Estimate
+    .tab-content
+      #product-details.tab-pane.active style="margin-left:7%"
+        h2 Item Details
+        = f.input :item_type, :as => :hidden, :value => "Available for sale"
+        = f.inputs :spec_number, :name, :image_url, :price, :description
+      #ingredient-details.tab-pane style="margin-left:7%"
+        .row-fluid
+          .span8
+            h2 Ingredients
+            | Add raw goods and quantity used
+            br
+            | Total Cost of Ingredients
+            = text_field_tag "total_cost", "0", :disabled => true, :id => "#my_cost"  
+            #ingredients
+              table.table.table-bordered#ingredients-table
+                tr
+                  th Raw Good
+                  th Quantity Used
+                  th Ingredient Cost
+                  th
+              = f.semantic_fields_for :ingredients do |ingredient|
+                = render 'ingredient_fields', :f => ingredient
+              .links
+                = link_to_add_association 'add ingredient', f, :ingredients
+      #cost-details.tab-pane style="margin-left:7%"
+        .row-fluid
+          .span8
+            h2 Product Cost Estimate
+  = f.actions 
+

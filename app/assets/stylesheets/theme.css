@@ -68,6 +68,10 @@ h1 {
 .form-horizontal input[type="text"], input[type="password"] {
   
 }
+.form-actions {
+  background-color: transparent;
+  border-top:none;
+}
 
 .checklist {
   font-size:2.5em;

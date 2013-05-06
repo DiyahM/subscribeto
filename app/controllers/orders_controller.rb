@@ -8,7 +8,7 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.json
   def show
-    @order = Order.includes(:customer, :plan, :payment_due).find(params[:id])
+    @order = Order.includes(:customer, :item, :payment_due).find(params[:id])
     @invoice = @order.payment_due.last
   end
 
@@ -21,7 +21,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
-    @order = Order.includes(:customer, :plan).find(params[:id])
+    @order = Order.includes(:customer, :item).find(params[:id])
   end
 
   # POST /orders

@@ -4,6 +4,10 @@ gem 'rails', '3.2.13'
 gem 'pg'
 gem 'slim'
 gem 'slim-rails'
+gem 'formtastic'
+gem 'rails3-jquery-autocomplete'
+gem 'formtastic-bootstrap'
+gem 'cocoon'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -29,4 +33,4 @@ group :test do
 end
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'jquery-rails'
-gem 'balanced'
+gem 'jquery-ui-rails'

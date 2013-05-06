@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   has_secure_password
-  has_many :plans
+  has_many :items
   has_one :site
   has_many :orders
   has_many :customers, through: :orders
