@@ -1,10 +1,18 @@
 class PreparedsController < ItemsController
-  autocomplete :raw, :name, :full => true
+
   def new
     @item = Prepared.new
   end
 
   def create
-    @item = Prepared.create(params[:prepare])
+    @item = Prepared.new(params[:prepared])
+
+    if @item.save
+      current_user.items << @item
+      redirect_to user_items_path(current_user), notice: "Item successfully added"
+    else
+      render "new"      
+    end
   end
+
 end

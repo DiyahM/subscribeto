@@ -1,13 +1,19 @@
 class Order < ActiveRecord::Base
-  attr_accessible :user_id, :customer_attributes, :item_id, :payment_due_attributes, :start_date
-  has_one :customer
-  belongs_to :item, counter_cache: true
+  attr_accessible :user_id, :customer_attributes, :item_id, :payment_due_attributes, :start_date,
+    :customer_company, :line_items_attributes, :customer_id
+  belongs_to :customer
+  has_many :line_items, :dependent => :destroy
+  has_many :items, :through => :line_items
   belongs_to :user
   has_many :payment_recvd
   has_many :payment_due
   accepts_nested_attributes_for :customer, :payment_due
-  after_create :create_payment_due
+  accepts_nested_attributes_for :line_items, :reject_if => :all_blank, :allow_destroy => true
+  #after_create :create_payment_due
   scope :new_orders, lambda { where("created_at > ?", Time.zone.now - 1.month ) }
+  attr_accessor :customer_company
+  validates :customer_id, presence: true
+  validates :line_items, :length => { :minimum => 1 }
   
 
   def self.past_due

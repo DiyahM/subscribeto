@@ -31,21 +31,23 @@ html lang="en"
             ul.nav
               - if current_user
                 li= link_to "Dashboard", dashboard_path
-                li= link_to "Orders", "#"
-                li= link_to "Inventory", "#"
+                li= link_to "Orders", user_orders_path(current_user)
+                li= link_to "Items", user_items_path(current_user)
+                li= link_to "Invoices", "#"
                 li= link_to "Reports", "#"
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#" Manage
                   ul.dropdown-menu
-                    li= link_to "Items", user_items_path(current_user)
-                    li= link_to "Delivery", "#"
-                    li= link_to "Customers", "#"
-                    li= link_to "Invoices", "#"
+                    li= link_to "Inventory", "#"
+                    li= link_to "Sales", "#"
+                    li= link_to "Delivery", user_delivery_slots_path(current_user)
+                    li= link_to "Customers", user_customers_path(current_user)
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#"
                     = current_user.email
                   ul.dropdown-menu
                     li= link_to "Settings", "#"
+                    li= link_to "Tutorials", "#"
                     li= link_to "Quick Start Guide", quickstart_path
                     li= link_to "Logout", logout_path
               - else

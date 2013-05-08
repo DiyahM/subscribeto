@@ -1,1 +1,36 @@
-h3 Welcome to your dashboard
+.row-fluid
+  #dashboard-header
+    .span6
+      | Actions for:
+    .span6.pull-right
+      = time_tag Time.now, format: "%A, %b %e"
+- if @summary.any?
+  .row-fluid 
+    .slate.clearfix style="margin-top:50px;"
+      - @summary.each do |sum|
+        a.stat-column href="#"
+          span.number= sum.last
+          span= sum.first
+- if @todays_orders.any?
+  - @todays_orders.each do |order|
+    .row-fluid style="margin-top:15px;"
+      table.table
+        tr style="background-color:#5BAFF5"
+          th colspan="5" 
+            = order.delivery_label
+        tr style="background-color:#A3D2F7"
+          th Customer
+          th Item
+          th Qty
+          th Status
+          th
+        - order.line_items.each do |line_item|
+          tr style="background-color:#EBF2F7"
+            td = line_item.order.customer.company_name
+            td = line_item.item.name
+            td = line_item.quantity
+            td Not Processed
+            td
+              a.btn.btn-mini.btn-space href="#" View
+              a.btn.btn-mini.btn-space href="#" Invoice
+              a.btn.btn-mini.btn-space href="#" Email Customer

@@ -1,31 +1,38 @@
-= form_for [current_user, @order] do |f|
+= semantic_form_for [current_user, @order] do |f|
   - if @order.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@order.errors.count, "error")} prohibited this order from being saved:"
-      ul
-        - @order.errors.full_messages.each do |message|
-          li = message
+    .row-fluid
+      #error_explanation
+        h2 = "#{pluralize(@order.errors.count, "error")} prohibited this order from being saved:"
+        ul
+          - @order.errors.full_messages.each do |message|
+            li = message
 
-  .field
-    = f.label "Order Start Date"
-    = f.date_select :start_date
-  .field
-    = f.label "Choose a plan"
-    = f.collection_select :plan_id, current_user.plans, :id, :plan_name
-  = f.fields_for :customer do |builder|
-    .field
-      = builder.label :first_name
-      = builder.text_field :first_name
-    .field
-      = builder.label :last_name
-      = builder.text_field :last_name
-    .field
-      = builder.label :email
-      = builder.text_field :email
-    .field
-      = builder.label :phone_number
-      = builder.text_field :phone_number
+  
+  .row-fluid
+    .span4
+      = f.input :customer_company, :as => :autocomplete, :url => autocomplete_customer_company_name_user_orders_path,
+        :input_html => { class: "span4", id_element: "#order_customer_id" }
+      = f.input :customer_id, :as => :hidden,
+        :input_html => { :name => "order[customer_id]" }
+    .span2
+      a.btn.btn-success style="margin:24px -80px;padding:5px" Add New Customer
+  
+  .row-fluid
+    table.table.table-bordered#order-table
+      tr
+        th width="25%" Assigned Delivery Slot
+        th width="25%" Item
+        th width="12%" Qty
+        th width="10%" Amount
+        th
+    = f.semantic_fields_for :line_items do |line_item|
+      = render 'line_item_fields', :f => line_item
+    .links
+      = link_to_add_association 'add new line item', f, :line_items
+  .row-fluid
+    = f.action :submit, :label => 'Save', :button_html => { class: "btn btn-success" }
 
-  .actions
-    a.btn.btn-large.btn-space href=user_orders_path(current_user) Cancel
-    = f.submit 'Save', class: "btn btn-large btn-success"
+javascript:
+  $("a.add_fields").data("association-insertion-node", '#order-table');
+  $("a.add_fields").data("association-insertion-method", 'append');
+

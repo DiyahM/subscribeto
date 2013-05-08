@@ -1,18 +1,20 @@
 Subscribeto::Application.routes.draw do
-  resources :vendors
-  resources :customers
+  #resources :vendors
   resources :sessions
 
   resources :users do
+    resources :delivery_slots, :only => ["index", "create", "destroy"]
     resources :items do
       get :autocomplete_vendor_name, :on => :collection
     end
     resources :raws
-    resources :prepareds do
-      get :autocomplete_raw_name, :on => :collection
-    end
+    resources :prepareds 
+    resources :customers
     #resources :sites
-    resources :orders 
+    resources :orders do
+      get :autocomplete_customer_company_name, :on => :collection
+      get :autocomplete_item_name, :on => :collection
+    end 
     #resources :payment_dues
   end
 

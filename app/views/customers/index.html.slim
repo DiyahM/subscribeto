@@ -1,29 +1,36 @@
-.row
-  .span4.offset4 
+.row-fluid
+  .span3
+    a.btn.btn-success.btn-space href=new_user_customer_path(current_user) + Add Customer
+    button.btn href="#" Batch Email
+  .span8 
     .input-append style="float:right"
-      input.span2#appendedInputButtons type="text"
+      input.span9#appendedInputButtons type="text"
       button.btn type="button" Search
-.row
+.row-fluid
   .span4
     h3 Customers
 
 table.table.table-striped
   tr
-    th First name
-    th Last name
+    th
+      input type="checkbox"
+    th Company
+    th Contact Name
     th Email
     th Phone number
     th
 
   - @customers.each do |customer|
     tr
-      td = customer.first_name
-      td = customer.last_name
+      td
+        input type="checkbox"
+      td = customer.company_name
+      td = customer.poc_name
       td = customer.email
       td = customer.phone_number
       td 
         = link_to 'Email', "mailto:#{customer.email}", class: "btn btn-mini btn-space"
         = link_to 'Call', "tel:#{customer.phone_number}", class: "btn btn-mini btn-space"
-        = link_to 'View', customer, class: "btn btn-mini btn-space"
-        = link_to 'Edit', edit_customer_path(customer), class: "btn btn-mini"
+        = link_to 'View', user_customer_path(current_user, customer.id), class: "btn btn-mini btn-space"
+        = link_to 'Edit', edit_user_customer_path(current_user.id, customer.id), class: "btn btn-mini"
 

@@ -1,0 +1,25 @@
+.row-fluid
+  h2 Available Delivery Times
+.row-fluid
+  table.table.table-striped
+    tr
+      th Delivery Slot
+      th Orders Assigned
+      th
+    - @slots.each do |slot|
+      tr
+        td
+          = slot.day
+          = time_tag(slot.start_time, format: "%l:%M %p")
+        td tba
+        td
+          = link_to "Remove", user_delivery_slot_path(current_user,slot), :method => :delete
+
+button.btn type="button" data-toggle="modal" data-target="#new-slot" Add Delivery Slot
+
+#new-slot.modal.hide.fade
+  .modal-header
+    button.close type="button" data-dismiss="modal" aria-hidden="true" x
+    h4 Add New Delivery Slot
+  .modal-body
+    == render 'form'

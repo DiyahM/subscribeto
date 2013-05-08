@@ -1,4 +1,15 @@
 class OrdersController < ApplicationController
+  autocomplete :customer, :company_name, :full => true, :display_value => :company_name
+  autocomplete :item, :name, :full => true, :display_value => :name
+
+  def get_autocomplete_items(parameters)
+    items = super(parameters)
+    if (items.first.class.name == "Item")
+      items = items.where(:user_id => current_user.id, :item_type => "Available for sale")
+    end
+    return items
+  end
+
   # GET /orders
   # GET /orders.json
   def index
@@ -8,8 +19,7 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.json
   def show
-    @order = Order.includes(:customer, :item, :payment_due).find(params[:id])
-    @invoice = @order.payment_due.last
+    @order = Order.includes(:customer).find(params[:id])
   end
 
   # GET /orders/new

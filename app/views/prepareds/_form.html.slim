@@ -9,20 +9,23 @@
   .tabbable.tabs-left
     ul.nav.nav-tabs
       li#product-link.active
-        a href="#product-details" data-toggle="tab" Item Details
+        a href="#product-details" data-toggle="tab" Item Overview
       li#ingredient-link
-        a href="#ingredient-details" data-toggle="tab" Ingredients
+        a href="#ingredient-details" data-toggle="tab" Related Raw Goods
       li#cost-link
-        a href="#cost-details" data-toggle="tab" Costing Estimate
+        a href="#cost-details" data-toggle="tab" Cost of Goods Tool
     .tab-content
       #product-details.tab-pane.active style="margin-left:7%"
-        h2 Item Details
+        h2 Item Overview
         = f.input :item_type, :as => :hidden, :value => "Available for sale"
-        = f.inputs :spec_number, :name, :image_url, :price, :description
+        = f.input :name
+        = f.input :price, :as => :number, :input_html => { :step => "0.01", :min => "0", :value => "0.00",
+          :style => "width:7%"}
+        = f.input :description, :input_html => { :rows => "6" }
       #ingredient-details.tab-pane style="margin-left:7%"
         .row-fluid
           .span8
-            h2 Ingredients
+            h2 Related Raw Goods
             | Add raw goods and quantity used
             br
             | Total Cost of Ingredients
@@ -43,4 +46,9 @@
           .span8
             h2 Product Cost Estimate
   = f.actions 
+
+javascript:
+
+  $("a.add_fields").data("association-insertion-node", '#ingredients-table');
+  $("a.add_fields").data("association-insertion-method", 'append');
 

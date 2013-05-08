@@ -1,16 +1,50 @@
 .row-fluid
-  .span7
-    h2 Inventory
   .span4
-    a.btn.btn-space.btn-info href=new_user_raw_path(current_user) + Add Raw Good
-    a.btn.btn-info href=new_user_prepared_path(current_user) + Add Finished Good
+    a.btn.btn-space.btn-success href=new_user_prepared_path(current_user) + Add Item For Sale
+    a.btn.btn-success href=new_user_raw_path(current_user) + Add Raw Item
+  .span7
+    .input-append style="float:right"
+      input.span9#appendedInputButtons type="text"
+      button.btn type="button" Search
 .row-fluid
-  table.table
-    tr
-      th Name
-      th Type 
+  .span4
+    h3 Items
+.row-fluid
+  ul.nav.nav-tabs
+    li#available-link.active
+      a href="#prepared-items" data-toggle="tab" Items For Sale
+    li#raw-link
+      a href="#raw-items" data-toggle="tab" Raw Items
+  .tab-content
+    #prepared-items.tab-pane.active
+      .row-fluid
+        table.table.table-striped
+          tr
+            th Product Image
+            th Name
+            th  
 
-    - @items.each do |item|
-      tr
-        td = item.name
-        td = item.item_type
+          - @prepared_items.each do |prepared_item|
+            tr
+              td = image_tag "http://placehold.it/100x100&text=[img]"
+              td = prepared_item.name
+              td
+                = link_to "Edit", "#"
+                | |
+                = link_to "Delete", "#"
+    #raw-items.tab-pane
+      .row-fluid
+        table.table.table-striped
+          tr
+            th Product Image
+            th Name
+            th 
+          - @raw_items.each do |raw_item|
+            tr
+              td = image_tag "http://placehold.it/100x100&text=[img]"
+              td = raw_item.name
+              td
+                = link_to "Edit", "#"
+                | |
+                = link_to "Delete", "#"
+

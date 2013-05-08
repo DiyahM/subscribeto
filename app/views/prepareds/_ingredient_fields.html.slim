@@ -2,7 +2,7 @@ tr.nested-fields
   = f.inputs do
     td
       = f.input :raw, :label => false, :as => :select,
-        :collection => Raw.all.map{ |b| [b.name, b.id, {'data-price'=>b.price}] },
+        :collection => Item.raw_goods(current_user.id).map{ |b| [b.name, b.id, {'data-price'=>b.price}] },
         :include_blank => false
     td
       = f.input :quantity, :label => false, :input_html => { step:'.25', onchange:'calculate_cost(this)' }

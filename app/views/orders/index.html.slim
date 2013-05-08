@@ -1,31 +1,32 @@
-.row
-  .span4
+.row-fluid
+  .span3
     a.btn.btn-success.btn-space href=new_user_order_path 
       | + Add Order
-  .span4 
+  .span8 
     .input-append style="float:right"
-      input.span2#appendedInputButtons type="text"
+      input.span9#appendedInputButtons type="text"
       button.btn type="button" Search
-.row
+.row-fluid
   .span4
     h3 Order History
 
 table.table.table-striped
   tr
+    th 
+      input type="checkbox"
     th Order id
     th Customer
-    th Next Payment Due
-    th Status
-    th
+    th Status 
+    th Actions
 
   - @orders.each do |order|
     tr
+      td
+        input type="checkbox"
       td = order.id
-      td = "#{order.customer.first_name} #{order.customer.last_name}" 
-      td = time_tag(order.payment_due.last.due_date, format: "%B %d, %Y")
-      td Invoice not sent
+      td = "#{order.customer.company_name}" 
+      td Invoice Printed
       td 
-        = link_to 'Invoice', "#", class: "btn btn-mini btn-space"
         = link_to 'View', user_order_path(current_user, order), class: "btn btn-mini btn-space" 
         = link_to 'Edit', edit_user_order_path(current_user, order), class: "btn btn-mini btn-space"
         = link_to 'Delete', user_order_path(current_user, order), class: "btn btn-mini btn-space",

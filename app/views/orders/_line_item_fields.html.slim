@@ -1,0 +1,14 @@
+tr.nested-fields
+  = f.inputs do
+    td
+      = f.input :delivery_slot_id, :label => false, :as => :select,
+        :collection => Hash[DeliverySlot.all.map{|b| [b.delivery_label,b.id]}], :include_blank => false
+    td
+      = f.input :item_id, :label => false, :as => :select,
+        :collection => Item.prepared_goods(current_user.id),
+        :include_blank => false
+    td
+      = f.input :quantity, :label => false
+    td 0
+    td
+      = link_to_remove_association "remove", f
