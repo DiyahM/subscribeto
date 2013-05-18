@@ -31,14 +31,14 @@ html lang="en"
       mixpanel.init("f5885d6a344288a4fae50012fa0de6fb");
 
   body
-    .navbar.navbar-fluid-top.navbar-fixed-top
+    .navbar.navbar-fixed-top
       .navbar-inner
         .container-fluid
           a.btn.btn-navbar data-target=".nav-collapse" data-toggle="collapse"
             span.icon-bar
             span.icon-bar
             span.icon-bar
-          a.brand href="#"OrderOrchard
+          a.brand href="/" OrderOrchard
           .container-fluid.nav-collapse
             ul.nav
               - if current_user
@@ -67,7 +67,7 @@ html lang="en"
 
     .container-fluid
       .row-fluid
-        .container style="margin-top:100px"
+        .container style="margin-top:7%"
           - if @layout != "home"
             #mainContent
               = bootstrap_flash
