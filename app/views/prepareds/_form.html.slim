@@ -10,16 +10,17 @@
     ul.nav.nav-tabs
       li#product-link.active
         a href="#product-details" data-toggle="tab" Item Overview
-      li#ingredient-link
-        a href="#ingredient-details" data-toggle="tab" Related Raw Goods
-      li#cost-link
-        a href="#cost-details" data-toggle="tab" Cost of Goods Tool
+      li#ingredient-link.disabled
+        a href="#" Related Raw Goods
+      li#cost-link.disabled
+        a href="#" Cost of Goods Tool
     .tab-content
       #product-details.tab-pane.active style="margin-left:7%"
         h2 Item Overview
         = f.input :item_type, :as => :hidden, :value => "Available for sale"
         = f.input :name
-        = f.input :price, :as => :number, :input_html => { :step => "0.01", :min => "0", :value => "0.00",
+        = f.input :price, :label=> "Default Price",
+          :as => :number, :input_html => { :step => "0.01", :min => "0",
           :style => "width:7%"}
         = f.input :description, :input_html => { :rows => "6" }
       #ingredient-details.tab-pane style="margin-left:7%"
@@ -45,7 +46,8 @@
         .row-fluid
           .span8
             h2 Product Cost Estimate
-  = f.actions 
+  = f.action :submit, :label => "Save", :button_html => { class: "btn btn-large btn-success pull-right",
+    style:"margin-right:20%" } 
 
 javascript:
 

@@ -1,11 +1,11 @@
 .row-fluid
   .span4
     a.btn.btn-space.btn-success href=new_user_prepared_path(current_user) + Add Item For Sale
-    a.btn.btn-success href=new_user_raw_path(current_user) + Add Raw Item
+    a.btn.btn-success.disabled href="#" + Add Raw Item
   .span7
     .input-append style="float:right"
-      input.span9#appendedInputButtons type="text"
-      button.btn type="button" Search
+      //input.span9#appendedInputButtons type="text"
+      //button.btn type="button" Search
 .row-fluid
   .span4
     h3 Items
@@ -13,25 +13,31 @@
   ul.nav.nav-tabs
     li#available-link.active
       a href="#prepared-items" data-toggle="tab" Items For Sale
-    li#raw-link
-      a href="#raw-items" data-toggle="tab" Raw Items
+    li#raw-link.disabled
+      a href="#" Raw Items
   .tab-content
     #prepared-items.tab-pane.active
       .row-fluid
         table.table.table-striped
           tr
-            th Product Image
+            //th Product Image
             th Name
+            th Description
+            th Default Price
             th  
 
           - @prepared_items.each do |prepared_item|
             tr
-              td = image_tag "http://placehold.it/100x100&text=[img]"
+              //td = image_tag "http://placehold.it/100x100&text=[img]"
               td = prepared_item.name
+              td = prepared_item.description
+              td = "$ #{prepared_item.price}"
               td
-                = link_to "Edit", "#"
-                | |
-                = link_to "Delete", "#"
+                = link_to "Edit", edit_user_prepared_path(current_user,prepared_item)
+                |  | 
+                = link_to "Delete", user_prepared_path(current_user,prepared_item),
+                  confirm: "Are you sure you want to delete this item?",
+                  method: :delete
     #raw-items.tab-pane
       .row-fluid
         table.table.table-striped

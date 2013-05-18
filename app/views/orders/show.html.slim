@@ -1,25 +1,60 @@
-p#notice = notice
-p
-  strong 
-    = "Order# #{@order.id}"
-  br
-  = "Order Date: #{@order.created_at}"
-  hr
-  strong
-    | Customer Information
-  br
-  = "Company Name: #{@order.customer.company_name}"
-  br
-  = "Customer Name: #{@order.customer.poc_name}"
-  br
-  = "Phone Number: #{@order.customer.phone_number}"
-  br
-  = "Email: #{@order.customer.email}"
-  hr
+.row-fluid
+  .span10
+    p
+      | Order Date: 
+      = time_tag @order.created_at
+      br
+      = "Order # #{@order.id}"
+  .span2
+    button.btn.btn-success Create Invoice
 
-p
-  button.btn.btn-info.btn-space Generate PDF Invoice
-  button.btn.btn-info.btn-space Email Invoice
+
+.row-fluid style="border:1px solid #ccc;padding:10px;margin-bottom:20px;"
+  .span3
+    p
+      strong Customer Information
+      br
+      = @order.customer.company_name
+      br
+      = @order.customer.poc_name
+      br
+      = link_to @order.customer.email, "mailto:#{@order.customer.email}"
+      br
+      | Tel: 
+      = @order.customer.phone_number
+  .span3
+    p
+      strong Delivery Address
+      br
+      = @order.customer.address_one
+      - if @order.customer.address_two != ""
+        br
+      = @order.customer.address_two unless @order.customer.address_two == ""
+      br
+      = "#{@order.customer.city}, #{@order.customer.state} #{@order.customer.postal_code}"
+  .span4
+    p
+      strong Notes:
+      p
+        = @order.customer.note
+  
+.row-fluid
+  h4 Order Details
+.row-fluid
+  table.table.table-bordered#order-table
+    tr
+      th width="25%" Assigned Delivery Slot
+      th width="25%" Item
+      th width="12%" Qty
+      th width="10%" Amount
+    - @order.line_items.each do |line_item|
+      tr
+        td= line_item.delivery_slot.delivery_label
+        td= line_item.item.name
+        td= line_item.quantity
+        td
+
+
 p
   = link_to 'Edit', edit_user_order_path(current_user, @order)
   |  | 

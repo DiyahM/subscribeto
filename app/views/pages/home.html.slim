@@ -1,10 +1,41 @@
-center
-  .header-text
-    | Simple Order and Inventory
-    br
-    | Management for your
-    br 
-    | Food Business
-    p style="margin-top:25px"
-      button.btn.btn-large.btn-success style="width:40%" Try it Free
-
+div style="background-image: url('assets/Sprouts-Produce-Vertical-Redondo-Beach-CA-HiRes.JPG');width:140%;margin-left:-20%;height:300px;margin-top:-3250px;padding-top:3350px;"
+  center
+    .header-text style="color:white;text-shadow:1px 1px #000"   
+      | Buy & Sell Local Foods.
+    h3 style="color:white;text-shadow:1px 1px #000"
+      | Marketplace and Order Management For Food Businesses
+      p style="margin-top:25px"
+        a.btn.btn-large.btn-success  href="https://docs.google.com/forms/d/1QRYT6IYmi6XuKgFxsJx6EkQ80Gd7Z1CeZk6fDSNVsVw/viewform" target="blank" onclick="mixpanel.track('Signup button');"style="width:20%" Request Invite To Join
+.row-fluid style="padding-top:30px;"
+  center
+    h3 Marketplace and Order Management Platform for Wholesale Buyers and Food Retailers.
+.row-fluid
+  .span4
+    p
+      h4 Wholesale Buyers:
+      ul
+        li Discover and source local food sellers.
+        li Read product reviews and ratings from previous buyers.
+        li Create purchase orders in a click.
+        li Manage vendors and automate recordkeeping.
+        li Support local food producers while receiving fresh
+        | and high quality products
+  .span4
+    p
+      h4 Sellers:
+      ul
+        li Increase sales with discoverable profile.
+        li Manage all orders on one platform
+        li Reduce Order-2-Cash Cycles with online
+        | payments.
+        li Automate Invoicing and track inventory.
+        li Low transaction fee of 2.9% + $0.25 for each online payment
+  .spa4
+    p
+      h4 Both:
+      ul
+        li Easy Integration with Quickbooks
+        li Easy setup: Let our staff import all your product and customer information
+        li No monthly fees
+javascript:
+  mixpanel.track("Home Page Visit");

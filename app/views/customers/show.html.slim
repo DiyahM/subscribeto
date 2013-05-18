@@ -1,18 +1,59 @@
 p#notice = notice
 
-p
-  strong First name:
-  = @customer.first_name
-p
-  strong Last name:
-  = @customer.last_name
-p
-  strong Email:
-  = @customer.email
-p
-  strong Phone number:
-  = @customer.phone_number
+= link_to 'Edit', edit_user_customer_path(@customer)
+|  | 
+= link_to 'Back', user_customers_path
+.row-fluid
+  h3
+    | Company Details For 
+    = @customer.company_name
+.row-fluid
+  .span3
+    p
+      strong Contact Information
+      br
+      = @customer.poc_name
+      br
+      = link_to @customer.email, "mailto:#{@customer.email}"
+      br
+      | Tel: 
+      = @customer.phone_number
+  .span3
+    p
+      strong Delivery Address
+      br
+      = @customer.address_one
+      - if @customer.address_two != ""
+        br
+      = @customer.address_two unless @customer.address_two == ""
+      br
+      = "#{@customer.city}, #{@customer.state} #{@customer.postal_code}"
+  .span6
+    p
+      strong Notes:
+      p
+        = @customer.note
+.row-fluid
+  a.btn.btn-success href=new_user_order_path(current_user) Create New Order For Customer
 
-= link_to 'Edit', edit_customer_path(@customer)
-'|
-= link_to 'Back', customers_path
+- if @customer.orders.any?
+  hr
+  .row-fluid
+    h4 Order History
+  .row-fluid
+    table.table.table-striped
+      tr
+        th Order #
+        th Order Date and Time
+        th Status
+        th
+      - @customer.orders.each do |order|
+        tr
+          td= order.id
+          td= time_tag order.created_at
+          td Pending
+          td Show Items
+
+
+
+

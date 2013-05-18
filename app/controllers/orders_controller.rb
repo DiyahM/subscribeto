@@ -1,11 +1,15 @@
 class OrdersController < ApplicationController
-  autocomplete :customer, :company_name, :full => true, :display_value => :company_name
+  autocomplete :customer, :company_name, :full => true, :display_value => :company_name,
+    :extra_data => [ :poc_name, :email, :phone_number, :address_one, :address_two,
+                    :city, :state, :postal_code ] 
   autocomplete :item, :name, :full => true, :display_value => :name
 
   def get_autocomplete_items(parameters)
     items = super(parameters)
     if (items.first.class.name == "Item")
       items = items.where(:user_id => current_user.id, :item_type => "Available for sale")
+    elsif (items.first.class.name == "Customer")
+      items = items.where(:user_id => current_user.id)
     end
     return items
   end
@@ -19,7 +23,7 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.json
   def show
-    @order = Order.includes(:customer).find(params[:id])
+    @order = Order.includes(:customer, :line_items).find(params[:id])
   end
 
   # GET /orders/new
@@ -31,7 +35,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
-    @order = Order.includes(:customer, :item).find(params[:id])
+    @order = Order.includes(:customer, :line_items).find(params[:id])
   end
 
   # POST /orders

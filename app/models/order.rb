@@ -1,6 +1,6 @@
 class Order < ActiveRecord::Base
   attr_accessible :user_id, :customer_attributes, :item_id, :payment_due_attributes, :start_date,
-    :customer_company, :line_items_attributes, :customer_id
+    :customer_company, :line_items_attributes, :customer_id, :status
   belongs_to :customer
   has_many :line_items, :dependent => :destroy
   has_many :items, :through => :line_items
@@ -11,91 +11,26 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :line_items, :reject_if => :all_blank, :allow_destroy => true
   #after_create :create_payment_due
   scope :new_orders, lambda { where("created_at > ?", Time.zone.now - 1.month ) }
+  scope :delivered, where("status = ?", "Delivered").includes(:customer)
   attr_accessor :customer_company
   validates :customer_id, presence: true
   validates :line_items, :length => { :minimum => 1 }
-  
 
-  def self.past_due
-    orders = []
-    Order.includes(:payment_due).all.each do |order|
-      if order.delinquent?
-        orders << order
-      end
+  def self.update_status(order_id)
+    order = Order.includes(:line_items).find(order_id)
+    count_check = order.line_items.count
+    count = 0
+    order.line_items.each do |line_item|
+      count += 1 if line_item.delivered
     end
-    return orders
+    if count == count_check
+      order.status = "Delivered"
+    elsif (1..count_check).include?(count)
+      order.status = "Partially Delivered"
+    else
+      order.status = "In Process"
+    end
+    order.save
   end
 
-  def delinquent?
-    if self.payment_due.last.due_date < Time.zone.now
-      if !self.payment_due.last.paid
-        return true
-      end
-    end
-    return false
-  end  
-
-  def self.upcoming
-    orders = []
-     Order.includes(:payment_due).all.each do |order|
-      if order.soon_due?
-        orders << order
-      end
-    end
-    return orders
-  end
-
-  def soon_due?
-    days = (self.payment_due.last.due_date - Time.zone.now)/1.day
-    if days < 30
-      return true
-    end
-    return false
-  end
-
-  def create_payment_due
-    bill = PaymentDue.new
-    bill.amount = self.item.price
-
-    #set billing cycle start date
-    if self.item.service_start == "on order date"
-      bill.bill_cycle_start = self.start_date
-    else
-      bill.bill_cycle_start = self.start_date + 1.month
-      if self.item.bill_cycle_start == "first day of month"
-        bill.bill_cycle_start = bill.bill_cycle_start.change(day:1)
-      elsif self.item.bill_cycle_start == "15th day of month"
-        bill.bill_cycle_start = bill.bill_cycle_start.change(day:15)
-      end
-    end
-
-    #set billing cycle end date
-    bill.bill_cycle_end = bill.bill_cycle_start + 1.month
-    if self.item.bill_cycle_start == "first day of month"
-      bill.bill_cycle_end = bill.bill_cycle_end.change(day:1) - 1.day
-    elsif self.item.bill_cycle_start == "15th day of month"
-      bill.bill_cycle_end = bill_cycle_end.change(day:15) - 1.day
-    elsif self.item.bill_cycle_start == "monthly from date ordered"
-      bill.bill_cycle_end -= 1.day
-    end
-
-    #set payment date
-    if self.item.bill_cycle_type == "in advance to services"
-      bill.due_date = self.created_at + self.item.payment_due.day
-    else
-      bill.due_date = bill.bill_cycle_end + self.item.payment_due.day
-    end 
-
-    #set payment amount
-    days = (bill.bill_cycle_end - bill.bill_cycle_start)/1.day
-    if days > 27
-      bill.amount = self.item.price
-    else
-      bill.amount = days * (self.item.price/30)
-    end
-    
-    
-    bill.save!
-    self.payment_due << bill
-  end  
 end

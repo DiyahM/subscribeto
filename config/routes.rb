@@ -18,6 +18,7 @@ Subscribeto::Application.routes.draw do
     #resources :payment_dues
   end
 
+  post 'mark_delivered', to: 'pages#mark_delivered'
   #get 'user/:id/invoices', to: 'payment_dues#index', as: 'invoices'
   get 'signup', to: 'users#new', as: 'signup'
   get 'login', to: 'sessions#new', as: 'login'

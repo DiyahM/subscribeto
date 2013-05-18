@@ -9,9 +9,16 @@ class PagesController < ApplicationController
   def quickstart
 
   end
+  
+  def mark_delivered
+    LineItem.mark_batch_delivered(params[:ids])
+    render :nothing => true
+  end
+
   def dashboard
     day = Time.now.strftime("%A")
-    @summary = DeliverySlot.items_count_by_day(day, current_user.id)
-    @todays_orders = DeliverySlot.orders_by_day(day, current_user.id)    
+    @item_summary= DeliverySlot.daily_summary(day, current_user.id)
+    @slots = DeliverySlot.delivery_schedule_for_day(day, current_user.id)    
+    @uninvoiced_items = current_user.orders.delivered
   end
 end

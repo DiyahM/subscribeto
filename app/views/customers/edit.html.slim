@@ -1,8 +1,8 @@
-h1 Editing customer
+h2 Edit Customer Details
 
 == render 'form'
 
-= link_to 'Show', @customer
+= link_to 'Show', user_customer_path(@customer.id)
 '|
-= link_to 'Back', customers_path
+= link_to 'Back', user_customers_path
 

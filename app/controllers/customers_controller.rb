@@ -2,13 +2,13 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = current_user.customers
+    @customers = current_user.customers.order("updated_at DESC")
   end
 
   # GET /customers/1
   # GET /customers/1.json
   def show
-    @customer = Customer.find(params[:id])
+    @customer = Customer.includes(:orders).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
@@ -55,7 +55,7 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.update_attributes(params[:customer])
-        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
+        format.html { redirect_to user_customers_path, notice: 'Customer was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -71,7 +71,7 @@ class CustomersController < ApplicationController
     @customer.destroy
 
     respond_to do |format|
-      format.html { redirect_to customers_url }
+      format.html { redirect_to user_customers_path, notice: 'Customer was successfully deleted.' }
       format.json { head :no_content }
     end
   end

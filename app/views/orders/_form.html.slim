@@ -10,16 +10,23 @@
   
   .row-fluid
     .span4
-      = f.input :customer_company, :as => :autocomplete, :url => autocomplete_customer_company_name_user_orders_path,
-        :input_html => { class: "span4", id_element: "#order_customer_id" }
+      = f.input :customer_company, :label=> "Company Name", :as => :autocomplete,
+        :url => autocomplete_customer_company_name_user_orders_path,
+        :input_html => { class: "span4", id_element: "#order_customer_id", update_elements: {}} 
       = f.input :customer_id, :as => :hidden,
         :input_html => { :name => "order[customer_id]" }
-    .span2
-      a.btn.btn-success style="margin:24px -80px;padding:5px" Add New Customer
+      
+    .span6
+      #customer-details style="display:none"
+        | Customer Details
+        br
+        input type="text" id="poc-name"
+
   
   .row-fluid
     table.table.table-bordered#order-table
       tr
+        th
         th width="25%" Assigned Delivery Slot
         th width="25%" Item
         th width="12%" Qty

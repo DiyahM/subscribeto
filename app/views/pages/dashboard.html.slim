@@ -1,36 +1,101 @@
 .row-fluid
   #dashboard-header
     .span6
-      | Actions for:
+      | Daily Summary:
     .span6.pull-right
       = time_tag Time.now, format: "%A, %b %e"
-- if @summary.any?
-  .row-fluid 
-    .slate.clearfix style="margin-top:50px;"
-      - @summary.each do |sum|
-        a.stat-column href="#"
-          span.number= sum.last
-          span= sum.first
-- if @todays_orders.any?
-  - @todays_orders.each do |order|
-    .row-fluid style="margin-top:15px;"
-      table.table
-        tr style="background-color:#5BAFF5"
-          th colspan="5" 
-            = order.delivery_label
-        tr style="background-color:#A3D2F7"
-          th Customer
-          th Item
-          th Qty
-          th Status
+
+#summary style="margin-top:50px;"
+  - if @item_summary.any?
+    .row-fluid 
+      h4 Orders
+    .row-fluid
+      .slate.clearfix 
+        - @item_summary.each do |item|
+          .stat-column href="#"
+            span.number= item.last
+            span= item.first
+#delivery
+  - if @slots.any?
+    .row-fluid
+      .span9
+        h4 Delivery Schedule
+      .span3 style="margin-top:10px"
+        button.btn onclick="mark_delivered();" Mark Selected As Delivered
+    - @slots.each do |slot|
+      .row-fluid
+        hr
+        h5 = slot.delivery_label
+      .row-fluid 
+        - if slot.undelivered_items.any?
+          table.table.table-striped.table-bordered
+            tr 
+              th Delivered
+              th Order #
+              th Customer
+              th Item
+              th Qty
+              th Phone
+              th Email
+              th Delivery Address
+              th
+            - slot.undelivered_items.each do |line_item|
+              tr 
+                td
+                  input type="checkbox" value="#{line_item.id}"
+                td = line_item.order.id
+                td = line_item.order.customer.company_name
+                td = line_item.item.name
+                td = line_item.quantity
+                td = link_to line_item.order.customer.phone_number, "tel:#{line_item.order.customer.phone_number}"
+                td = link_to line_item.order.customer.email, "mailto:#{line_item.order.customer.email}"
+                td 
+                  a href="https://maps.google.com/?q=#{line_item.order.customer.address_one}, #{line_item.order.customer.city}, #{line_item.order.customer.state}" target="blank"
+                    = "#{line_item.order.customer.address_one}, #{line_item.order.customer.address_two}, "
+                    = "#{line_item.order.customer.city}, #{line_item.order.customer.state}"
+                td
+                  a.btn.btn-mini.btn-space href=user_order_path(current_user,line_item.order.id) View Order
+                  a.btn.btn-mini.btn-space href=edit_user_order_path(current_user, line_item.order.id) Edit Order
+        .row-fluid
+          table.table.table-bordered
+            tr
+              th = "Delivery Summary for #{slot.delivery_label}"
+              td = "#{slot.orders.count} Customer(s)"
+              - slot.items.each do |item|
+                td = "#{DeliverySlot.count_items(slot.id,item.id)} #{item.name}"
+#invoice
+  - if @uninvoiced_items.any?
+    hr
+    .row-fluid
+      h4 Orders Ready For Invoicing
+    .row-fluid
+      table.table.table-striped.table-bordered
+        tr
+          th Order id
+          th Customer 
+          th Amount Due
           th
-        - order.line_items.each do |line_item|
-          tr style="background-color:#EBF2F7"
-            td = line_item.order.customer.company_name
-            td = line_item.item.name
-            td = line_item.quantity
-            td Not Processed
+        - @uninvoiced_items.each do |order|
+          tr
+            td = order.id
+            td = order.customer.company_name
+            td $0
             td
-              a.btn.btn-mini.btn-space href="#" View
-              a.btn.btn-mini.btn-space href="#" Invoice
-              a.btn.btn-mini.btn-space href="#" Email Customer
+              a.btn.btn-mini.btn-space href=user_order_path(current_user, order.id) View Order
+              a.btn.btn-mini.btn-space href=edit_user_order_path(current_user, order.id) Edit Order
+              a.btn.btn-mini href="#" Invoice
+
+javascript:
+  var mark_delivered = function() {
+    var items = [];
+    $.each($("input[type='checkbox']:checked"), function(i,item){
+      items.push(item.value);
+    });
+    $.ajax({
+      type: 'POST',
+      url: '/mark_delivered',
+      data: {"ids":items},
+      async:false
+    });
+    location.reload();
+  }

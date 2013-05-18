@@ -63,7 +63,7 @@ class ItemsController < ApplicationController
     @item.destroy
 
     respond_to do |format|
-      format.html { redirect_to items_url }
+      format.html { redirect_to user_items_url, notice: 'Item was successfully removed.' }
       format.json { head :no_content }
     end
   end

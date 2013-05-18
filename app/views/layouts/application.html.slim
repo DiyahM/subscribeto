@@ -17,6 +17,18 @@ html lang="en"
     link href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72"
     link href="images/apple-touch-icon.png" rel="apple-touch-icon-precomposed"
     //link href="favicon.ico" rel="shortcut icon"
+    javascript:
+      (function(c,a){window.mixpanel=a;var b,d,h,e;b=c.createElement("script");
+      b.type="text/javascript";b.async=!0;b.src=("https:"===c.location.protocol?"https:":"http:")+
+      '//cdn.mxpnl.com/libs/mixpanel-2.2.min.js';d=c.getElementsByTagName("script")[0];
+      d.parentNode.insertBefore(b,d);a._i=[];a.init=function(b,c,f){function d(a,b){
+      var c=b.split(".");2==c.length&&(a=a[c[0]],b=c[1]);a[b]=function(){a.push([b].concat(
+      Array.prototype.slice.call(arguments,0)))}}var g=a;"undefined"!==typeof f?g=a[f]=[]:
+      f="mixpanel";g.people=g.people||[];h=['disable','track','track_pageview','track_links',
+      'track_forms','register','register_once','unregister','identify','alias','name_tag','set_config',
+      'people.set','people.set_once','people.increment','people.track_charge','people.append'];
+      for(e=0;e<h.length;e++)d(g,h[e]);a._i.push([b,c,f])};a.__SV=1.2;})(document,window.mixpanel||[]);
+      mixpanel.init("f5885d6a344288a4fae50012fa0de6fb");
 
   body
     .navbar.navbar-fluid-top.navbar-fixed-top
@@ -32,26 +44,25 @@ html lang="en"
               - if current_user
                 li= link_to "Dashboard", dashboard_path
                 li= link_to "Orders", user_orders_path(current_user)
-                li= link_to "Items", user_items_path(current_user)
+                li= link_to "Customers", user_customers_path(current_user)
                 li= link_to "Invoices", "#"
-                li= link_to "Reports", "#"
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#" Manage
                   ul.dropdown-menu
-                    li= link_to "Inventory", "#"
-                    li= link_to "Sales", "#"
+                    //li= link_to "Inventory", "#"
+                    //li= link_to "Sales", "#"
                     li= link_to "Delivery", user_delivery_slots_path(current_user)
-                    li= link_to "Customers", user_customers_path(current_user)
+                    li= link_to "Items", user_items_path(current_user)
+                    //li= link_to "Reports", "#"
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#"
                     = current_user.email
                   ul.dropdown-menu
-                    li= link_to "Settings", "#"
-                    li= link_to "Tutorials", "#"
+                    //li= link_to "Settings", "#"
+                    //li= link_to "Tutorials", "#"
                     li= link_to "Quick Start Guide", quickstart_path
                     li= link_to "Logout", logout_path
               - else
-                li= link_to "Sign Up", signup_path
                 li= link_to "Login", login_path
 
     .container-fluid
@@ -64,5 +75,4 @@ html lang="en"
           - else
             = bootstrap_flash
             = yield
-    
-    
+

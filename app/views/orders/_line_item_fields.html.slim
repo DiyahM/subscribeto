@@ -1,6 +1,8 @@
 tr.nested-fields
   = f.inputs do
     td
+      = f.input :delivered, :label => '', :as => :boolean
+    td
       = f.input :delivery_slot_id, :label => false, :as => :select,
         :collection => Hash[DeliverySlot.all.map{|b| [b.delivery_label,b.id]}], :include_blank => false
     td

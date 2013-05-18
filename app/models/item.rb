@@ -6,10 +6,10 @@ class Item < ActiveRecord::Base
   validates :item_type, presence: :true
 
   def self.raw_goods(id)
-    Item.where("item_type = ? AND user_id = ?", "Raw Goods", id)
+    Item.where("item_type = ? AND user_id = ?", "Raw Goods", id).order("updated_at DESC")
   end
 
   def self.prepared_goods(id)
-    Item.where("item_type = ? AND user_id = ?", "Available for sale", id)
+    Item.where("item_type = ? AND user_id = ?", "Available for sale", id).order("updated_at DESC")
   end
 end
