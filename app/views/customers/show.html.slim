@@ -33,6 +33,9 @@ p#notice = notice
       strong Notes:
       p
         = @customer.note
+      strong Terms:
+      p
+        = @customer.term
 .row-fluid
   a.btn.btn-success href=new_user_order_path(current_user) Create New Order For Customer
 

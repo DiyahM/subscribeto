@@ -4,13 +4,49 @@ tr.nested-fields
       = f.input :delivered, :label => '', :as => :boolean
     td
       = f.input :delivery_slot_id, :label => false, :as => :select,
-        :collection => Hash[DeliverySlot.all.map{|b| [b.delivery_label,b.id]}], :include_blank => false
+        :collection => Hash[DeliverySlot.all.map{|b| [b.delivery_label,b.id]}], :include_blank => "Select Time"
     td
       = f.input :item_id, :label => false, :as => :select,
-        :collection => Item.prepared_goods(current_user.id),
-        :include_blank => false
+        :collection => Item.prepared_goods(current_user.id), input_html: { class: "order_item" },
+        :include_blank => "Select Item"
+    td.order_list_price
+      | --
+    td 
+      = f.input :price, :label => false, input_html: { class: "order_customer_price" }
     td
-      = f.input :quantity, :label => false
-    td 0
+      = f.input :quantity, :label => false, input_html: { :value => "1", class: "order_quantity"}
+    td.order_price
+      | --
+    td
+      | --
     td
       = link_to_remove_association "remove", f
+
+javascript:
+  $(".order_item").change(function() {
+    var item_id = $(this).val();
+    var item_element = $(this).parents("tr");
+    $.getJSON("/users/"+"#{current_user.id}"+"/items/"+item_id, function(data){
+      item_element.children(".order_list_price").html("$"+data.price);
+      item_element.find(".order_customer_price").val(data.price);
+      var total = parseInt(item_element.find(".order_quantity").val()) * parseFloat(data.price);
+      item_element.find(".order_price").html(total);
+      calculateOrderTotal();
+    });
+  });
+
+  $(".order_quantity").change(function() {
+    var item_element = $(this).parents("tr");
+    var total = parseInt(item_element.find(".order_quantity").val()) * parseFloat(item_element.find(".order_customer_price").val());
+    item_element.find(".order_price").html(total);
+    calculateOrderTotal();
+  });
+
+  $(".order_customer_price").change(function() {
+    var item_element = $(this).parents("tr");
+    var total = parseInt(item_element.find(".order_quantity").val()) * parseFloat(item_element.find(".order_customer_price").val());
+    item_element.find(".order_price").html(total);
+    calculateOrderTotal();
+  });
+
+  

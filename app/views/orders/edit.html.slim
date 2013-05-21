@@ -40,24 +40,56 @@
           = @order.customer.note
   
   .row-fluid
-    h4 Order Details
+    h4 Order Summary
+    table.table.table-bordered
+      tr
+        th Order Total
+        th
+          = f.input :total, :label => false, :input_html => { readonly: true, class: "order-total"}
+
+  .row-fluid
+    h5 Order Details
   .row-fluid
     table.table.table-bordered#order-table
       tr
         th Delivered
-        th width="25%" Assigned Delivery Slot
-        th width="25%" Item
-        th width="12%" Qty
-        th width="10%" Amount
+        th Assigned Delivery Slot
+        th Item
+        th List Price
+        th Customer Price
+        th Qty
+        th Amount
+        th Credit
         th
       = f.semantic_fields_for :line_items do |line_item|
         = render 'line_item_fields', :f => line_item
-    .links
-      = link_to_add_association 'add new line item', f, :line_items
+      .links
+        = link_to_add_association 'add new line item', f, :line_items
   .row-fluid
     = f.action :submit, :label => 'Save', :button_html => { class: "btn btn-success" }
 
 javascript:
+  $("#order-table .nested-fields").each(function(){
+    var item_id = $(this).find(".order_item").val();
+    var item_element = $(this);
+    $.getJSON("/users/"+"#{current_user.id}"+"/items/"+item_id, function(data){
+      item_element.find(".order_list_price").html("$"+data.price);
+      var total = parseInt(item_element.find(".order_quantity").val()) * parseFloat(data.price);
+      item_element.find(".order_price").html(total);
+    });
+    
+  });
   $("a.add_fields").data("association-insertion-node", '#order-table');
   $("a.add_fields").data("association-insertion-method", 'append');
+  $('#order-table').bind('cocoon:after-remove', function(e, removedItem) {
+    calculateOrderTotal();
+  });  
+
+  var calculateOrderTotal = function(){
+    var total = 0;
+    $("#order-table .nested-fields .order_price").each(function(){
+      total += parseFloat($(this).text());
+    });
+    $(".order-total").val(total.toFixed(2));
+  }
 

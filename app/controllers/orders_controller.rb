@@ -1,8 +1,8 @@
 class OrdersController < ApplicationController
   autocomplete :customer, :company_name, :full => true, :display_value => :company_name,
     :extra_data => [ :poc_name, :email, :phone_number, :address_one, :address_two,
-                    :city, :state, :postal_code ] 
-  autocomplete :item, :name, :full => true, :display_value => :name
+                    :city, :state, :postal_code, :note, :term] 
+  autocomplete :item, :name, :full => true, :display_value => :name, :extra_data => [ :price ]
 
   def get_autocomplete_items(parameters)
     items = super(parameters)
@@ -31,6 +31,7 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new
     @order.build_customer
+    @order.line_items.build
   end
 
   # GET /orders/1/edit

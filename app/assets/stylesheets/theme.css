@@ -1,3 +1,6 @@
+.formtastic strong {
+  font-weight: bold;
+}
 @media (max-width: 480px) {
       
 }

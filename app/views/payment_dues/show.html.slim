@@ -1,0 +1,64 @@
+.row-fluid
+  .span6
+    p
+      | Company Name
+      br
+      | Compay Address
+      br
+      | Company Phone Number
+      br
+      | Company Email
+  .span6
+    h2 Invoice
+    table.table.table-bordered
+      tr
+        th Date
+        th Invoice #
+        th Terms
+        th Due Date
+      tr
+        td= time_tag @invoice.created_at
+        td= @invoice.id
+        td= @invoice.order.customer.term
+        td= time_tag @invoice.due_date
+.row-fluid
+  h5 Invoice For:
+  p
+    = @invoice.order.customer.company_name
+    br
+    = @invoice.order.customer.poc_name
+    br
+    = @invoice.order.customer.address_one
+    br
+    = @invoice.order.customer.address_two
+    br
+    = "#{@invoice.order.customer.city}, #{@invoice.order.customer.state} #{@invoice.order.customer.postal_code}"
+hr
+.row-fluid
+  h4 Order 
+  table.table.table-striped.table-bordered
+    tr
+      th Item Description
+      th Quantity
+      th Price
+      th Credit
+      th Amount
+    - @invoice.order.line_items.each do |line_item|
+      tr
+        td= line_item.item.name
+        td= line_item.quantity
+        td= line_item.price
+        td
+          | --
+        - total = line_item.quantity * line_item.price
+        td= number_with_precision(total, precision:2)
+    tr
+      th colspan="4" 
+        h4 Total Amount Due
+      th
+        h4
+          = @invoice.order.total
+hr
+.row-fluid
+  center
+    h4 Thank you!

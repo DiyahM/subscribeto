@@ -24,6 +24,11 @@
         = f.label :phone_number, :class => "control-label"
         .controls
           = f.telephone_field :phone_number
+      .control-group
+        = f.label "Terms", :class => "control-label"
+        .controls
+          = f.select :term,
+            "<option>Net 30</option><option>Net 10</option><option>Net 15</option><option>Net 60</option>".html_safe
     .span6
       .control-group
         = f.label "Delivery Address", class: "control-label"

@@ -1,12 +1,12 @@
 class Order < ActiveRecord::Base
   attr_accessible :user_id, :customer_attributes, :item_id, :payment_due_attributes, :start_date,
-    :customer_company, :line_items_attributes, :customer_id, :status
+    :customer_company, :line_items_attributes, :customer_id, :status, :total, :complete_date
   belongs_to :customer
   has_many :line_items, :dependent => :destroy
   has_many :items, :through => :line_items
   belongs_to :user
   has_many :payment_recvd
-  has_many :payment_due
+  has_one :payment_due
   accepts_nested_attributes_for :customer, :payment_due
   accepts_nested_attributes_for :line_items, :reject_if => :all_blank, :allow_destroy => true
   #after_create :create_payment_due
@@ -25,6 +25,7 @@ class Order < ActiveRecord::Base
     end
     if count == count_check
       order.status = "Delivered"
+      order.complete_date = Date.today
     elsif (1..count_check).include?(count)
       order.status = "Partially Delivered"
     else

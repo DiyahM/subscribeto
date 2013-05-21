@@ -6,7 +6,8 @@
       br
       = "Order # #{@order.id}"
   .span2
-    button.btn.btn-success Create Invoice
+    = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
+      :order_id => @order.id}, :class => "btn" )
 
 
 .row-fluid style="border:1px solid #ccc;padding:10px;margin-bottom:20px;"
@@ -44,15 +45,30 @@
   table.table.table-bordered#order-table
     tr
       th width="25%" Assigned Delivery Slot
+      th Delivered
       th width="25%" Item
       th width="12%" Qty
-      th width="10%" Amount
+      th Price
+      th width="10%" Total(s)
     - @order.line_items.each do |line_item|
       tr
         td= line_item.delivery_slot.delivery_label
+        td= line_item.delivered? ? 'yes' : 'no'
         td= line_item.item.name
         td= line_item.quantity
-        td
+        td= number_with_precision(line_item.price, precision: 2)
+        - total = line_item.price * line_item.quantity
+        td= number_with_precision(total, precision: 2)
+    tr
+      th Totals
+      th
+        | --
+      th= "#{@order.line_items.count} Item(s)"
+      th
+        | --
+      th
+        | --
+      th= number_with_precision(@order.total, precision: 2)
 
 
 p

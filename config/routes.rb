@@ -15,7 +15,7 @@ Subscribeto::Application.routes.draw do
       get :autocomplete_customer_company_name, :on => :collection
       get :autocomplete_item_name, :on => :collection
     end 
-    #resources :payment_dues
+    resources :invoices, :controller => "payment_dues"
   end
 
   post 'mark_delivered', to: 'pages#mark_delivered'

@@ -16,30 +16,59 @@
       = f.input :customer_id, :as => :hidden,
         :input_html => { :name => "order[customer_id]" }
       
-    .span6
+    .span4
       #customer-details style="display:none"
-        | Customer Details
-        br
-        input type="text" id="poc-name"
-
-  
+      
+    .span4
+      #customer-notes style="display:none"
+  hr
   .row-fluid
+    h4 Order Summary
+    table.table.table-bordered
+      tr
+        th Order Total
+        th
+          = f.input :total, :label => false, :input_html => { readonly: true, value: 0, class: "order-total"}
+  .row-fluid
+    h5 Order Details
     table.table.table-bordered#order-table
       tr
+        th 
+        th Assigned Delivery Slot
+        th Item
+        th List Price
+        th Customer Price
+        th Qty
+        th Amount
+        th Credit
         th
-        th width="25%" Assigned Delivery Slot
-        th width="25%" Item
-        th width="12%" Qty
-        th width="10%" Amount
-        th
-    = f.semantic_fields_for :line_items do |line_item|
-      = render 'line_item_fields', :f => line_item
-    .links
-      = link_to_add_association 'add new line item', f, :line_items
+      = f.semantic_fields_for :line_items do |line_item|
+        = render 'line_item_fields', :f => line_item
+      .links
+        = link_to_add_association 'add new line item', f, :line_items
   .row-fluid
     = f.action :submit, :label => 'Save', :button_html => { class: "btn btn-success" }
 
 javascript:
   $("a.add_fields").data("association-insertion-node", '#order-table');
   $("a.add_fields").data("association-insertion-method", 'append');
+  $('#order_customer_company').bind('railsAutocomplete.select', function(event, data){
+    var customer_html = "<strong>Contact name: </strong>" + data.item.poc_name + "<br /><strong>Phone Number: </strong>"+data.item.phone_number+"<br /><strong>Delivery Address:</strong><br />"+data.item.address_one+"<br />"+data.item.address_two+"<br />"+data.item.city+", "+data.item.state+" "+data.item.postal_code+"</div>";
+    $('#customer-details').html(customer_html);
+    $('#customer-notes').html("<strong>Customer Notes: </strong>"+data.item.note);
+    $('#customer-details').show();
+    $('#customer-notes').show();
+  }); 
+  
+  $('#order-table').bind('cocoon:after-remove', function(e, removedItem) {
+    calculateOrderTotal();
+  });  
+
+  var calculateOrderTotal = function(){
+    var total = 0;
+    $("#order-table .nested-fields .order_price").each(function(){
+      total += parseFloat($(this).text());
+    });
+    $(".order-total").val(total.toFixed(2));
+  }
 
