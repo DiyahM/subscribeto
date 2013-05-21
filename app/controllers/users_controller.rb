@@ -15,7 +15,12 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
+    redirect_to :back, notice: "Unauthorized to view page" unless current_user
+  end
+
+  def update
+    current_user.update_attributes(params[:user]) if current_user
+    redirect_to dashboard_path, notice: "Settings Updated"    
   end
 
   def add_bank_account

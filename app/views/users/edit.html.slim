@@ -1,2 +1,8 @@
-= javascript_include_tag "https://js.balancedpayments.com/v1/balanced.js"
-h2 Lets Get Started
+.row-fluid
+  h2 Account Settings
+hr
+.row-fluid
+  = semantic_form_for current_user do |f|
+    = f.inputs :company_name, :name, :email, :phone_number, :street_address, :city, :state,
+      :postal_code, :password, :password_confirmation
+    = f.action :submit, :label => "Update Settings"

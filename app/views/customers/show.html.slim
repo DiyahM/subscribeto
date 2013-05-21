@@ -54,8 +54,9 @@ p#notice = notice
         tr
           td= order.id
           td= time_tag order.created_at
-          td Pending
-          td Show Items
+          td= order.status
+          td
+            a.btn.btn-mini href=user_order_path(current_user, order) View Order
 
 
 

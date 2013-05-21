@@ -8,6 +8,7 @@ gem 'formtastic'
 gem 'rails3-jquery-autocomplete'
 gem 'formtastic-bootstrap'
 gem 'cocoon'
+gem "wkhtmltopdf", "~> 0.1.2"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

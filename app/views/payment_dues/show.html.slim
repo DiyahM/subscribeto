@@ -1,13 +1,16 @@
 .row-fluid
   .span6
     p
-      | Company Name
+      h4 = current_user.company_name
+      = current_user.name
       br
-      | Compay Address
+      = current_user.street_address
       br
-      | Company Phone Number
+      = "#{current_user.city}, #{current_user.state} #{current_user.postal_code}"
       br
-      | Company Email
+      = current_user.phone_number
+      br
+      = current_user.email
   .span6
     h2 Invoice
     table.table.table-bordered
@@ -17,10 +20,10 @@
         th Terms
         th Due Date
       tr
-        td= time_tag @invoice.created_at
+        td= time_tag @invoice.created_at, format: "%B %d, %Y"
         td= @invoice.id
         td= @invoice.order.customer.term
-        td= time_tag @invoice.due_date
+        td= time_tag @invoice.due_date, format: "%B %d, %Y"
 .row-fluid
   h5 Invoice For:
   p
@@ -29,8 +32,9 @@
     = @invoice.order.customer.poc_name
     br
     = @invoice.order.customer.address_one
-    br
-    = @invoice.order.customer.address_two
+    - if @invoice.order.customer.address_two != ""
+      br
+      = @invoice.order.customer.address_two 
     br
     = "#{@invoice.order.customer.city}, #{@invoice.order.customer.state} #{@invoice.order.customer.postal_code}"
 hr
