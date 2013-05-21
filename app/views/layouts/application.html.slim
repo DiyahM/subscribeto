@@ -45,7 +45,7 @@ html lang="en"
                 li= link_to "Dashboard", dashboard_path
                 li= link_to "Orders", user_orders_path(current_user)
                 li= link_to "Customers", user_customers_path(current_user)
-                li= link_to "Invoices", "#"
+                li= link_to "Invoices", user_invoices_path(current_user)
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#" Manage
                   ul.dropdown-menu

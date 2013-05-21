@@ -25,7 +25,7 @@ table.table.table-striped
         input type="checkbox"
       td = order.id
       td = "#{order.customer.company_name}" 
-      td Invoice Printed
+      td = order.status
       td 
         = link_to 'View', user_order_path(current_user, order), class: "btn btn-mini btn-space" 
         = link_to 'Edit', edit_user_order_path(current_user, order), class: "btn btn-mini btn-space"

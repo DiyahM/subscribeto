@@ -74,16 +74,17 @@
           th Order id
           th Customer 
           th Amount Due
+          th Status
           th
         - @uninvoiced_items.each do |order|
           tr
             td = order.id
             td = order.customer.company_name
-            td $0
+            td = number_with_precision(order.total, precision:2)
+            td = order.status
             td
-              a.btn.btn-mini.btn-space href=user_order_path(current_user, order.id) View Order
-              a.btn.btn-mini.btn-space href=edit_user_order_path(current_user, order.id) Edit Order
-              a.btn.btn-mini href="#" Invoice
+              = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
+                :order_id => order.id, :user_id => current_user.id}, :class => "btn btn-mini" )
 
 javascript:
   var mark_delivered = function() {

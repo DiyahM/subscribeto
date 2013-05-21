@@ -5,6 +5,8 @@
       = time_tag @order.created_at
       br
       = "Order # #{@order.id}"
+      br
+      = "Order Status: #{@order.status}"
   .span2
     = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
       :order_id => @order.id}, :class => "btn" )

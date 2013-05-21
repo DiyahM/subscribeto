@@ -16,20 +16,24 @@ class Order < ActiveRecord::Base
   validates :customer_id, presence: true
   validates :line_items, :length => { :minimum => 1 }
 
-  def self.update_status(order_id)
+  def self.update_status(order_id, status=nil)
     order = Order.includes(:line_items).find(order_id)
-    count_check = order.line_items.count
-    count = 0
-    order.line_items.each do |line_item|
-      count += 1 if line_item.delivered
-    end
-    if count == count_check
-      order.status = "Delivered"
-      order.complete_date = Date.today
-    elsif (1..count_check).include?(count)
-      order.status = "Partially Delivered"
+    if status.nil?
+      count_check = order.line_items.count
+      count = 0
+      order.line_items.each do |line_item|
+        count += 1 if line_item.delivered
+      end
+      if count == count_check
+        order.status = "Delivered"
+        order.complete_date = Date.today
+      elsif (1..count_check).include?(count)
+        order.status = "Partially Delivered"
+      else
+        order.status = "In Process"
+      end
     else
-      order.status = "In Process"
+      order.status = status
     end
     order.save
   end
