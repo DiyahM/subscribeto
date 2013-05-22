@@ -1,4 +1,7 @@
 .row-fluid
+  .span3.pull-right
+    = link_to "Printable Invoice (PDF)", user_invoice_path(current_user,@invoice, format: "pdf"), class: "btn"
+.row-fluid
   .span6
     p
       h4 = current_user.company_name

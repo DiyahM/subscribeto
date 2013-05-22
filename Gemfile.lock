@@ -1,6 +1,18 @@
+GIT
+  remote: git://github.com/prawnpdf/prawn.git
+  revision: 8028ca0cd2aae8c72df9fc4bf16388948423bcb2
+  ref: 8028ca0cd2
+  specs:
+    prawn (1.0.0.rc2)
+      afm
+      pdf-reader (~> 1.2)
+      ruby-rc4
+      ttfunk (~> 1.0.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
+    Ascii85 (1.0.2)
     actionmailer (3.2.13)
       actionpack (= 3.2.13)
       mail (~> 2.5.3)
@@ -29,6 +41,7 @@ GEM
       i18n (= 0.6.1)
       multi_json (~> 1.0)
     addressable (2.3.4)
+    afm (0.2.0)
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
     builder (3.0.4)
@@ -70,6 +83,7 @@ GEM
     guard-rspec (2.5.3)
       guard (>= 1.1)
       rspec (~> 2.11)
+    hashery (2.1.0)
     hike (1.2.2)
     i18n (0.6.1)
     journey (1.0.4)
@@ -98,6 +112,12 @@ GEM
     mime-types (1.22)
     multi_json (1.7.2)
     nokogiri (1.5.9)
+    pdf-reader (1.3.3)
+      Ascii85 (~> 1.0.0)
+      afm (~> 0.2.0)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     pg (0.15.1)
     polyglot (0.3.3)
     pry (0.9.12)
@@ -148,6 +168,7 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
+    ruby-rc4 (0.1.5)
     sass (3.2.7)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -178,6 +199,7 @@ GEM
     treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
+    ttfunk (1.0.3)
     turnip (1.1.0)
       gherkin (>= 2.5)
       rspec (~> 2.0)
@@ -193,7 +215,6 @@ GEM
     webmock (1.9.3)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
-    wkhtmltopdf (0.1.2)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -214,6 +235,7 @@ DEPENDENCIES
   launchy
   less-rails
   pg
+  prawn!
   pry
   rails (= 3.2.13)
   rails3-jquery-autocomplete
@@ -229,4 +251,3 @@ DEPENDENCIES
   uglifier (>= 1.0.3)
   vcr
   webmock (~> 1.9.0)
-  wkhtmltopdf (~> 0.1.2)

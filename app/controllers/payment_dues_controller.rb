@@ -13,5 +13,12 @@ class PaymentDuesController < ApplicationController
 
   def show
     @invoice = PaymentDue.includes(:order => [:customer, :line_items]).find(params[:id])
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = InvoicePdf.new(@invoice, view_context, current_user)
+        send_data pdf.render, filename: "invoice_#{@invoice.id}", type: "application/pdf", disposition: "inline"
+      end
+    end
   end
 end
