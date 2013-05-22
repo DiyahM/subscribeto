@@ -9,9 +9,10 @@ gem 'rails3-jquery-autocomplete'
 gem 'formtastic-bootstrap'
 gem 'cocoon'
 gem 'prawn', :git => "git://github.com/prawnpdf/prawn.git", :ref => "8028ca0cd2"
+gem 'activeadmin', github: 'gregbell/active_admin'
+gem 'sass-rails',   '~> 3.2.3'
 
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
   gem 'twitter-bootstrap-rails'

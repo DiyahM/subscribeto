@@ -1,4 +1,21 @@
 GIT
+  remote: git://github.com/gregbell/active_admin.git
+  revision: fe2a508890a37ebf634859813823bd597edb6c7e
+  specs:
+    activeadmin (0.6.0)
+      arbre (>= 1.0.1)
+      bourbon (>= 1.0.0)
+      devise (>= 1.1.2)
+      fastercsv
+      formtastic (>= 2.0.0)
+      inherited_resources (>= 1.3.1)
+      jquery-rails (>= 1.0.0)
+      kaminari (>= 0.13.0)
+      meta_search (>= 0.9.2)
+      rails (>= 3.0.0)
+      sass (>= 3.1.0)
+
+GIT
   remote: git://github.com/prawnpdf/prawn.git
   revision: 8028ca0cd2aae8c72df9fc4bf16388948423bcb2
   ref: 8028ca0cd2
@@ -42,8 +59,13 @@ GEM
       multi_json (~> 1.0)
     addressable (2.3.4)
     afm (0.2.0)
+    arbre (1.0.1)
+      activesupport (>= 3.0.0)
     arel (3.0.2)
     bcrypt-ruby (3.0.1)
+    bourbon (3.1.6)
+      sass (>= 3.2.0)
+      thor
     builder (3.0.4)
     capybara (2.1.0)
       mime-types (>= 1.16)
@@ -63,10 +85,16 @@ GEM
     commonjs (0.2.6)
     crack (0.3.2)
     database_cleaner (0.9.1)
+    devise (2.2.4)
+      bcrypt-ruby (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (~> 3.1)
+      warden (~> 1.2.1)
     diff-lcs (1.2.3)
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    fastercsv (1.5.5)
     formatador (0.2.4)
     formtastic (2.2.1)
       actionpack (>= 3.0)
@@ -83,9 +111,13 @@ GEM
     guard-rspec (2.5.3)
       guard (>= 1.1)
       rspec (~> 2.11)
+    has_scope (0.5.1)
     hashery (2.1.0)
     hike (1.2.2)
     i18n (0.6.1)
+    inherited_resources (1.4.0)
+      has_scope (~> 0.5.0)
+      responders (~> 0.9)
     journey (1.0.4)
     jquery-rails (2.2.1)
       railties (>= 3.0, < 5.0)
@@ -94,6 +126,9 @@ GEM
       jquery-rails
       railties (>= 3.1.0)
     json (1.7.7)
+    kaminari (0.14.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     launchy (2.3.0)
       addressable (~> 2.3)
     less (2.3.2)
@@ -108,10 +143,16 @@ GEM
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    meta_search (1.1.3)
+      actionpack (~> 3.1)
+      activerecord (~> 3.1)
+      activesupport (~> 3.1)
+      polyamorous (~> 0.5.0)
     method_source (0.8.1)
     mime-types (1.22)
     multi_json (1.7.2)
     nokogiri (1.5.9)
+    orm_adapter (0.4.0)
     pdf-reader (1.3.3)
       Ascii85 (~> 1.0.0)
       afm (~> 0.2.0)
@@ -119,6 +160,8 @@ GEM
       ruby-rc4
       ttfunk
     pg (0.15.1)
+    polyamorous (0.5.0)
+      activerecord (~> 3.0)
     polyglot (0.3.3)
     pry (0.9.12)
       coderay (~> 1.0.5)
@@ -153,6 +196,8 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.4)
+    responders (0.9.3)
+      railties (~> 3.1)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -212,6 +257,8 @@ GEM
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     vcr (2.4.0)
+    warden (1.2.1)
+      rack (>= 1.0)
     webmock (1.9.3)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
@@ -222,6 +269,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activeadmin!
   bcrypt-ruby (~> 3.0.0)
   capybara
   cocoon

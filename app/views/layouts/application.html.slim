@@ -68,11 +68,10 @@ html lang="en"
     .container-fluid
       .row-fluid
         .container style="margin-top:7%"
+          = bootstrap_flash
           - if @layout != "home"
             #mainContent
-              = bootstrap_flash
               = yield
           - else
-            = bootstrap_flash
             = yield
 
