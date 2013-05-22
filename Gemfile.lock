@@ -151,6 +151,7 @@ GEM
     method_source (0.8.1)
     mime-types (1.22)
     multi_json (1.7.2)
+    newrelic_rpm (3.6.2.96)
     nokogiri (1.5.9)
     orm_adapter (0.4.0)
     pdf-reader (1.3.3)
@@ -282,6 +283,7 @@ DEPENDENCIES
   jquery-ui-rails
   launchy
   less-rails
+  newrelic_rpm
   pg
   prawn!
   pry
