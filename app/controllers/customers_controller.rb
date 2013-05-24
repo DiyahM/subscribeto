@@ -48,6 +48,13 @@ class CustomersController < ApplicationController
     end
   end
 
+  def new_order
+    customer = Customer.find(params[:customer_id])
+    @order = customer.orders.build
+    session[:order] = @order
+    redirect_to new_user_order_path(current_user) 
+  end
+
   # PUT /customers/1
   # PUT /customers/1.json
   def update

@@ -37,7 +37,7 @@ p#notice = notice
       p
         = @customer.term
 .row-fluid
-  a.btn.btn-success href=new_user_order_path(current_user) Create New Order For Customer
+  a.btn.btn-success href="#{@customer.id}/orders/new" Create New Order For Customer
 
 - if @customer.orders.any?
   hr

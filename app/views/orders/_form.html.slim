@@ -50,6 +50,17 @@
     = f.action :submit, :label => 'Save', :button_html => { class: "btn btn-success" }
 
 javascript:
+  if ($('#order_customer_id').val() != "") {
+    var customer_id = $('#order_customer_id').val();
+    $.getJSON("/users/#{current_user.id}/customers/" + customer_id, function(data){
+      $('#order_customer_company').val(data.company_name);
+      var customer_html = "<strong>Contact name: </strong>" + data.poc_name + "<br /><strong>Phone Number: </strong>"+data.phone_number+"<br /><strong>Delivery Address:</strong><br />"+data.address_one+"<br />"+data.address_two+"<br />"+data.city+", "+data.state+" "+data.postal_code+"</div>";
+    $('#customer-details').html(customer_html);
+    $('#customer-notes').html("<strong>Customer Notes: </strong>"+data.note);
+    $('#customer-details').show();
+    $('#customer-notes').show();
+    });  
+  }
   $("a.add_fields").data("association-insertion-node", '#order-table');
   $("a.add_fields").data("association-insertion-method", 'append');
   $('#order_customer_company').bind('railsAutocomplete.select', function(event, data){

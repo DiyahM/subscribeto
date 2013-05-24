@@ -29,8 +29,13 @@ class OrdersController < ApplicationController
   # GET /orders/new
   # GET /orders/new.json
   def new
-    @order = Order.new
-    @order.build_customer
+    if session[:order].nil?
+      @order = Order.new
+      @order.build_customer
+    else
+      @order = session[:order]
+      session[:order] = nil
+    end
     @order.line_items.build
   end
 
