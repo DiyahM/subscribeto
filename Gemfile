@@ -12,6 +12,7 @@ gem 'prawn', :git => "git://github.com/prawnpdf/prawn.git", :ref => "8028ca0cd2"
 gem 'activeadmin', github: 'gregbell/active_admin'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'newrelic_rpm'
+gem 'pony'
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'
@@ -21,12 +22,14 @@ group :assets do
   gem 'therubyracer'
 end
 
+group :test, :development do
+  gem 'launchy'
+end
 group :test do
   gem 'pry'
   gem "rspec-rails", "~> 2.0"
   gem 'turnip'
   gem 'capybara'
-  gem 'launchy'
   gem 'database_cleaner'
   gem 'rb-fsevent'
   gem 'guard-rspec'

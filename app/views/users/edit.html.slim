@@ -4,5 +4,5 @@ hr
 .row-fluid
   = semantic_form_for current_user do |f|
     = f.inputs :company_name, :name, :email, :phone_number, :street_address, :city, :state,
-      :postal_code, :password, :password_confirmation
+      :postal_code
     = f.action :submit, :label => "Update Settings"

@@ -8,8 +8,11 @@
       br
       = "Order Status: #{@order.status}"
   .span2
-    = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
-      :order_id => @order.id}, :class => "btn" )
+    - if @order.status == "Delivered"
+      = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
+        :order_id => @order.id}, :class => "btn" )
+    - elsif @order.status == "Invoiced"
+      = link_to "View Invoice", user_invoice_path(current_user, @order.payment_due)
 
 
 .row-fluid style="border:1px solid #ccc;padding:10px;margin-bottom:20px;"

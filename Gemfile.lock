@@ -164,6 +164,8 @@ GEM
     polyamorous (0.5.0)
       activerecord (~> 3.0)
     polyglot (0.3.3)
+    pony (1.4.1)
+      mail (> 2.0)
     pry (0.9.12)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -285,6 +287,7 @@ DEPENDENCIES
   less-rails
   newrelic_rpm
   pg
+  pony
   prawn!
   pry
   rails (= 3.2.13)

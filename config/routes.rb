@@ -22,6 +22,7 @@ Subscribeto::Application.routes.draw do
   end
 
   post 'mark_delivered', to: 'pages#mark_delivered'
+  get 'email_invoice/:payment_due_id', to: 'payment_dues#email', as: 'email_invoice'
   #get 'user/:id/invoices', to: 'payment_dues#index', as: 'invoices'
   get 'signup', to: 'users#new', as: 'signup'
   get 'login', to: 'sessions#new', as: 'login'

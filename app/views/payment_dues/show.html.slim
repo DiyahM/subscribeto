@@ -1,6 +1,7 @@
 .row-fluid
-  .span3.pull-right
-    = link_to "Printable Invoice (PDF)", user_invoice_path(current_user,@invoice, format: "pdf"), class: "btn"
+  .span4.pull-right
+    = link_to "Printable Invoice (PDF)", user_invoice_path(current_user,@invoice, format: "pdf"), class: "btn btn-space"
+    = link_to "Email Invoice", email_invoice_path(:payment_due_id => @invoice.id), class: "btn"
 .row-fluid
   .span6
     p
