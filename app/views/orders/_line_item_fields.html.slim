@@ -4,7 +4,7 @@ tr.nested-fields
       = f.input :delivered, :label => '', :as => :boolean
     td
       = f.input :delivery_slot_id, :label => false, :as => :select,
-        :collection => Hash[DeliverySlot.all.map{|b| [b.delivery_label,b.id]}], :include_blank => "Select Time"
+        :collection => Hash[current_user.delivery_slots.map{|b| [b.delivery_label,b.id]}], :include_blank => "Select Time"
     td
       = f.input :item_id, :label => false, :as => :select,
         :collection => Item.prepared_goods(current_user.id), input_html: { class: "order_item" },
