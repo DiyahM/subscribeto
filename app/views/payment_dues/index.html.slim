@@ -4,6 +4,7 @@
     tr
       th Invoice #
       th Customer Name
+      th Invoice Date
       th Amount Due
       th Due Date
       th Status
@@ -12,9 +13,10 @@
     - @invoices.each do |invoice|
       tr
         td = invoice.id 
-        td = "#{invoice.order.customer.company_name}" 
+        td = "#{invoice.order.customer.company_name}"
+        td = time_tag invoice.created_at, format: "%B %d"
         td = invoice.amount 
-        td = time_tag invoice.due_date, format: "%B %d %Y" 
+        td = time_tag invoice.due_date, format: "%B %d" 
         td = invoice.paid? ? "Paid" : "Unpaid"
         td
           = link_to 'View', user_invoice_path(current_user,invoice), class: "btn btn-mini btn-space"

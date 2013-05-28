@@ -3,9 +3,14 @@
     .span6
       | Daily Summary:
     .span6.pull-right
-      = time_tag Time.now, format: "%A, %b %e"
+      = @date 
 
 #summary style="margin-top:50px;"
+  .row-fluid
+    .span5.pull-right
+      = form_tag dashboard_path, :method => "get" do
+        = text_field_tag :datepicker,"", placeholder:"Select new date", class:"input-medium"
+        = submit_tag("Change Date", class: "btn btn-success", style:"vertical-align:top;margin-left:8px") 
   - if @item_summary.any?
     .row-fluid 
       h4 Orders
@@ -100,3 +105,8 @@ javascript:
     });
     location.reload();
   }
+  $('#datepicker').datepicker();
+
+  $('#datepicker').change(function(){
+    console.log("changed");
+  });

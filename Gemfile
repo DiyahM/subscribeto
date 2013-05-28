@@ -20,6 +20,7 @@ group :assets do
   gem 'twitter-bootstrap-rails'
   gem 'less-rails'
   gem 'therubyracer'
+  gem 'jquery-ui-rails'
 end
 
 group :test, :development do
@@ -39,4 +40,3 @@ group :test do
 end
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'jquery-rails'
-gem 'jquery-ui-rails'
