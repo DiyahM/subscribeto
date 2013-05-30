@@ -11,10 +11,10 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require twitter/bootstrap
 //= require jquery_ujs
 //= require jquery.ui.autocomplete
 //= require jquery.ui.datepicker
+//= require twitter/bootstrap
 //= require autocomplete-rails
 //= require cocoon
 //= require_tree .
