@@ -1,1 +1,4 @@
 /spec
+/doc
+Guardfile
+README.rdoc
