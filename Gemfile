@@ -13,6 +13,8 @@ gem 'activeadmin', github: 'gregbell/active_admin'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'newrelic_rpm'
 gem 'pony'
+gem 'honeybadger'
+gem 'heroku'
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'
