@@ -27,6 +27,8 @@ Subscribeto::Application.routes.draw do
   get "dashboard", to: 'pages#dashboard', as: 'dashboard'
   get "quickstart", to: 'pages#quickstart', as: 'quickstart'
   get "pages/home"
+  get "quickbooks/authenticate"
+  get "quickbooks/oauth_callback"
 
   root :to => "pages#home"
 end

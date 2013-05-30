@@ -1,5 +1,19 @@
+=javascript_include_tag "https://appcenter.intuit.com/Content/IA/intuit.ipp.anywhere.js"
+
+javascript:
+  intuit.ipp.anywhere.setup({menuProxy: '/path/to/blue-dot', grantUrl: "#{quickbooks_authenticate_url}"});
 .row-fluid
   h2 Account Settings
+hr
+.row-fluid
+  - if current_user.qb_token.nil?
+    h4 Connect to Quickbooks
+    em
+      | Quickbooks feature is currently in testing.
+    ipp:connectToIntuit
+  - else
+    em
+      | ** Connected to Quickbooks 
 hr
 .row-fluid
   = semantic_form_for current_user do |f|

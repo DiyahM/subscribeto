@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130530164020) do
+ActiveRecord::Schema.define(:version => 20130530181804) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -136,6 +136,9 @@ ActiveRecord::Schema.define(:version => 20130530164020) do
     t.string   "bank_uri"
     t.string   "company_name"
     t.string   "state"
+    t.string   "qb_token"
+    t.string   "qb_secret"
+    t.string   "qb_realm_id"
   end
 
 end
