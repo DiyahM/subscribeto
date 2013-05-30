@@ -2,7 +2,6 @@ class User < ActiveRecord::Base
   has_secure_password
   has_many :delivery_slots, :dependent => :destroy
   has_many :items, :dependent => :destroy
-  has_one :site
   has_many :orders, :dependent => :destroy
   has_many :customers, :dependent => :destroy
   has_many :payment_dues, through: :orders

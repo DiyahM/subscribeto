@@ -6,51 +6,13 @@
         - @item.errors.full_messages.each do |message|
           li = message
     
-  .tabbable.tabs-left
-    ul.nav.nav-tabs
-      li#product-link.active
-        a href="#product-details" data-toggle="tab" Item Overview
-      li#ingredient-link.disabled
-        a href="#" Related Raw Goods
-      li#cost-link.disabled
-        a href="#" Cost of Goods Tool
-    .tab-content
-      #product-details.tab-pane.active style="margin-left:7%"
-        h2 Item Overview
-        = f.input :item_type, :as => :hidden, :value => "Available for sale"
-        = f.input :name
-        = f.input :price, :label=> "Default Price",
-          :as => :number, :input_html => { :step => "0.01", :min => "0",
-          :style => "width:7%"}
-        = f.input :description, :input_html => { :rows => "6" }
-      #ingredient-details.tab-pane style="margin-left:7%"
-        .row-fluid
-          .span8
-            h2 Related Raw Goods
-            | Add raw goods and quantity used
-            br
-            | Total Cost of Ingredients
-            = text_field_tag "total_cost", "0", :disabled => true, :id => "#my_cost"  
-            #ingredients
-              table.table.table-bordered#ingredients-table
-                tr
-                  th Raw Good
-                  th Quantity Used
-                  th Ingredient Cost
-                  th
-              = f.semantic_fields_for :ingredients do |ingredient|
-                = render 'ingredient_fields', :f => ingredient
-              .links
-                = link_to_add_association 'add ingredient', f, :ingredients
-      #cost-details.tab-pane style="margin-left:7%"
-        .row-fluid
-          .span8
-            h2 Product Cost Estimate
+  #product-details.tab-pane.active style="margin-left:7%"
+    = f.input :item_type, :as => :hidden, :value => "Available for sale"
+    = f.input :name
+    = f.input :price, :label=> "Default Price",
+      :as => :number, :input_html => { :step => "0.01", :min => "0",
+      :style => "width:7%"}
+    = f.input :description, :input_html => { :rows => "6" }
   = f.action :submit, :label => "Save", :button_html => { class: "btn btn-large btn-success pull-right",
     style:"margin-right:20%" } 
-
-javascript:
-
-  $("a.add_fields").data("association-insertion-node", '#ingredients-table');
-  $("a.add_fields").data("association-insertion-method", 'append');
 

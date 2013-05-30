@@ -1,7 +1,6 @@
 class ItemsController < ApplicationController
   autocomplete :vendor, :name, :full => true, :display_value => :name
   def index
-    @raw_items = Item.raw_goods(current_user.id)
     @prepared_items = Item.prepared_goods(current_user.id)
   end
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130522024253) do
+ActiveRecord::Schema.define(:version => 20130530164020) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -71,14 +71,6 @@ ActiveRecord::Schema.define(:version => 20130522024253) do
     t.integer  "user_id"
   end
 
-  create_table "ingredients", :force => true do |t|
-    t.integer  "raw_id"
-    t.integer  "prepared_id"
-    t.decimal  "quantity",    :precision => 8, :scale => 3
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
-  end
-
   create_table "items", :force => true do |t|
     t.string   "image_url"
     t.datetime "created_at",                                                  :null => false
@@ -127,25 +119,6 @@ ActiveRecord::Schema.define(:version => 20130522024253) do
     t.datetime "due_date"
   end
 
-  create_table "payment_recvds", :force => true do |t|
-    t.integer  "payment_amount"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.integer  "order_id"
-  end
-
-  create_table "sites", :force => true do |t|
-    t.string   "company_name"
-    t.string   "logo"
-    t.string   "headline"
-    t.text     "description"
-    t.string   "website_url"
-    t.string   "facebook"
-    t.string   "twitter"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "password_digest"
@@ -163,17 +136,6 @@ ActiveRecord::Schema.define(:version => 20130522024253) do
     t.string   "bank_uri"
     t.string   "company_name"
     t.string   "state"
-  end
-
-  create_table "vendors", :force => true do |t|
-    t.string   "name"
-    t.string   "contact_name"
-    t.text     "address"
-    t.string   "phone"
-    t.string   "email"
-    t.text     "notes"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
   end
 
 end
