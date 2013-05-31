@@ -32,6 +32,13 @@ class CustomersController < ApplicationController
     @customer = Customer.find(params[:id])
   end
 
+  def import_from_qb
+    current_user.customers.create(JSON.parse(params[:customers]))
+    flash[:notice] = "Customers Imported from Quickbooks"
+    render :nothing => true
+  end
+
+
   # POST /customers
   # POST /customers.json
   def create

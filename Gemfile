@@ -28,9 +28,9 @@ end
 
 group :test, :development do
   gem 'launchy'
+  gem 'pry'
 end
 group :test do
-  gem 'pry'
   gem "rspec-rails", "~> 2.0"
   gem 'turnip'
   gem 'capybara'

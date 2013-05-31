@@ -16,8 +16,10 @@ Subscribeto::Application.routes.draw do
       get :autocomplete_item_name, :on => :collection
     end 
     resources :invoices, :controller => "payment_dues"
+    get "/quickbooks/import_qb_customers"
   end
-
+  
+  post "/customers/import_from_qb"
   post 'mark_delivered', to: 'pages#mark_delivered'
   post 'email_invoice/:payment_due_id', to: 'payment_dues#email', as: 'email_invoice'
   get 'users/:user_id/customers/:customer_id/orders/new', to: 'customers#new_order'

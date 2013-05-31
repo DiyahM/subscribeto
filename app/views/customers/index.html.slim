@@ -1,8 +1,9 @@
 .row-fluid
-  .span3
+  .span6
     a.btn.btn-success.btn-space href=new_user_customer_path(current_user) + Add Customer
-    //button.btn href="#" Batch Email
-  .span8 
+    - if current_user.qb_token
+      a.btn href=user_quickbooks_import_qb_customers_path(current_user) Import Customers from Quickbooks
+  .span1 
     .input-append style="float:right"
       //input.span9#appendedInputButtons type="text"
       //button.btn type="button" Search

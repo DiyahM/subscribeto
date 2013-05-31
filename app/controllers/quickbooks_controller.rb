@@ -1,3 +1,4 @@
+require 'pry'
 class QuickbooksController < ApplicationController
 
   def authenticate
@@ -14,7 +15,10 @@ class QuickbooksController < ApplicationController
     realm_id = params['realmId']
     current_user.update_attributes(qb_token: token, qb_secret: secret, qb_realm_id: realm_id)
     redirect_to edit_user_path(current_user)
-    # store the token, secret & RealmID somewhere for this user, you will need all 3 to work with Quickeebooks
+  end
+
+  def import_qb_customers
+    @qb_customers= qb_customer_api.list.entries
   end
 
 end
