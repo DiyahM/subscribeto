@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_filter :authorize, :only => [:edit, :update]
   def new
     @user = User.new()
   end
@@ -7,25 +8,18 @@ class UsersController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       session[:user_id] = @user.id
-      flash[:notice] = "Thank you for signing up"
-      redirect_to quickstart_path
+      redirect_to  edit_user_path(current_user), notice: "Thank you for signing up. Get started by completing your profile" 
     else
       render "new"
     end
   end
 
   def edit
-    redirect_to :back, notice: "Unauthorized to view page" unless current_user
   end
 
   def update
-    current_user.update_attributes(params[:user]) if current_user
-    redirect_to dashboard_path, notice: "Settings Updated"    
+    current_user.update_attributes(params[:user]) 
+    redirect_to dashboard_path, notice: "Your account profile has been updated"    
   end
 
-  def add_bank_account
-    puts "Add bank_account"
-    #payments_service.add_bank_account(current_user.id, params[:bank_uri]) 
-    #redirect_to user_plans_path(current_user)
-  end
 end

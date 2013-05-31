@@ -1,6 +1,14 @@
 h3 Sign Up 
 hr
 .control-group
+  = f.label :company_name, "Company Name", class: "control-label"
+  .controls
+    = f.text_field :company_name
+.control-group
+  = f.label :name, "Your Name", class: "control-label"
+  .controls
+    = f.text_field :name
+.control-group
   = f.label :email, class: "control-label"
   .controls
     = f.text_field :email
@@ -9,7 +17,7 @@ hr
   .controls
     = f.password_field :password
 .control-group
-  = f.label :password_confirmation, class: "control-label"
+  = f.label :password_confirmation, "Password Confirmation", class: "control-label"
   .controls
     = f.password_field :password_confirmation
 

@@ -11,6 +11,27 @@
       = form_tag dashboard_path, :method => "get" do
         = text_field_tag :datepicker,"", placeholder:"Select new date", class:"input-medium"
         = submit_tag("Change Date", class: "btn btn-success", style:"vertical-align:top;margin-left:8px") 
+  .row-fluid
+    - if current_user.delivery_slots.empty?
+      .alert.alert-info
+        a.close href="#" data-dismiss="alert" x
+        strong To Do: 
+        a href=user_delivery_slots_path(current_user) Click here to add your delivery route options
+    - if current_user.items.empty?
+      .alert.alert-info
+        a.close href="#" data-dismiss="alert" x
+        strong To Do: 
+        a href=user_items_path(current_user) Click here to add your items for sale 
+    - if current_user.customers.empty?
+      .alert.alert-info
+        a.close href="#" data-dismiss="alert" x
+        strong To Do: 
+        a href=user_customers_path(current_user) Click here to add your customers
+    - if current_user.orders.empty?
+      .alert.alert-info
+        a.close href="#" data-dismiss="alert" x
+        strong To Do: 
+        a href=user_orders_path(current_user) Click here to add an order
   - if @item_summary.any?
     .row-fluid 
       h4 Orders

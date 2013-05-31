@@ -1,21 +1,19 @@
 class PagesController < ApplicationController
+  before_filter :authorize, :except => [:home]
+
   def home
     @layout = "home"
   end
 
-  def banking
-  end
-
-  def quickstart
-
-  end
-  
   def mark_delivered
     LineItem.mark_batch_delivered(params[:ids])
     render :nothing => true
   end
 
   def dashboard
+    if session[:first_login]
+      @first_login = true
+    end
     if params[:datepicker].nil?
       date = Date.current
     else
