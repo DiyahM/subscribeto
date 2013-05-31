@@ -6,6 +6,9 @@ class PaymentDuesController < ApplicationController
 
   def create
     order = Order.includes(:line_items, :customer).find(params[:order_id])
+    if order.payment_due
+      order.payment_due.destroy
+    end
     invoice = order.create_payment_due
     Order.update_status(order.id,"Invoiced")
     redirect_to user_invoice_path(current_user,invoice), notice: "Invoice successfully created"
