@@ -7,6 +7,7 @@ class LineItem < ActiveRecord::Base
   after_save :update_order_status
 
   validates :quantity, :numericality => {:greater_than => 0}
+  validates :delivery_slot_id, :order_id, :quantity, :item_id, :price, presence: true
 
   def self.mark_batch_delivered(ids)
     if ids.any?

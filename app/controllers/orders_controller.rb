@@ -1,3 +1,4 @@
+require 'pry'
 class OrdersController < ApplicationController
   autocomplete :customer, :company_name, :full => true, :display_value => :company_name,
     :extra_data => [ :poc_name, :email, :phone_number, :address_one, :address_two,
@@ -30,7 +31,7 @@ class OrdersController < ApplicationController
   # GET /orders/new.json
   def new
     if session[:order].nil?
-      @order = Order.new
+      @order = current_user.orders.build
       @order.build_customer
     else
       @order = session[:order]
@@ -47,11 +48,10 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new(params[:order])
+    @order = current_user.orders.create(params[:order])
 
     respond_to do |format|
-      if @order.save
-        current_user.orders << @order
+      if @order.errors.messages.empty?
         format.html { redirect_to user_order_path(current_user,@order), notice: 'Order was successfully created.' }
       else
         format.html { render action: "new" }

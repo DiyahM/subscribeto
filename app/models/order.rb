@@ -11,7 +11,7 @@ class Order < ActiveRecord::Base
   scope :new_orders, lambda { where("created_at > ?", Time.zone.now - 1.month ) }
   scope :delivered, where("status = ?", "Delivered").includes(:customer)
   attr_accessor :customer_company
-  validates :customer_id, presence: true
+  validates :customer_id, :user_id, presence: true
   validates :line_items, :length => { :minimum => 1 }
 
   def self.update_status(order_id, status=nil)

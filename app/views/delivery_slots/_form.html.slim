@@ -2,6 +2,7 @@
   =f.input :day, :label => "Day of the Week", :as => :select,
     :collection => ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
     :include_blank => false
-  =f.input :start_time, :label => "Start of Delivery", :as => :string, :include_blank => false,
-    :input_html => { :type => "time" }
+  span class="help-block" Enter delivery time in 12hour format. (ie 08:00AM)
+  =f.input :start_time, :label => "Delivery Time", :as => :string, :include_blank => false,
+    :input_html => { :type => "time", :class=> "input-small"}
   =f.action :submit, :label => "Create"

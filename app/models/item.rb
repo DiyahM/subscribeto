@@ -3,7 +3,7 @@ class Item < ActiveRecord::Base
    :description, :pricing_unit
   belongs_to :user
   has_many :orders
-  validates :item_type, presence: :true
+  validates :item_type, :price, :user_id, :name, presence: :true
 
   def self.prepared_goods(id)
     Item.where("item_type = ? AND user_id = ?", "Available for sale", id).order("updated_at DESC")

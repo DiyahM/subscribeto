@@ -1,7 +1,19 @@
 = link_to 'Back', user_orders_path(current_user)
-|  | 
-= link_to 'Add New Customer', new_user_customer_path(current_user)
-
+- if current_user.customers.empty?
+  .alert.alert-error
+    strong To Do: Please add a customer before adding an order. 
+    a href=new_user_customer_path(current_user)
+      | Click here to add.
+- if current_user.delivery_slots.empty?
+  .alert.alert-error
+    strong To Do: Please add a delivery route before adding an order. 
+    a href=user_delivery_slots_path(current_user)
+      | Click here to add.
+- if current_user.items.empty?
+  .alert.alert-error
+    strong To Do: Please add an item before adding an order. 
+    a href=new_user_prepared_path(current_user)
+      | Click here to add.
 h2 New Order
 hr
 

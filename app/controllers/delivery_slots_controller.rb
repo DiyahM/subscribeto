@@ -7,11 +7,11 @@ class DeliverySlotsController < ApplicationController
   def create
     slot = current_user.delivery_slots.build(params[:delivery_slot])
     if slot.save
-      notice = "Delivery Slot added"
+      flash[:notice] = "Delivery Route added"
     else
-      notice = "Could not create Delivery Slot"
+      flash[:error] = "Error in Creating Delivery Route. Please Try Again."
     end
-    redirect_to user_delivery_slots_path(current_user), :notice => notice
+    redirect_to user_delivery_slots_path(current_user)
   end
 
   def destroy
