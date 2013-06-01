@@ -40,6 +40,7 @@ group :test do
   gem 'shoulda-matchers'
   gem 'vcr'
   gem 'webmock', '~> 1.9.0'
+  gem 'factory_girl_rails'
 end
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'jquery-rails'
