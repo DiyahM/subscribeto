@@ -22,15 +22,9 @@
     .span4
       #customer-notes style="display:none"
   hr
+  
   .row-fluid
-    h4 Order Summary
-    table.table.table-bordered
-      tr
-        th Order Total
-        th
-          = f.input :total, :label => false, :input_html => { readonly: true, value: 0, class: "order-total"}
-  .row-fluid
-    h5 Order Details
+    h4 Order Details
     table.table.table-bordered#order-table
       tr
         th 
@@ -45,11 +39,21 @@
       = f.semantic_fields_for :line_items do |line_item|
         = render 'line_item_fields', :f => line_item
       .links
-        = link_to_add_association 'add new line item', f, :line_items
+        h5
+          = link_to_add_association '+ Add Line Item', f, :line_items
   .row-fluid
     = f.action :submit, :label => 'Save', :button_html => { class: "btn btn-success" }
+  hr
+  .row-fluid
+    h4 Order Summary
+    table.table.table-bordered
+      tr
+        th Order Total
+        th
+          = f.input :total, :label => false, :input_html => { readonly: true, value: 0, class: "order-total"}
 
 javascript:
+  $("input[type=checkbox]").hide();
   if ($('#order_customer_id').val() != "") {
     var customer_id = $('#order_customer_id').val();
     $.getJSON("/users/#{current_user.id}/customers/" + customer_id, function(data){
@@ -74,6 +78,9 @@ javascript:
   $('#order-table').bind('cocoon:after-remove', function(e, removedItem) {
     calculateOrderTotal();
   });  
+  $('#order-table').bind('cocoon:after-insert', function(e, removedItem) {
+    $("input[type=checkbox]").hide();
+  });
 
   var calculateOrderTotal = function(){
     var total = 0;
