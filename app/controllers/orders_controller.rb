@@ -1,4 +1,3 @@
-require 'pry'
 class OrdersController < ApplicationController
   autocomplete :customer, :company_name, :full => true, :display_value => :company_name,
     :extra_data => [ :poc_name, :email, :phone_number, :address_one, :address_two,
