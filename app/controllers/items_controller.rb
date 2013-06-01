@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
-  autocomplete :vendor, :name, :full => true, :display_value => :name
-  def index
+  before_filter :authorize
+
+  def my_items
     @prepared_items = Item.prepared_goods(current_user.id)
   end
 

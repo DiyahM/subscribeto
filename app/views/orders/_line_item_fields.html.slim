@@ -26,7 +26,7 @@ javascript:
   $(".order_item").change(function() {
     var item_id = $(this).val();
     var item_element = $(this).parents("tr");
-    $.getJSON("/users/"+"#{current_user.id}"+"/items/"+item_id, function(data){
+    $.getJSON("/items/"+item_id, function(data){
       item_element.children(".order_list_price").html("$"+data.price);
       item_element.find(".order_customer_price").val(data.price);
       var total = parseInt(item_element.find(".order_quantity").val()) * parseFloat(data.price);

@@ -3,12 +3,10 @@ Subscribeto::Application.routes.draw do
   ActiveAdmin.routes(self)
 
   resources :sessions
-
+  resources :items, :only => ["show"]
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]
-    resources :items do
-      get :autocomplete_vendor_name, :on => :collection
-    end
+    get '/items', to: 'items#my_items', as: 'items'
     resources :prepareds 
     resources :customers
     resources :orders do
