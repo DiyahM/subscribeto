@@ -13,7 +13,7 @@
     .row-fluid
       table.table.table-striped
         tr
-          //th Product Image
+          th Product Image
           th Name
           th Description
           th Default Price
@@ -21,10 +21,10 @@
 
         - @prepared_items.each do |prepared_item|
           tr
-            //td = image_tag "http://placehold.it/100x100&text=[img]"
+            td = image_tag prepared_item.image_url, width:"150px" if prepared_item.image_url
             td = prepared_item.name
             td = prepared_item.description
-            td = "$ #{prepared_item.price}"
+            td = number_with_precision prepared_item.price, precision:2
             td
               = link_to "Edit", edit_user_prepared_path(current_user,prepared_item)
               |  | 

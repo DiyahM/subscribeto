@@ -1,3 +1,4 @@
+= filepicker_js_include_tag
 = semantic_form_for [current_user, @item] do |f|
   - if @item.errors.any?
     #error_explanation
@@ -6,13 +7,26 @@
         - @item.errors.full_messages.each do |message|
           li = message
     
-  #product-details.tab-pane.active style="margin-left:7%"
+  .row-fluid
+    .span4
+      = f.label :image_url, "Upload Image"
+      = f.filepicker_field :image_url
+    .span4
+      #display-image
+        = image_tag @item.image_url if @item.image_url
+  .row-fluid style="margin-top:18px"
     = f.input :item_type, :as => :hidden, input_html: { :value => "Available for sale" }
     = f.input :name
     = f.input :price, :label=> "Default Price",
       :as => :number, :input_html => { :step => "0.01", :min => "0",
       :style => "width:7%"}
     = f.input :description, :input_html => { :rows => "6" }
-  = f.action :submit, :label => "Save", :button_html => { class: "btn btn-large btn-success pull-right",
-    style:"margin-right:20%" } 
+    = f.action :submit, :label => "Save", :button_html => { class: "btn btn-large btn-success pull-right",
+      style:"margin-right:20%" } 
+
+javascript:
+  $('#prepared_image_url').change( function(){
+    console.log($('#prepared_image_url').val());
+    $('#display-image').html("<img src='"+$('#prepared_image_url').val()+"' >");
+  });
 
