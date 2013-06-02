@@ -1,6 +1,10 @@
 class ItemsController < ApplicationController
   before_filter :authorize
 
+  def index
+    @categories = Category.includes(:items).all
+  end
+
   def my_items
     @prepared_items = Item.prepared_goods(current_user.id)
   end

@@ -3,7 +3,7 @@ Subscribeto::Application.routes.draw do
   ActiveAdmin.routes(self)
 
   resources :sessions
-  resources :items, :only => ["show"]
+  get "marketplace", to: 'items#index' 
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]
     get '/items', to: 'items#my_items', as: 'items'

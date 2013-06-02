@@ -1,0 +1,30 @@
+h2 Marketplace
+em
+  | Currently in test mode only
+- @categories.each do |category|
+  - if category.items.any?
+    h4 = category.name
+    table.table
+      tr
+        th
+        th Name
+        th Description
+        th List Price
+        th Producer
+        th Qty
+        th
+      - category.items.each do |item|
+        tr
+          td
+            - if item.image_url && item.image_url != ""
+              = image_tag item.image_url, width:"200px"
+          td = item.name
+          td = item.description
+          td = number_with_precision item.price, precision: 2
+          td = item.user.company_name
+          td
+            input type="number" class="input-mini"
+          td
+            button.btn.btn-primary href="#" Add to Cart
+
+
