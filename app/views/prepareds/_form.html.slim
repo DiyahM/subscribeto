@@ -31,9 +31,9 @@
       style:"margin-right:20%" } 
 
 javascript:
+  $('#prepared_image_url').val("#{@item.image_url}");
   $('label.checkbox').addClass('inline span4');
   $('#prepared_image_url').change( function(){
-    console.log($('#prepared_image_url').val());
     $('#display-image').html("<img src='"+$('#prepared_image_url').val()+"' >");
   });
 
