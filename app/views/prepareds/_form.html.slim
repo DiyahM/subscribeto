@@ -20,11 +20,18 @@
     = f.input :price, :label=> "Default Price",
       :as => :number, :input_html => { :step => "0.01", :min => "0",
       :style => "width:7%"}
+  .row-fluid
+    .span9
+      = f.input :categories, :as => :check_boxes, 
+        input_html: {style: "margin-left:10px;"}
+  .row-fluid
     = f.input :description, :input_html => { :rows => "6" }
-    = f.action :submit, :label => "Save", :button_html => { class: "btn btn-large btn-success pull-right",
+  .row-fluid
+    = f.action :submit, :label => "Save", :button_html => { class: "btn btn-success",
       style:"margin-right:20%" } 
 
 javascript:
+  $('label.checkbox').addClass('inline span4');
   $('#prepared_image_url').change( function(){
     console.log($('#prepared_image_url').val());
     $('#display-image').html("<img src='"+$('#prepared_image_url').val()+"' >");
