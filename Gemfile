@@ -16,6 +16,7 @@ gem 'pony'
 gem 'honeybadger'
 gem 'heroku'
 gem 'quickeebooks'
+gem 'filepicker-rails'
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'

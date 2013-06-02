@@ -53,5 +53,6 @@ module Subscribeto
     end
     config.assets.initialize_on_precompile = false
     config.assets.precompile += ['active_admin.css', 'active_admin/print.css', 'active_admin.js']
+    config.filepicker_rails.api_key = ENV['FILEPICKER_API_KEY']
   end
 end
