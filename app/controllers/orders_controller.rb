@@ -23,7 +23,7 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.json
   def show
-    @order = Order.includes(:customer, :line_items).find(params[:id])
+    @order = Order.includes(:customer, {:line_items => [:delivery_slot, :item]}).find(params[:id])
   end
 
   # GET /orders/new

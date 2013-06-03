@@ -2,7 +2,7 @@ class ItemsController < ApplicationController
   before_filter :authorize
 
   def index
-    @categories = Category.includes(:items).all
+    @categories = Category.includes(:items => :user).all
   end
 
   def my_items

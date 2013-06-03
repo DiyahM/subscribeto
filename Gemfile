@@ -27,6 +27,9 @@ group :assets do
   gem 'jquery-ui-rails'
 end
 
+group :development do
+  gem 'bullet'
+end
 group :test, :development do
   gem 'launchy'
   gem 'pry'

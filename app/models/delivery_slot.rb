@@ -4,7 +4,8 @@ class DeliverySlot < ActiveRecord::Base
   has_many :line_items
   has_many :items, through: :undelivered_items
   has_many :orders, through: :undelivered_items
-  has_many :undelivered_items, :class_name => 'LineItem', :conditions => ['delivered = ?', false]
+  has_many :undelivered_items, :class_name => 'LineItem', :conditions => ['delivered = ?', false],
+    :include => [:item, {:order => :customer}]
   validates :day, :start_time, presence: true
 
 
