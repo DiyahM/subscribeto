@@ -7,7 +7,7 @@ em
     table.table
       tr
         th
-        th Name
+        th Product
         th Description
         th List Price
         th Producer
@@ -18,10 +18,14 @@ em
           td
             - if item.image_url && item.image_url != ""
               = image_tag item.image_url, width:"200px"
+            - else
+              = image_tag "http://placehold.it/200x134&text=No%20image%20available"
           td = item.name
           td = item.description
           td = number_with_precision item.price, precision: 2
-          td = item.user.company_name
+          td 
+            a href=user_profile_path(item.user, item.user.profile)
+              = item.user.company_name
           td
             input type="number" class="input-mini"
           td

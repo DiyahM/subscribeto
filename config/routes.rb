@@ -4,6 +4,7 @@ Subscribeto::Application.routes.draw do
 
   resources :sessions
   get "marketplace", to: 'items#index' 
+  
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]
     get '/items', to: 'items#my_items', as: 'items'
@@ -15,6 +16,9 @@ Subscribeto::Application.routes.draw do
     end 
     resources :invoices, :controller => "payment_dues"
     get "/quickbooks/import_qb_customers"
+    get "/profile/:id", to: 'profiles#show', as: 'profile'
+    get "profile/:id/edit", to: 'profiles#edit', as: 'profile_edit'
+    put "/profile/:id", to: 'profiles#update'
   end
   
   post "/customers/import_from_qb"

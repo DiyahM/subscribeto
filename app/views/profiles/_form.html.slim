@@ -1,0 +1,34 @@
+= filepicker_js_include_tag
+= semantic_form_for [current_user, @profile] do |f|
+  - if @profile.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@profile.errors.count, "error")} prohibited this profile from being saved:"
+      ul
+        - @profile.errors.full_messages.each do |message|
+          li = message
+      
+  .row-fluid
+    .span4
+      = f.label :image_url, "Upload a Profile Picture"
+      = f.filepicker_field :image_url
+    .span4
+      #display-image
+        -if @profile.image_url && @profile.image_url != ""
+          = image_tag @profile.image_url
+  .row-fluid style="margin-top:18px"
+    = f.inputs do
+      = f.input :phone_number
+      = f.input :web
+      = f.input :address
+      = f.input :certifications, input_html: { rows:3}
+      = f.input :about
+
+    = f.action :submit
+
+javascript:
+  $('#profile_image_url').val("#{@profile.image_url}");
+  $('#profile_image_url').change( function(){
+    console.log("change");
+    $('#display-image').html("<img src='"+$('#profile_image_url').val()+"' >");
+  });
+  

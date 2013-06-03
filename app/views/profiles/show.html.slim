@@ -1,0 +1,52 @@
+- if current_user.id == @profile.user_id
+  a href=user_profile_edit_path(current_user, @profile) Edit Profile
+.row-fluid
+  .span6
+    h2 = @profile.user.company_name
+.row-fluid
+  .span4
+    - if @profile.image_url && @profile.image_url != ""
+      = image_tag @profile.image_url
+    p
+      = @profile.certifications.gsub(/\n/, '<br/>').html_safe if @profile.certifications
+      br 
+    p 
+      center
+        button.btn.btn-warning 
+          = "Ask #{@profile.user.company_name} a Question"
+    div style="margin-top:30px"
+      center
+        p
+          = @profile.address
+          br 
+          = @profile.phone_number
+          br 
+          = @profile.web
+    
+  .span8
+    p
+      h4 About
+      = @profile.about.gsub(/\n/, '<br/>').html_safe if @profile.about
+      hr
+    - if @profile.user.items
+      p
+        h4 Products
+        hr
+        ul.thumbnails
+          - @profile.user.items.each do |item|
+            li.span4 style="margin-left:0; margin-right:1%"
+              .thumbnail
+                - if item.image_url && item.image_url != ""
+                  img data-src=item.image_url src=item.image_url
+                - else
+                  img data-src="http://placehold.it/209x140&text=No%20image%20available" src="http://placehold.it/209x140&text=No%20image%20available"
+                h5
+                  = item.name
+                  = "  $#{number_with_precision(item.price, precision:2)}"
+                p
+                  input.span4 type="number"
+                  span class="help-inline" Qty
+                p
+                  button.btn.btn-mini.btn-primary href="#" Add To Cart
+
+

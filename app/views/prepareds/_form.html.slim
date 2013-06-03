@@ -14,7 +14,7 @@
     .span4
       #display-image
         -if @item.image_url && @item.image_url != ""
-          = image_tag @item.image_url if @item.image_url
+          = image_tag @item.image_url
   .row-fluid style="margin-top:18px"
     = f.input :item_type, :as => :hidden, input_html: { :value => "Available for sale" }
     = f.input :name

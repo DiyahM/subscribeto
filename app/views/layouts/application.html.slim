@@ -50,8 +50,9 @@ html lang="en"
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#" Manage
                   ul.dropdown-menu
-                    li= link_to "Delivery", user_delivery_slots_path(current_user)
+                    li= link_to "Delivery Routes", user_delivery_slots_path(current_user)
                     li= link_to "Items", user_items_path(current_user)
+                    li= link_to "Profile", user_profile_path(current_user, current_user.profile)
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#"
                     = current_user.email
