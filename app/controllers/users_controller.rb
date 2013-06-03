@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    current_user.update_attributes(params[:user]) 
+    current_user.update_attributes!(params[:user]) 
     redirect_to dashboard_path, notice: "Your account profile has been updated"    
   end
 
