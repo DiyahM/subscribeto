@@ -5,6 +5,7 @@ Subscribeto::Application.routes.draw do
   resources :sessions
   get "marketplace", to: 'items#index' 
   get '/items/:id', to: 'items#show', as: 'show_item'
+  post '/line_items/:id', to: 'line_items#update'
   
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]

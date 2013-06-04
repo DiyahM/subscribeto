@@ -33,7 +33,18 @@ class Order < ActiveRecord::Base
     else
       order.status = status
     end
+    order.update_total
     order.save
+  end
+
+    
+  def update_total
+    self.total = 0
+    line_items.each do |line_item|
+      self.total += (line_item.price * line_item.qty_delivered)
+      self.total -= (line_item.price * line_item.qty_returned)
+    end
+    self.save
   end
 
 end

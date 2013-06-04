@@ -1,5 +1,5 @@
 class LineItem < ActiveRecord::Base
-  attr_accessible :delivery_slot_id, :order_id, :quantity, :item_id, :delivered, :price
+  attr_accessible :delivery_slot_id, :order_id, :quantity, :item_id, :delivered, :price, :qty_delivered, :qty_returned
   belongs_to :order
   belongs_to :delivery_slot
   belongs_to :item
@@ -36,6 +36,8 @@ class LineItem < ActiveRecord::Base
   
   def set_default_values
     self.delivered = false
+    self.qty_delivered = quantity
     self.save
   end
+  
 end

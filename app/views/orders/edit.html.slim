@@ -72,7 +72,7 @@ javascript:
   $("#order-table .nested-fields").each(function(){
     var item_id = $(this).find(".order_item").val();
     var item_element = $(this);
-    $.getJSON("/users/"+"#{current_user.id}"+"/items/"+item_id, function(data){
+    $.getJSON("/items/"+item_id, function(data){
       item_element.find(".order_list_price").html("$"+data.price);
       var total = parseInt(item_element.find(".order_quantity").val()) * parseFloat(data.price);
       item_element.find(".order_price").html(total);

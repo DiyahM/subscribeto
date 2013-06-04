@@ -64,7 +64,7 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
 
     respond_to do |format|
-      if @order.update_attributes(params[:order])
+      if @order.update_attributes!(params[:order])
         format.html { redirect_to user_order_path(current_user, @order), notice: 'Order was successfully updated.' }
         format.json { head :no_content }
       else

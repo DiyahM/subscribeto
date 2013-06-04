@@ -1,16 +1,14 @@
 .row-fluid
   #dashboard-header
-    .span6
-      | Daily Summary:
-    .span6.pull-right
+    .span7
+      | Summary for 
       = @date 
-
-#summary style="margin-top:50px;"
-  .row-fluid
     .span5.pull-right
       = form_tag dashboard_path, :method => "get" do
         = text_field_tag :datepicker,"", placeholder:"Select new date", class:"input-medium"
-        = submit_tag("Change Date", class: "btn btn-success", style:"vertical-align:top;margin-left:8px") 
+        = submit_tag("Change Date", class: "btn", style:"vertical-align:top;margin-left:3px")
+
+#summary style="margin-top:50px;"
   .row-fluid
     - if current_user.delivery_slots.empty?
       .alert.alert-info
@@ -34,23 +32,28 @@
         a href=user_orders_path(current_user) Click here to add an order
   - if @item_summary.any?
     .row-fluid 
-      h4 Orders
+      h3 Orders
     .row-fluid
       .slate.clearfix 
         - @item_summary.each do |item|
           .stat-column href="#"
             span.number= item.last
             span= item.first
+  - else
+    .row-fluid
+      p
+        | Slow day, huh?
+hr
+  
 #delivery
   - if @slots.any?
     .row-fluid
       .span9
-        h4 Delivery Schedule
+        h3 Delivery Schedule
       .span3 style="margin-top:10px"
-        button.btn onclick="mark_delivered();" Mark Selected As Delivered
+        //button.btn onclick="mark_delivered();" Batch Update 
     - @slots.each do |slot|
       .row-fluid
-        hr
         h5 = slot.delivery_label
       .row-fluid 
         - if slot.undelivered_items.any?
@@ -60,7 +63,8 @@
               th Order #
               th Customer
               th Item
-              th Qty
+              th Qty Ordered
+              th Qty Delivered
               th Phone
               th Email
               th Delivery Address
@@ -69,10 +73,14 @@
               tr 
                 td
                   input type="checkbox" value="#{line_item.id}"
-                td = line_item.order.id
-                td = line_item.order.customer.company_name
+                td 
+                  = link_to line_item.order.id, user_order_path(current_user, line_item.order.id)
+                td = link_to line_item.order.customer.company_name,
+                user_customer_path(current_user, line_item.order.customer.id)
                 td = line_item.item.name
                 td = line_item.quantity
+                td
+                  input type="number" class="input-mini" value=line_item.qty_delivered 
                 td = link_to line_item.order.customer.phone_number, "tel:#{line_item.order.customer.phone_number}"
                 td = link_to line_item.order.customer.email, "mailto:#{line_item.order.customer.email}"
                 td 
@@ -80,39 +88,99 @@
                     = "#{line_item.order.customer.address_one}, #{line_item.order.customer.address_two}, "
                     = "#{line_item.order.customer.city}, #{line_item.order.customer.state}"
                 td
-                  a.btn.btn-mini.btn-space href=user_order_path(current_user,line_item.order.id) View Order
-                  a.btn.btn-mini.btn-space href=edit_user_order_path(current_user, line_item.order.id) Edit Order
-        .row-fluid
-          table.table.table-bordered
-            tr
-              th = "Delivery Summary for #{slot.delivery_label}"
-              td = "#{slot.orders.count} Customer(s)"
-              - slot.items.each do |item|
-                td = "#{DeliverySlot.count_items(slot.id,item.id)} #{item.name}"
+                  button.btn.btn-mini.btn-space onclick="update_line_item($(this).closest('tr'));" Save
+                  button.btn.btn-mini href=edit_user_order_path(current_user, line_item.order) Edit
+    hr
+        
 #invoice
   - if @uninvoiced_items.any?
-    hr
     .row-fluid
-      h4 Orders Ready For Invoicing
+      h3 Create Invoices 
     .row-fluid
-      table.table.table-striped.table-bordered
-        tr
-          th Order id
-          th Customer 
-          th Amount Due
-          th Status
-          th
+      .accordion#invoice-accordion
         - @uninvoiced_items.each do |order|
-          tr
-            td = order.id
-            td = order.customer.company_name
-            td = number_with_precision(order.total, precision:2)
-            td = order.status
-            td
-              = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
-                :order_id => order.id, :user_id => current_user.id}, :class => "btn btn-mini" )
+          .accordion-group
+            .accordion-heading
+              .accordion-toggle data-parent="#invoice-accordion" href="#order#{order.id}"
+                table.table.table-condensed
+                  thead
+                    tr
+                      th
+                        = link_to "Order#:#{order.id}", user_order_path(current_user, order.id)
+                      th= order.customer.company_name
+                      th= "Amount Due: $#{number_with_precision(order.total, precision:2)}"
+                      td
+                        button.btn.btn-mini.btn-space type="button" data-toggle="collapse" data-target="#order#{order.id}" Show/Hide Line Items
+                        button.btn.btn-mini.btn-space href="#" onclick="update_order($('#table-order-#{order.id}'))" Save 
+                        button.btn.btn-mini href="#" Create Invoice
+            div.accordion-body.collapse.in id="order#{order.id}"
+              .accordion-inner
+                table.table id="table-order-#{order.id}"
+                  thead
+                    th Delivered Date
+                    th Item
+                    th Qty Delivered
+                    th Qty Returned
+                    th Price
+                    th Total
+                  tbody
+                    - order.line_items.each do |line_item|
+                      tr
+                        td id="test#{line_item.id}" style="display:none" = line_item.id
+                        td= time_tag order.complete_date, format: "%B %d"
+                        td= line_item.item.name
+                        td 
+                          input type="number" class="input-mini" value=line_item.qty_delivered
+                        td 
+                          input type="number" class="input-mini" value=line_item.qty_returned
+                        td
+                          input type="number" class="input-mini" value=line_item.price
+                        td tba
 
 javascript:
+  $(".collapse").collapse();
+  var update_order = function (input) {
+    var line_item_attributes_json = {};
+    input.find('tbody tr').each(function(index){
+      $this = $(this);
+      line_item_attributes_json[index] = { "qty_delivered": $this.find('td:nth-child(4) input').val(),
+        "qty_returned" : $this.find('td:nth-child(5) input').val(),
+        "price" : $this.find('td:nth-child(6) input').val(),
+        "id" : $this.find('td:first').text() 
+         };
+    });
+    var order_id = input.attr("id").split("-")[2];
+    var order_json = {"id": order_id};
+    order_json["order"] = {"line_items_attributes":{}};
+    order_json["order"]["line_items_attributes"] = line_item_attributes_json;
+    $.ajax({
+      type: 'PUT',
+      url: "/users/#{current_user.id}/orders/"+order_id,
+      data: order_json,
+      async:false
+    });
+    location.reload();
+  }
+
+  
+  var update_line_item = function (input) {
+    var line_item_id = input.find('td:first input')[0].value;
+    var delivered = input.find("td:first input[type='checkbox']")[0].checked;
+    var qty_delivered = input.find('td:nth-child(6) input')[0].value;
+
+    $.ajax({
+      type: 'POST',
+      url: '/line_items/' + line_item_id,
+      data: {
+           "id": line_item_id,
+           "line_item": {
+             "delivered": delivered,
+             "qty_delivered": qty_delivered
+             }},
+      async:false
+    });
+    location.reload();
+  }
   var mark_delivered = function() {
     var items = [];
     $.each($("input[type='checkbox']:checked"), function(i,item){
