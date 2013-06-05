@@ -100,19 +100,22 @@ hr
       .accordion#invoice-accordion
         - @uninvoiced_items.each do |order|
           .accordion-group
-            .accordion-heading
+            .accordion-heading style="background-color:#FAF3C3;"
               .accordion-toggle data-parent="#invoice-accordion" href="#order#{order.id}"
                 table.table.table-condensed
                   thead
-                    tr
+                    tr.info
                       th
                         = link_to "Order#:#{order.id}", user_order_path(current_user, order.id)
                       th= order.customer.company_name
                       th= "Amount Due: $#{number_with_precision(order.total, precision:2)}"
-                      td
-                        button.btn.btn-mini.btn-space type="button" data-toggle="collapse" data-target="#order#{order.id}" Show/Hide Line Items
-                        button.btn.btn-mini.btn-space href="#" onclick="update_order($('#table-order-#{order.id}'))" Save 
-                        button.btn.btn-mini href="#" Create Invoice
+                      td 
+                        .span5
+                          button.btn.btn-mini.btn-space type="button" data-toggle="collapse" data-target="#order#{order.id}" Show/Hide Line Items
+                          button.btn.btn-mini.btn-space href="#" onclick="update_order($('#table-order-#{order.id}'))" Save 
+                        .span1
+                          = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
+                :order_id => order.id, :user_id => current_user.id}, :class => "btn btn-mini btn-primary" ) 
             div.accordion-body.collapse.in id="order#{order.id}"
               .accordion-inner
                 table.table id="table-order-#{order.id}"
@@ -138,7 +141,6 @@ hr
                         td tba
 
 javascript:
-  $(".collapse").collapse();
   var update_order = function (input) {
     var line_item_attributes_json = {};
     input.find('tbody tr').each(function(index){
