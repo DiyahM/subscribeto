@@ -9,7 +9,7 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :customer, :payment_due
   accepts_nested_attributes_for :line_items, :reject_if => :all_blank, :allow_destroy => true
   scope :new_orders, lambda { where("created_at > ?", Time.zone.now - 1.month ) }
-  scope :delivered, where("status = ?", "Delivered").includes(:customer)
+  scope :delivered, where("status = ?", "Delivered").includes(:customer, { :line_items => :item })
   attr_accessor :customer_company
   validates :customer_id, :user_id, presence: true
   validates :line_items, :length => { :minimum => 1 }
