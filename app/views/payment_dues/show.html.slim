@@ -48,21 +48,22 @@ hr
   table.table.table-striped.table-bordered
     tr
       th Item Description
-      th Quantity
+      th Qty Ordered
+      th Qty Delivered
+      th Qty Returned
       th Price
-      th Credit
       th Amount
     - @invoice.order.line_items.each do |line_item|
       tr
         td= line_item.item.name
         td= line_item.quantity
+        td= line_item.qty_delivered
+        td= line_item.qty_returned
         td= number_with_precision(line_item.price, precision:2)
-        td
-          | --
-        - total = line_item.quantity * line_item.price
+        - total = (line_item.qty_delivered - line_item.qty_returned)* line_item.price
         td= number_with_precision(total, precision:2)
     tr
-      th colspan="4" 
+      th colspan="5" 
         h4 Total Amount Due
       th
         h4

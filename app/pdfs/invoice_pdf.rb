@@ -25,7 +25,9 @@ class InvoicePdf < Prawn::Document
 
   def right_header
     grid([0,2], [1,4]).bounding_box do
+      fill_color "FC0303"
       text "Invoice", size: 30, style: :bold, align: :right
+      fill_color "5a5a5a"
       move_down 10
       invoice_table
     end
@@ -36,7 +38,7 @@ class InvoicePdf < Prawn::Document
   end
 
   def order_table
-    table line_item_rows, :position => :center
+    table line_item_rows, :position => :center, :width => 550
   end
 
   def invoice_rows
@@ -46,9 +48,9 @@ class InvoicePdf < Prawn::Document
   end
   
   def line_item_rows
-    [["Item Descritption", "Qty", "Price", "Credit", "Amount"]]+
+    [["Item Descritption", "Qty", "Qty Delivered", "Qty Returned", "Price", "Amount"]]+
     @invoice.order.line_items.map do |item|
-      [item.item.name, item.quantity, item.price, "--", price(item.price*item.quantity)]
+      [item.item.name, item.quantity, item.qty_delivered, item.qty_returned, item.price, price((item.qty_delivered - item.qty_returned)*item.price)]
     end
   end
 
