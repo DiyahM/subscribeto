@@ -71,11 +71,5 @@ html lang="en"
               = yield
           - else
             = yield
-javascript:
-  if ("#{current_user}")
-  { 
-    mixpanel.name_tag("#{current_user.email}");
-  }
- 
 
 
