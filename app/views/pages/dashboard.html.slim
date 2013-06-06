@@ -104,7 +104,7 @@ hr
               .accordion-toggle data-parent="#invoice-accordion" href="#order#{order.id}"
                 table.table.table-condensed
                   thead
-                    tr.info
+                    tr
                       th
                         = link_to "Order#:#{order.id}", user_order_path(current_user, order.id)
                       th= order.customer.company_name

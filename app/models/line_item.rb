@@ -23,6 +23,9 @@ class LineItem < ActiveRecord::Base
     Order.update_status(self.order_id)
   end
 
+  def total
+    (qty_delivered - qty_returned) *price
+  end
   def self.undelivered_for_day(delivery_slots, user_id)
     undelivered_items = []
     delivery_slots.each do |slot|

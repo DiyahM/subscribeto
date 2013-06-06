@@ -24,7 +24,7 @@ class PagesController < ApplicationController
         flash[:error]= "Invalid Date"
       end
     end
-    @date = date.strftime("%A, %b %e")
+    @date = date.strftime("%a, %b %e")
     day = date.strftime("%A")
     @item_summary= DeliverySlot.daily_summary(day, current_user.id)
     @slots = DeliverySlot.delivery_schedule_for_day(day, current_user.id)    

@@ -12,27 +12,23 @@
     h3 Customers
 
 table.table.table-striped
-  tr
-    th
-      input type="checkbox"
-    th Company
-    th Contact Name
-    th Email
-    th Phone number
-    th
-
-  - @customers.each do |customer|
+  thead
     tr
-      td
-        input type="checkbox"
-      td = customer.company_name
-      td = customer.poc_name
-      td = customer.email
-      td = customer.phone_number
-      td 
-        = link_to 'Email', "mailto:#{customer.email}", class: "btn btn-mini btn-space"
-        = link_to 'Call', "tel:#{customer.phone_number}", class: "btn btn-mini btn-space"
-        = link_to 'View', user_customer_path(current_user, customer.id), class: "btn btn-mini btn-space"
-        = link_to 'Edit', edit_user_customer_path(current_user.id, customer.id), class: "btn btn-mini btn-space"
-        = link_to 'Delete', user_customer_path(current_user, customer.id), class: "btn btn-mini", :confirm => 'Are you sure?', :method => :delete 
+      th Company
+      th Contact Name
+      th Email
+      th Phone number
+      th
+  tbody
+    - @customers.each do |customer|
+      tr
+        td = customer.company_name
+        td = customer.poc_name
+        td = link_to customer.email, "mailto:#{customer.email}"
+        td = customer.phone_number
+        td 
+          = link_to 'View', user_customer_path(current_user, customer.id), class: "btn btn-mini btn-space"
+          = link_to 'Edit', edit_user_customer_path(current_user.id, customer.id), class: "btn btn-mini btn-space"
+          = link_to 'Delete', user_customer_path(current_user, customer.id), class: "btn btn-mini",
+            :confirm => 'Are you sure?', :method => :delete 
 

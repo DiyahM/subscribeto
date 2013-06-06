@@ -5,30 +5,32 @@ em
   - if category.items.any?
     h4 = category.name
     table.table
-      tr
-        th width="200px"
-        th Product
-        th width="30%" Description
-        th List Price
-        th Producer
-        th Qty
-        th width="11%"
-      - category.items.each do |item|
+      thead
         tr
-          td
-            - if item.image_url && item.image_url != ""
-              = image_tag item.image_url, width:"200px"
-            - else
-              = image_tag "http://placehold.it/200x134&text=No%20image%20available"
-          td = item.name
-          td = item.description
-          td = number_with_precision item.price, precision: 2
-          td 
-            a href=user_profile_path(item.user, item.user.profile)
-              = item.user.company_name
-          td
-            input type="number" class="input-mini"
-          td
-            button.btn.btn-primary href="#" Add to Cart
+          th width="200px"
+          th Product
+          th width="30%" Description
+          th List Price
+          th Producer
+          th Qty
+          th width="11%"
+      tbody
+        - category.items.each do |item|
+          tr
+            td
+              - if item.image_url && item.image_url != ""
+                = image_tag item.image_url, width:"200px"
+              - else
+                = image_tag "http://placehold.it/200x134&text=No%20image%20available"
+            td = item.name
+            td = item.description
+            td = number_with_precision item.price, precision: 2
+            td 
+              a href=user_profile_path(item.user, item.user.profile)
+                = item.user.company_name
+            td
+              input type="number" class="input-mini"
+            td
+              button.btn.btn-primary href="#" Add to Cart
 
 

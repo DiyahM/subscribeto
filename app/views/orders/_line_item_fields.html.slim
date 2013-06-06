@@ -1,7 +1,7 @@
 tr.nested-fields
   = f.inputs do
     td
-      = f.input :delivered, :label => '', :as => :boolean
+      = f.input :delivered, :label => '', :as => :boolean, :input_html => { class:"delivered"}
     td
       = f.input :delivery_slot_id, :label => false, :as => :select,
         :collection => Hash[current_user.delivery_slots.map{|b| [b.delivery_label,b.id]}], :include_blank => "Select Time"
@@ -14,15 +14,33 @@ tr.nested-fields
     td 
       = f.input :price, :label => false, input_html: { class: "order_customer_price" }
     td
-      = f.input :quantity, :label => false, input_html: { :value => "1", class: "order_quantity"}
-    td.order_price
-      | --
+      = f.input :quantity, :label => false, input_html: { :value => "1", class: "order_quantity", min: "1"}
     td
+      = f.input :qty_delivered, :label => false, input_html: { style:"display:none", class:"order-options order-delivered",
+        min:"0"}
+    td 
+      = f.input :qty_returned, :label => false, input_html: { style:"display:none", class:"order-options order-returned",
+        min:"0"}
+    td.order_price
       | --
     td
       = link_to_remove_association "Remove Line Item", f
 
 javascript:
+  $(".delivered").change(function() {
+    console.log("checkbox");
+    var item_id = $(this).val();
+    var item_element = $(this).parents("tr");
+    if (item_element.find(".delivered").is(":checked"))
+    {
+      console.log("holla");
+      item_element.find(":hidden").show();
+      item_element.find(".order_quantity").attr('readonly', true);
+    } else {
+      item_element.find(".order-options").hide();
+      item_element.find(".order_quantity").attr('readonly', false);
+    }
+  });
   $(".order_item").change(function() {
     var item_id = $(this).val();
     var item_element = $(this).parents("tr");
@@ -38,6 +56,13 @@ javascript:
   $(".order_quantity").change(function() {
     var item_element = $(this).parents("tr");
     var total = parseInt(item_element.find(".order_quantity").val()) * parseFloat(item_element.find(".order_customer_price").val());
+    item_element.find(".order_price").html(total);
+    calculateOrderTotal();
+  });
+
+  $(".order-options").change(function() {
+    var item_element = $(this).parents("tr");
+    var total = parseInt((item_element.find(".order-delivered").val() - item_element.find(".order-returned").val()) * parseFloat(item_element.find(".order_customer_price").val()));
     item_element.find(".order_price").html(total);
     calculateOrderTotal();
   });

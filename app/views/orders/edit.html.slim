@@ -57,9 +57,10 @@
         th Item
         th List Price
         th Customer Price
-        th Qty
+        th Qty Ordered
+        th Qty Delivered
+        th Qty Returned
         th Amount
-        th Credit
         th
       = f.semantic_fields_for :line_items do |line_item|
         = render 'line_item_fields', :f => line_item

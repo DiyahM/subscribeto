@@ -9,6 +9,8 @@ Subscribeto::Application.routes.draw do
   
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]
+    resources :order_templates, :only => ["create", "destroy"]
+    post "order_templates/create_order/", to: 'order_templates#create_order', as: 'template_create_order'
     get '/items', to: 'items#my_items', as: 'items'
     resources :prepareds 
     resources :customers

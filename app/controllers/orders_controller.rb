@@ -17,7 +17,8 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = current_user.orders.includes(:customer)
+    @orders = current_user.orders.includes(:customer).order("updated_at DESC")
+    @templates = current_user.order_templates.includes(:order => [:customer, :line_items => [:delivery_slot, :item]])
   end
 
   # GET /orders/1

@@ -5,31 +5,34 @@
     .input-append style="float:right"
       //input.span9#appendedInputButtons type="text"
       //button.btn type="button" Search
-.row-fluid
+.row-fluid style="margin-top:25px"
   .span4
     h3 Items
 .row-fluid
   #prepared-items.tab-pane.active
     .row-fluid
       table.table.table-striped
-        tr
-          th Product Image
-          th Name
-          th Description
-          th Default Price
-          th  
-
-        - @prepared_items.each do |prepared_item|
+        thead
           tr
-            td
-              - if prepared_item.image_url && prepared_item.image_url != ""
-                = image_tag prepared_item.image_url, width:"150px" 
-            td = prepared_item.name
-            td = prepared_item.description
-            td = number_with_precision prepared_item.price, precision:2
-            td
-              = link_to "Edit", edit_user_prepared_path(current_user,prepared_item)
-              |  | 
-              = link_to "Delete", user_prepared_path(current_user,prepared_item),
-                confirm: "Are you sure you want to delete this item?",
-                method: :delete
+            th width="15%" Product Image
+            th Name
+            th width="50%" Description
+            th Default Price
+            th  
+        tbody
+          - @prepared_items.each do |prepared_item|
+            tr
+              td
+                - if prepared_item.image_url && prepared_item.image_url != ""
+                  = image_tag prepared_item.image_url, width:"150px" 
+                - else
+                  | Edit this item to have your img displayed here
+              td = prepared_item.name
+              td = prepared_item.description
+              td = number_with_precision prepared_item.price, precision:2
+              td
+                = link_to "Edit", edit_user_prepared_path(current_user,prepared_item)
+                |  | 
+                = link_to "Delete", user_prepared_path(current_user,prepared_item),
+                  confirm: "Are you sure you want to delete this item?",
+                  method: :delete
