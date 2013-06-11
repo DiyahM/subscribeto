@@ -22,12 +22,11 @@ table.table.table-striped
   tbody
     - @customers.each do |customer|
       tr
-        td = customer.company_name
+        td = link_to customer.company_name, user_customer_path(current_user, customer.id)
         td = customer.poc_name
         td = link_to customer.email, "mailto:#{customer.email}"
         td = customer.phone_number
         td 
-          = link_to 'View', user_customer_path(current_user, customer.id), class: "btn btn-mini btn-space"
           = link_to 'Edit', edit_user_customer_path(current_user.id, customer.id), class: "btn btn-mini btn-space"
           = link_to 'Delete', user_customer_path(current_user, customer.id), class: "btn btn-mini",
             :confirm => 'Are you sure?', :method => :delete 

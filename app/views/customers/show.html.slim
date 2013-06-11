@@ -43,18 +43,42 @@
     h4 Order History
   .row-fluid
     table.table.table-striped
-      tr
-        th Order #
-        th Order Date and Time
-        th Status
-        th
-      - @customer.orders.each do |order|
+      thead
         tr
-          td= order.id
-          td= time_tag order.created_at
-          td= order.status
-          td
-            a.btn.btn-mini href=user_order_path(current_user, order) View Order
+          th Order #
+          th Order Date and Time
+          th Status
+          th Amount
+          th
+      tbody
+        - @customer.orders.each do |order|
+          tr
+            td= link_to order.id, user_order_path(current_user, order)
+            td= time_tag order.created_at
+            td= order.status
+            td= number_with_precision order.total, precision:2
+            td
+              = link_to "Edit", edit_user_order_path(current_user, order), class: "btn btn-mini"
+- if @customer.payment_dues.any?
+  hr
+  .row-fluid
+    h4 Invoices
+  .row-fluid
+    table.table.table-striped
+      thead
+        tr
+          th Invoice #
+          th Order #
+          th Amount Due
+          th Status
+      tbody
+        - @customer.payment_dues.each do |invoice|
+          tr
+            td= link_to invoice.id, user_invoice_path(current_user, invoice)
+            td= invoice.order_id
+            td= number_with_precision invoice.amount, precision:2
+            td= invoice.status
+
 
 
 

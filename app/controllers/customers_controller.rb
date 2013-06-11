@@ -9,7 +9,7 @@ class CustomersController < ApplicationController
   # GET /customers/1
   # GET /customers/1.json
   def show
-    @customer = Customer.includes(:orders).find(params[:id])
+    @customer = Customer.includes(:orders, :payment_dues).find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb

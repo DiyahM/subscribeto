@@ -4,6 +4,9 @@ class PaymentDue < ActiveRecord::Base
   validates :order_id, presence: true
   after_create :set_values
 
+  def status
+    paid? ? "Paid" : "Unpaid"
+  end
   private
 
   def set_values
