@@ -23,6 +23,7 @@ Subscribeto::Application.routes.draw do
     get "/profile/:id", to: 'profiles#show', as: 'profile'
     get "profile/:id/edit", to: 'profiles#edit', as: 'profile_edit'
     put "/profile/:id", to: 'profiles#update'
+    post "/orders/:id", to: 'orders#update'
   end
   
   post "/customers/import_from_qb"

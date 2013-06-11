@@ -156,7 +156,7 @@ javascript:
     order_json["order"] = {"line_items_attributes":{}};
     order_json["order"]["line_items_attributes"] = line_item_attributes_json;
     $.ajax({
-      type: 'PUT',
+      type: 'POST',
       url: "/users/#{current_user.id}/orders/"+order_id,
       data: order_json,
       async:false

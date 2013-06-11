@@ -12,7 +12,7 @@
     .accordion#template-accordion
       - @templates.each do |template|
         .accordion-group
-          .accordion-heading style="background-color:#D7DFF7;"
+          .accordion-heading 
             .accordion-toggle data-parent="#template-accordion" href="#template_#{template.id}"
               table.table.table-condensed
                 thead
@@ -20,12 +20,12 @@
                     th Order Template For #{template.order.customer.company_name}
                     td 
                       .span5
-                        button.btn.btn-mini.btn-space type="button" data-toggle="collapse" data-target="#template_#{template.id}" Show/Hide Template Details
-                        = link_to 'Delete Template', user_order_template_path(current_user, template),
+                        button.btn.btn-mini.btn-space type="button" data-toggle="collapse" data-target="#template_#{template.id}" Expand/Collapse 
+                        = link_to 'Delete', user_order_template_path(current_user, template),
                           class: "btn btn-mini btn-space", :confirm => 'Are you sure?', :method => :delete
                       .span1
                         = button_to 'Create New Order From This Template', user_template_create_order_path(current_user,
-                          order_id:template.order_id), class:"btn btn-mini btn-primary"
+                          order_id:template.order_id), class:"btn btn-mini btn-success"
           div.accordion-body.collapse.in id="template_#{template.id}"
             .accordion-inner
               table.table id="details-test"
@@ -58,12 +58,11 @@ table.table.table-striped
   tbody
     - @orders.each do |order|
       tr
-        td = order.id
-        td = "#{order.customer.company_name}" 
+        td = link_to order.id, user_order_path(current_user, order)
+        td = order.customer.company_name
         td = order.status
         td 
           .span4
-            = link_to 'View', user_order_path(current_user, order), class: "btn btn-mini btn-space" 
             = link_to 'Edit', edit_user_order_path(current_user, order), class: "btn btn-mini btn-space"
             = link_to 'Delete', user_order_path(current_user, order), class: "btn btn-mini btn-space",
               :confirm => 'Are you sure?', :method => :delete
