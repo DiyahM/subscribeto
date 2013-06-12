@@ -22,6 +22,7 @@ class PaymentDuesController < ApplicationController
         pdf = InvoicePdf.new(@invoice, view_context, current_user)
         send_data pdf.render, filename: "invoice_#{@invoice.id}", type: "application/pdf", disposition: "inline"
       end
+      format.iif { render iif: render_to_string(locals: { invoice:@invoice }), filename: "invoice_#{@invoice.id}"}
     end
   end
 

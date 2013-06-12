@@ -6,17 +6,21 @@ javascript:
   h2 Account Settings
 hr
 .row-fluid
-  - if current_user.qb_token.nil?
-    h4 Connect to Quickbooks
-    em
-      | Quickbooks feature is currently in testing.
-    ipp:connectToIntuit
-  - else
-    em
-      | ** Connected to Quickbooks 
-hr
-.row-fluid
   = semantic_form_for current_user do |f|
+    .row-fluid
+      - if current_user.qb_token.nil?
+        h4 Connect to Quickbooks
+        .row-fluid
+          .span4
+            = f.input :quickbooks_desktop, :label => "Check this box if you use Quickbooks Desktop",
+              :input_html => {style:"padding-left:0"}
+          .span6
+            ipp:connectToIntuit
+      - else
+        em
+          | ** Connected to Quickbooks
+    hr
+    h4 Account Details
     = f.inputs :company_name, :name, :email, :phone_number, :street_address, :city, :state,
       :postal_code
     = f.action :submit, :label => "Update Settings"

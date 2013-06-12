@@ -8,7 +8,12 @@ class ApplicationController < ActionController::Base
 
   def qb_customer_api
     if @qb_customer_api.nil?
-      @qb_customer_api = Quickeebooks::Online::Service::Customer.new
+      if current_user.quickbooks_desktop
+        @qb_customer_api = Quickeebooks::Windows::Service::Customer.new(qb_oauth_client, current_user.qb_realm_id)
+      else
+        @qb_customer_api = Quickeebooks::Online::Service::Customer.new
+      end
+
       @qb_customer_api.access_token = qb_oauth_client
       @qb_customer_api.realm_id = current_user.qb_realm_id
     end
