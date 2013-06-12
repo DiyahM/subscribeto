@@ -12,7 +12,7 @@ hr
         h4 Connect to Quickbooks
         .row-fluid
           .span4
-            = f.input :quickbooks_desktop, :label => "Check this box if you use Quickbooks Desktop",
+            = f.input :quickbooks_desktop, :as => :boolean, :label => "Check this box if you use Quickbooks Desktop",
               :input_html => {style:"padding-left:0"}
           .span6
             ipp:connectToIntuit
