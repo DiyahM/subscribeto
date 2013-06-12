@@ -115,7 +115,8 @@ hr
                           button.btn.btn-mini.btn-space href="#" onclick="update_order($('#table-order-#{order.id}'))" Save 
                         .span1
                           = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
-                :order_id => order.id, :user_id => current_user.id}, :class => "btn btn-mini btn-primary" ) 
+                            :order_id => order.id, :user_id => current_user.id}, { :class => "btn btn-mini btn-primary",
+                            :onclick=> "update_order($('#table-order-#{order.id}'))"}) 
             div.accordion-body.collapse.in id="order#{order.id}"
               .accordion-inner
                 table.table id="table-order-#{order.id}"
