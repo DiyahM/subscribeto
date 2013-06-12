@@ -12,7 +12,6 @@ class InvoicePdf < Prawn::Document
   end
 
   def main_content
-    move_down 20
     text "Order Details", size: 15, style: :bold
     move_down 20
     order_table
@@ -55,7 +54,7 @@ class InvoicePdf < Prawn::Document
   end
 
   def left_header
-    grid([0,0],[2,1]).bounding_box do
+    grid([0,0],[3,1]).bounding_box do
       bill_from
       move_down 20 
       invoice_to
