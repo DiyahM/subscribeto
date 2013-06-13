@@ -41,15 +41,15 @@ class InvoicePdf < Prawn::Document
   end
 
   def invoice_rows
-    [["Date","Invoice #","Terms","Due Date"],
-     [@invoice.created_at.strftime("%B %d, %Y"), @invoice.id,
-      @invoice.order.customer.term, @invoice.due_date.strftime("%B %d, %Y")]]
+    [["Date","Terms","Due Date","Invoice #"],
+     [@invoice.created_at.strftime("%B %d, %Y"),
+      @invoice.order.customer.term, @invoice.due_date.strftime("%B %d, %Y"), @invoice.id]]
   end
   
   def line_item_rows
-    [["Item Descritption", "Qty", "Qty Delivered", "Qty Returned", "Price", "Amount"]]+
+    [["Qty","Item Descritption", "Price", "Total"]]+
     @invoice.order.line_items.map do |item|
-      [item.item.name, item.quantity, item.qty_delivered, item.qty_returned, item.price, price((item.qty_delivered - item.qty_returned)*item.price)]
+      [item.quantity, item.item.name, item.price, price(item.total)]
     end
   end
 
