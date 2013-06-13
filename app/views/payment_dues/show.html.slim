@@ -1,4 +1,6 @@
 .row-fluid
+  .span2
+    = link_to "View Order", user_order_path(current_user, @invoice.order)
   .span4.pull-right
     = link_to "Printable Invoice (PDF)", user_invoice_path(current_user,@invoice, format: "pdf"), class: "btn btn-space"
     //= link_to "Email Invoice", email_invoice_path(:payment_due_id => @invoice.id), class: "btn"
@@ -20,15 +22,15 @@
     h2 Invoice
     table.table.table-bordered
       tr
-        th Date
-        th Invoice #
+        th Invoice Date
         th Terms
         th Due Date
+        th Invoice #
       tr
         td= time_tag @invoice.created_at, format: "%B %d, %Y"
-        td= @invoice.id
         td= @invoice.order.customer.term
         td= time_tag @invoice.due_date, format: "%B %d, %Y"
+        td= @invoice.id
 .row-fluid
   h5 Invoice For:
   p
@@ -44,30 +46,27 @@
     = "#{@invoice.order.customer.city}, #{@invoice.order.customer.state} #{@invoice.order.customer.postal_code}"
 hr
 .row-fluid
-  h4 Order 
+  h4 Order Details 
   table.table.table-striped.table-bordered
-    tr
-      th Item Description
-      th Qty Ordered
-      th Qty Delivered
-      th Qty Returned
-      th Price
-      th Amount
-    - @invoice.order.line_items.each do |line_item|
+    thead
       tr
-        td= line_item.item.name
-        td= line_item.quantity
-        td= line_item.qty_delivered
-        td= line_item.qty_returned
-        td= number_with_precision(line_item.price, precision:2)
-        - total = (line_item.qty_delivered - line_item.qty_returned)* line_item.price
-        td= number_with_precision(total, precision:2)
-    tr
-      th colspan="5" 
-        h4 Total Amount Due
-      th
-        h4
-          = number_with_precision(@invoice.order.total, precision:2)
+        th Qty 
+        th Item Description
+        th Price
+        th Total
+    tbody
+      - @invoice.order.line_items.each do |line_item|
+        tr
+          td= line_item.quantity
+          td= line_item.item.name
+          td= number_with_precision(line_item.price, precision:2)
+          td= number_with_precision(line_item.total, precision:2)
+      tr
+        th colspan="3" 
+          h4 Total Amount Due
+        th
+          h4
+            = number_with_precision(@invoice.order.total, precision:2)
 hr
 .row-fluid
   center
