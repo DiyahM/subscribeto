@@ -23,15 +23,15 @@ class PaymentDue < ActiveRecord::Base
     self.paid = false
     case self.order.customer.term
     when "Net 30"
-      self.due_date = self.order.complete_date + 30.day 
+      self.due_date = self.created_at + 30.day 
     when "Net 7"
-      self.due_date = self.order.complete_date + 7.day
+      self.due_date = self.created_at + 7.day
     when "Net 10"
-      self.due_date = self.order.complete_date + 10.day
+      self.due_date = self.created_at + 10.day
     when "Net 15"
-      self.due_date = self.order.complete_date + 15.day
+      self.due_date = self.created_at + 15.day
     when "Net 60"
-      self.due_date = self.order.complete_date + 60.day
+      self.due_date = self.created_at + 60.day
     end
     self.save
   end

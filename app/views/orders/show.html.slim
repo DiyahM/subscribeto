@@ -1,26 +1,22 @@
 .row-fluid
-p
-  = link_to 'Edit', edit_user_order_path(current_user, @order)
-  |  | 
-  = link_to 'View All Orders', user_orders_path(current_user)
-.row-fluid
-  .span10
-    p
-      | Order Date: 
-      = time_tag @order.created_at
-      br
-      = "Order # #{@order.id}"
-      br
-      = "Order Status: #{@order.status}"
-  .span2
-    - if @order.status == "Delivered"
-      = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
-        :order_id => @order.id}, :class => "btn" )
-    - elsif @order.status == "Invoiced"
-      = link_to "View Invoice", user_invoice_path(current_user, @order.payment_due)
+  .span6
+    ul.nav.nav-pills
+      li = link_to 'Edit Order', edit_user_order_path(current_user, @order)
+      li = link_to 'View All Orders', user_orders_path(current_user)
+      - if @order.payment_due
+        li = link_to "View Invoice", user_invoice_path(current_user, @order.payment_due)
+      - else
+        li = button_to( "Create Invoice", {:action => "create", :controller => "payment_dues",
+            :order_id => @order.id}, :class => "btn btn-success" )
+  .span3.pull-right
+    | Order Date: 
+    = time_tag @order.created_at
+    br
+    = "Order # #{@order.id}"
+    br
+    = "Order Status: #{@order.status}"
 
-
-.row-fluid style="border:1px solid #ccc;padding:10px;margin-bottom:20px;"
+.row-fluid style="border:3px solid #ccc;padding:10px;margin-bottom:20px;margin-top:20px;"
   .span3
     p
       strong Customer Information
@@ -29,7 +25,7 @@ p
       br
       = @order.customer.poc_name
       br
-      = link_to @order.customer.email, "mailto:#{@order.customer.email}"
+      = @order.customer.email
       br
       | Tel: 
       = @order.customer.phone_number
@@ -50,6 +46,7 @@ p
         = @order.customer.note
   
 .row-fluid
+  hr
   h4 Order Details
 .row-fluid
   table.table.table-bordered#order-table
@@ -86,9 +83,7 @@ p
       th
         | --
       th= number_with_precision(@order.total, precision: 2)
-p
-  em
-    | When order has not been delivered, qty delivered is assumed
+
 
 
 

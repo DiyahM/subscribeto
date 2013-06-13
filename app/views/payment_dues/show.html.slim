@@ -1,10 +1,9 @@
 .row-fluid
-  .span2
-    = link_to "View Order", user_order_path(current_user, @invoice.order)
-  .span4.pull-right
-    = link_to "Printable Invoice (PDF)", user_invoice_path(current_user,@invoice, format: "pdf"), class: "btn btn-space"
-    //= link_to "Email Invoice", email_invoice_path(:payment_due_id => @invoice.id), class: "btn"
-    a href="#email-modal" role="button" class="btn" data-toggle="modal" Email Invoice
+  ul.nav.nav-pills
+    li = link_to "Edit Order", edit_user_order_path(current_user, @invoice.order)
+    li = link_to "Printable Invoice (PDF)", user_invoice_path(current_user,@invoice, format: "pdf")
+    li
+      a href="#email-modal" role="button" data-toggle="modal" Email Invoice
 .row-fluid
   .span6
     p

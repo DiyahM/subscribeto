@@ -4,7 +4,7 @@ class LineItem < ActiveRecord::Base
   belongs_to :delivery_slot
   belongs_to :item
   after_create :set_default_values
-  after_save :update_order_status
+  after_save :update_order_status, :update_quantity
 
   validates :quantity, :numericality => {:greater_than => 0}
   validates :delivery_slot_id, :quantity, :item_id, :price, presence: true
@@ -19,6 +19,12 @@ class LineItem < ActiveRecord::Base
     end
   end
 
+  def update_quantity
+    if !delivered && (qty_delivered != quantity)
+      self.qty_delivered = quantity
+      self.save
+    end
+  end
   def update_order_status
     Order.update_status(self.order_id)
   end
@@ -26,6 +32,7 @@ class LineItem < ActiveRecord::Base
   def total
     (qty_delivered - qty_returned) *price
   end
+
   def self.undelivered_for_day(delivery_slots, user_id)
     undelivered_items = []
     delivery_slots.each do |slot|
