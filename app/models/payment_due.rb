@@ -7,6 +7,15 @@ class PaymentDue < ActiveRecord::Base
   def status
     paid? ? "Paid" : "Unpaid"
   end
+
+  def print_due_date
+    if order.customer.term == "Due upon receipt"
+      return "Due upon receipt"
+    else
+      return due_date.strftime("%B %d, %Y")
+    end
+  end
+
   private
 
   def set_values

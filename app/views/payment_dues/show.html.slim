@@ -29,7 +29,7 @@
       tr
         td= time_tag @invoice.created_at, format: "%B %d, %Y"
         td= @invoice.order.customer.term
-        td= time_tag @invoice.due_date, format: "%B %d, %Y"
+        td= @invoice.print_due_date 
         td= @invoice.id
 .row-fluid
   h5 Invoice For:
