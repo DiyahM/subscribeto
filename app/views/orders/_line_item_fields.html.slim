@@ -15,10 +15,10 @@ tr.nested-fields
       = f.input :price, :label => false, input_html: { class: "order_customer_price" }
     td
       = f.input :quantity, :label => false, input_html: { class: "order_quantity", min: "1"}
-    td.quantity-edits
+    td.quantity-edits style="display:none"
       = f.input :qty_delivered, :label => false, input_html: { style:"display:none", class:"order-options order-delivered",
         min:"0"}
-    td.quantity-edits 
+    td.quantity-edits style="display:none"
       = f.input :qty_returned, :label => false, input_html: { style:"display:none", class:"order-options order-returned",
         min:"0"}
     td.order_price

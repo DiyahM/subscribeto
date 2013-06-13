@@ -70,6 +70,7 @@
     = f.action :submit, :label => 'Save', :button_html => { class: "btn btn-success" }
 
 javascript:
+  $(".quantity-edits").show();
   $("#order-table .nested-fields").each(function(){
     var item_id = $(this).find(".order_item").val();
     var item_element = $(this);
@@ -85,6 +86,10 @@ javascript:
   $('#order-table').bind('cocoon:after-remove', function(e, removedItem) {
     calculateOrderTotal();
   });  
+  $('#order-table').bind('cocoon:after-insert', function(e, insertedItem) {
+    $(".quantity-edits").show();
+    calculateOrderTotal();
+  });
 
   var calculateOrderTotal = function(){
     var total = 0;
