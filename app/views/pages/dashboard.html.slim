@@ -77,7 +77,7 @@ hr
                   = link_to line_item.order.id, user_order_path(current_user, line_item.order.id)
                 td = link_to line_item.order.customer.company_name,
                 user_customer_path(current_user, line_item.order.customer.id)
-                td = line_item.item.name
+                td = line_item.item.name if line_item.item
                 td = line_item.quantity
                 td
                   input type="number" class="input-mini" value=line_item.qty_delivered 
@@ -132,7 +132,7 @@ hr
                       tr
                         td id="test#{line_item.id}" style="display:none" = line_item.id
                         td= time_tag order.complete_date, format: "%B %d"
-                        td= line_item.item.name
+                        td= line_item.item.name if line_item.item
                         td 
                           input type="number" class="input-mini" value=line_item.qty_delivered
                         td 

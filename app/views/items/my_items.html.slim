@@ -32,7 +32,4 @@
               td = number_with_precision prepared_item.price, precision:2
               td
                 = link_to "Edit", edit_user_prepared_path(current_user,prepared_item)
-                |  | 
-                = link_to "Delete", user_prepared_path(current_user,prepared_item),
-                  confirm: "Are you sure you want to delete this item?",
-                  method: :delete
+                

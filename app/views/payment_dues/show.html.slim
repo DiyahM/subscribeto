@@ -57,7 +57,7 @@ hr
       - @invoice.order.line_items.each do |line_item|
         tr
           td= line_item.quantity
-          td= line_item.item.name
+          td= line_item.item.name if line_item.item
           td= number_with_precision(line_item.price, precision:2)
           td= number_with_precision(line_item.total, precision:2)
       tr
