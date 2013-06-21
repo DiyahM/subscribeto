@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+  before_filter :authorize, :except => [ :get_autocomplete_items]
   autocomplete :customer, :company_name, :full => true, :display_value => :company_name,
     :extra_data => [ :poc_name, :email, :phone_number, :address_one, :address_two,
                     :city, :state, :postal_code, :note, :term] 
