@@ -34,9 +34,9 @@ end
 group :test, :development do
   gem 'launchy'
   gem 'pry'
+  gem "rspec-rails", "~> 2.0"
 end
 group :test do
-  gem "rspec-rails", "~> 2.0"
   gem 'turnip'
   gem 'capybara'
   gem 'database_cleaner'
