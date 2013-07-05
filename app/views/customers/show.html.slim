@@ -6,7 +6,7 @@
     | Company Details For 
     = @customer.company_name
 .row-fluid
-  .span3
+  .span6
     p
       strong Contact Information
       br
@@ -16,7 +16,7 @@
       br
       | Tel: 
       = @customer.phone_number
-  .span3
+  .span6
     p
       strong Delivery Address
       br
@@ -26,14 +26,20 @@
       = @customer.address_two unless @customer.address_two == ""
       br
       = "#{@customer.city}, #{@customer.state} #{@customer.postal_code}"
-  .span6
+.row-fluid
+  p
+    strong Terms: 
+    = @customer.term
+  p
+    strong Assigned Delivery Times:
+    ul
+      - @customer.delivery_slots.each do |slot|
+        li =slot.delivery_label
+  p
+    strong Notes:
     p
-      strong Notes:
-      p
-        = @customer.note
-      strong Terms:
-      p
-        = @customer.term
+      = @customer.note
+  
 .row-fluid
   a.btn.btn-success href="#{@customer.id}/orders/new" Create New Order For Customer
 

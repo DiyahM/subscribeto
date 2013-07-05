@@ -6,8 +6,30 @@ class DeliverySlot < ActiveRecord::Base
   has_many :orders, through: :undelivered_items
   has_many :undelivered_items, :class_name => 'LineItem', :conditions => ['delivered = ?', false],
     :include => [:item, {:order => :customer}]
+  has_and_belongs_to_many :customers
   validates :day, :start_time, presence: true
 
+
+  def get_date_for(week_start)
+    case day
+    when "Sunday"
+      ret_date = week_start
+    when "Monday"
+      ret_date = week_start + 1.day
+    when "Tuesday"
+      ret_date = week_start + 2.days
+    when "Wednesday"
+      ret_date = week_start + 3.days
+    when "Thursday"
+      ret_date = week_start + 4.days
+    when "Friday"
+      ret_date = week_start + 5.days
+    when "Saturday"
+      ret_date = week_start + 6.days
+    end
+    
+    return ret_date
+  end
 
   def delivery_label
     day + start_time.strftime(" %l:%M %p")

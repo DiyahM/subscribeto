@@ -1,4 +1,5 @@
 Subscribeto::Application.routes.draw do
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
@@ -24,6 +25,7 @@ Subscribeto::Application.routes.draw do
     get "profile/:id/edit", to: 'profiles#edit', as: 'profile_edit'
     put "/profile/:id", to: 'profiles#update'
     post "/orders/:id", to: 'orders#update'
+    resources :weekly_schedules, :only => ["create", "update"]
   end
   
   post "/customers/import_from_qb"
