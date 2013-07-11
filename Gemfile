@@ -18,6 +18,7 @@ gem 'heroku'
 gem 'quickeebooks'
 gem 'filepicker-rails'
 gem 'riif'
+gem 'amoeba'
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'

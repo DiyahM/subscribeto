@@ -8,8 +8,13 @@ class WeeklySchedule < ActiveRecord::Base
   def self.find_or_initialize_by(week_start, user_id)
     schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
     if schedule.nil?
-      schedule = WeeklySchedule.new(week_start: week_start, user_id: user_id)
-      ScheduleCreator.set_schedule(schedule)
+      schedule = WeeklySchedule.where(user_id: user_id).last
+      if schedule.nil?
+        schedule = ScheduleCreator.create_schedule(week_start, user_id)
+      else
+        schedule.amoeba_dup
+        ScheduleCreator.set_schedule(schedule)
+      end
     end
     return schedule
   end

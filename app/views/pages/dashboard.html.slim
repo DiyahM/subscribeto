@@ -16,14 +16,7 @@
         button.btn.btn-large Review and Send Invoices 
 
   #schedule style="margin-top:20px"
-    /*= semantic_form_for [current_user, @weekly_schedule] do |f|*/
-    /*  = f.semantic_fields_for :delivery_dates do |delivery_date|*/
-    /*    = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|*/
-    /*      = delivery_detail.object.customer.company_name*/
-    /*      = delivery_detail.input :qty_ordered*/
 
-    =@weekly_schedule.delivery_dates.first.customers.inspect
-    h2 Please Fix Me Stupid: The Delivery Details Model should contain many items through :say_model. The entire row needs to be the model
     table.table.table-bordered
       thead
         tr
@@ -33,16 +26,18 @@
       tbody
         = semantic_form_for [current_user, @weekly_schedule] do |f|
           = f.semantic_fields_for :delivery_dates do |delivery_date|
-            tr
-              td colspan=current_user.items.count+1
-                = delivery_date.object.delivery_slot.delivery_label
-                = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
-            = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
+            - if delivery_date.object.delivery_details.any?
               tr
-                td = delivery_detail.object.customer.company_name
-                td
-                  = delivery_detail.object.item.name
-                  = delivery_detail.input :qty_ordered
+                td colspan=current_user.items.count+1
+                  = delivery_date.object.delivery_slot.delivery_label
+                  = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
+              = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
+                tr
+                  td = delivery_detail.object.customer.company_name
+                  = delivery_detail.semantic_fields_for :order_quantities do |order_quantity|
+                    td
+                      = order_quantity.object.item.name
+                      = order_quantity.input :quantity, label: false, :input_html => { class: "span4" }
                 
 
 

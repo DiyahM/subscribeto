@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130705194947) do
+ActiveRecord::Schema.define(:version => 20130711140150) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -94,8 +94,6 @@ ActiveRecord::Schema.define(:version => 20130705194947) do
   create_table "delivery_details", :force => true do |t|
     t.integer  "customer_id"
     t.integer  "weekly_schedule_id"
-    t.integer  "item_id"
-    t.integer  "qty_ordered"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.integer  "delivery_date_id"
@@ -137,6 +135,14 @@ ActiveRecord::Schema.define(:version => 20130705194947) do
     t.integer  "order_week_id"
     t.integer  "customer_id"
     t.datetime "scheduled_delivered_date"
+  end
+
+  create_table "order_quantities", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "quantity",           :default => 0
+    t.integer  "delivery_detail_id"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
   end
 
   create_table "order_templates", :force => true do |t|
@@ -192,8 +198,8 @@ ActiveRecord::Schema.define(:version => 20130705194947) do
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
     t.string   "name"
     t.string   "account_type"
     t.string   "phone_number"
@@ -210,6 +216,8 @@ ActiveRecord::Schema.define(:version => 20130705194947) do
     t.string   "qb_secret"
     t.string   "qb_realm_id"
     t.boolean  "quickbooks_desktop"
+    t.string   "password_reset_token"
+    t.datetime "password_reset_sent_at"
   end
 
   create_table "weekly_schedules", :force => true do |t|
