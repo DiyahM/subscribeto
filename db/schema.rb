@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130612141929) do
+ActiveRecord::Schema.define(:version => 20130711091737) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -76,6 +76,31 @@ ActiveRecord::Schema.define(:version => 20130612141929) do
     t.string   "term"
   end
 
+  create_table "customers_delivery_slots", :force => true do |t|
+    t.integer "customer_id"
+    t.integer "delivery_slot_id"
+    t.integer "customers_id"
+    t.integer "delivery_slots_id"
+  end
+
+  create_table "delivery_dates", :force => true do |t|
+    t.datetime "scheduled_for"
+    t.integer  "weekly_schedule_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.integer  "delivery_slot_id"
+  end
+
+  create_table "delivery_details", :force => true do |t|
+    t.integer  "customer_id"
+    t.integer  "weekly_schedule_id"
+    t.integer  "item_id"
+    t.integer  "qty_ordered"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.integer  "delivery_date_id"
+  end
+
   create_table "delivery_slots", :force => true do |t|
     t.string   "day"
     t.time     "start_time"
@@ -102,13 +127,16 @@ ActiveRecord::Schema.define(:version => 20130612141929) do
     t.integer  "order_id"
     t.integer  "delivery_slot_id"
     t.integer  "quantity"
-    t.datetime "created_at",                                                    :null => false
-    t.datetime "updated_at",                                                    :null => false
+    t.datetime "created_at",                                                            :null => false
+    t.datetime "updated_at",                                                            :null => false
     t.integer  "item_id"
     t.boolean  "delivered"
-    t.decimal  "price",            :precision => 8, :scale => 2
-    t.integer  "qty_delivered",                                  :default => 0
-    t.integer  "qty_returned",                                   :default => 0
+    t.decimal  "price",                    :precision => 8, :scale => 2
+    t.integer  "qty_delivered",                                          :default => 0
+    t.integer  "qty_returned",                                           :default => 0
+    t.integer  "order_week_id"
+    t.integer  "customer_id"
+    t.datetime "scheduled_delivered_date"
   end
 
   create_table "order_templates", :force => true do |t|
@@ -116,6 +144,13 @@ ActiveRecord::Schema.define(:version => 20130612141929) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.integer  "user_id"
+  end
+
+  create_table "order_weeks", :force => true do |t|
+    t.integer  "week_number"
+    t.integer  "user_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "orders", :force => true do |t|
@@ -128,6 +163,7 @@ ActiveRecord::Schema.define(:version => 20130612141929) do
     t.string   "status"
     t.decimal  "total",         :precision => 8, :scale => 2
     t.date     "complete_date"
+    t.boolean  "recurring"
   end
 
   create_table "payment_dues", :force => true do |t|
@@ -156,8 +192,8 @@ ActiveRecord::Schema.define(:version => 20130612141929) do
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
     t.string   "name"
     t.string   "account_type"
     t.string   "phone_number"
@@ -174,6 +210,16 @@ ActiveRecord::Schema.define(:version => 20130612141929) do
     t.string   "qb_secret"
     t.string   "qb_realm_id"
     t.boolean  "quickbooks_desktop"
+    t.string   "password_reset_token"
+    t.datetime "password_reset_sent_at"
+  end
+
+  create_table "weekly_schedules", :force => true do |t|
+    t.integer  "user_id"
+    t.datetime "week_start"
+    t.datetime "week_end"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
 end

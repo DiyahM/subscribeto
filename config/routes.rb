@@ -1,7 +1,9 @@
 Subscribeto::Application.routes.draw do
+  get "password_resets/new"
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-
+  resources :password_resets
   resources :sessions
   get "marketplace", to: 'items#index' 
   get '/items/:id', to: 'items#show', as: 'show_item'
