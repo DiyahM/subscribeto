@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   has_many :orders, :dependent => :destroy
   has_many :customers, :dependent => :destroy
   has_many :payment_dues, through: :orders
+  has_many :weekly_schedules
   has_one :profile
   has_many :order_templates
   attr_accessible :company_name, :name, :email, :password, :password_confirmation, :account_type, :phone_number, 

@@ -7,4 +7,22 @@ class Customer < ActiveRecord::Base
   has_many :payment_dues, through: :orders
   has_many :delivery_details
   has_many :delivery_dates, through: :delivery_details
+  has_many :invoices
+
+  def amount_due_for_week(weekly_schedule)
+    my_delivery_details = delivery_details_for_week(weekly_schedule)
+    total = 0
+    my_delivery_details.each do |delivery_detail|
+      delivery_detail.order_quantities.each do |order|
+        if order.quantity > 0
+          total += order.subtotal
+        end
+      end
+    end
+    return total
+  end
+
+  def delivery_details_for_week(weekly_schedule)
+    delivery_details.find_all_by_delivery_date_id(weekly_schedule.delivery_dates)
+  end
 end

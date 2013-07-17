@@ -1,9 +1,14 @@
 class WeeklySchedule < ActiveRecord::Base
-  attr_accessible :user_id, :week_end, :week_start, :delivery_dates_attributes
+  attr_accessible :user_id, :week_start, :delivery_dates_attributes
   belongs_to :user
-  has_many :delivery_dates
+  has_many :delivery_dates, :dependent => :destroy
+  has_many :customers, through: :delivery_dates, :uniq => true
+  has_many :delivery_details, through: :delivery_dates
+  has_many :order_quantities, through: :delivery_details
+  has_many :invoices, :dependent => :destroy
   validates :week_start, uniqueness: true
   accepts_nested_attributes_for :delivery_dates
+  after_create :create_invoices_for_week
 
   def self.find_or_initialize_by(week_start, user_id)
     schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
@@ -12,10 +17,17 @@ class WeeklySchedule < ActiveRecord::Base
       if schedule.nil?
         schedule = ScheduleCreator.create_schedule(week_start, user_id)
       else
-        schedule.amoeba_dup
-        ScheduleCreator.set_schedule(schedule)
+        schedule = ScheduleCreator.set_schedule_from_last(week_start, schedule)
       end
     end
     return schedule
+  end
+
+  def create_invoices_for_week
+    InvoiceGenerator.create_invoices_for_week(self)
+  end
+
+  def end_of_week
+    week_start.end_of_week(:sunday)
   end
 end
