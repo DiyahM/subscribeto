@@ -73,7 +73,7 @@
                 input type="text" value=invoice.memo
               td
                 a.btn.btn-mini.btn-space href="#" Edit Order
-                a.btn.btn-mini.btn-space href="#" View Invoice as PDF
+                a.btn.btn-mini.btn-space target="blank" href=user_invoices_pdf_url(current_user, invoice, format: "pdf") View Invoice as PDF
                 a.btn.btn-mini href="#" Email Invoice
   #view-schedule style="display:none;margin-top:20px;"
     - if @weekly_schedule.new_record?

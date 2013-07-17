@@ -19,7 +19,8 @@ Subscribeto::Application.routes.draw do
       get :autocomplete_customer_company_name, :on => :collection
       get :autocomplete_item_name, :on => :collection
     end 
-    resources :invoices, :controller => "payment_dues"
+    resources :invoices
+    get "/invoices/pdfs/:id", to: 'invoices#pdf', as: 'invoices_pdf'
     get "/quickbooks/import_qb_customers"
     get "/profile/:id", to: 'profiles#show', as: 'profile'
     get "profile/:id/edit", to: 'profiles#edit', as: 'profile_edit'
