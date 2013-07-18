@@ -6,7 +6,7 @@ Subscribeto::Application.routes.draw do
   resources :sessions
   get "marketplace", to: 'items#index' 
   get '/items/:id', to: 'items#show', as: 'show_item'
-  post '/line_items/:id', to: 'line_items#update'
+  post '/invoice/:id', to: 'invoices#update'
   
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]
@@ -31,7 +31,7 @@ Subscribeto::Application.routes.draw do
   
   post "/customers/import_from_qb"
   post 'mark_delivered', to: 'pages#mark_delivered'
-  post 'email_invoice/:payment_due_id', to: 'payment_dues#email', as: 'email_invoice'
+  post 'email_invoice/:invoice_id', to: 'invoices#email', as: 'email_invoice'
   get 'users/:user_id/customers/:customer_id/orders/new', to: 'customers#new_order'
   get 'signup', to: 'users#new', as: 'signup'
   get 'login', to: 'sessions#new', as: 'login'

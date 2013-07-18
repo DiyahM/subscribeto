@@ -7,8 +7,10 @@ class Invoice < ActiveRecord::Base
   after_initialize :default_values
 
   def default_values
-    self.memo = "Thank you for your business!"
-    self.save
+    if new_record?
+      self.memo = "Thank you for your business!"
+      self.save
+    end
   end
 
   def order_quantities

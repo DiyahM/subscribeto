@@ -19,7 +19,7 @@ class InvoicePdf < Prawn::Document
     text "Total Amount Due: ", size: 15, style: :bold
     text price(@invoice.amount_due), size:15, style: :bold
     move_down 30
-    text "Thank you for your business!"
+    text @invoice.memo
   end
 
   def right_header
