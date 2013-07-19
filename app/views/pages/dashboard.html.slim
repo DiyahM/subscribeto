@@ -1,8 +1,7 @@
 .row-fluid
   #dashboard-header
     .span7
-      | Week of 
-      = time_tag @weekly_schedule.week_start, format: "%b %d"
+      #{time_tag @weekly_schedule.week_start, format: "%b %d"} - #{time_tag @weekly_schedule.end_of_week, format: "%b %d"}
     .span5.pull-right
       = form_tag dashboard_path, :method => "get" do
         = text_field_tag :datepicker,"", placeholder:"Select new week", class:"input-medium"
@@ -14,7 +13,7 @@
       .btn-group
         button.btn.btn-large.btn-info#edit-btn onclick="showEditSchedule();" Update Orders
         button.btn.btn-large#invoice-btn onclick="showInvoices();" Send Invoices 
-        button.btn.btn-large#view-btn onclick="showSchedule();" View Schedule
+        button.btn.btn-large#view-btn onclick="showSchedule();" Summary Report
 
   #edit-schedule style="margin-top:20px"
 
@@ -37,8 +36,9 @@
             - if delivery_date.object.delivery_details.any?
               tr
                 td colspan=current_user.items.count+1
-                  = delivery_date.object.delivery_slot.delivery_label
-                  = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
+                  strong
+                    = delivery_date.object.delivery_slot.delivery_label
+                    = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
               = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
                 = delivery_detail.input :customer_id, :as => :hidden
                 tr 
@@ -104,6 +104,12 @@
           .alert.alert-error
             h4 Please click "Update Orders" button and click 'Save' before viewing this week's schedule
     - else
+      #summary-table
+        .slate.clearfix
+          - @weekly_schedule.items.each do |item|
+            .stat-column href="#"
+              span.number= @weekly_schedule.item_count(item.id)
+              span= item.name
       table.table.table-bordered
         thead
           tr

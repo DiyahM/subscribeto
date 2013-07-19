@@ -10,6 +10,13 @@ class WeeklySchedulesController < ApplicationController
   end
 
   def update
-    puts "*****UPDATE"
+    @weekly_schedule = WeeklySchedule.find(params[:id])
+    @weekly_schedule.update_attributes(params[:weekly_schedule])
+    if @weekly_schedule.errors.messages.empty?
+      @show_invoice = true
+      render "pages/dashboard", notice: "Weekly Schedule has been saved"
+    else
+      render "pages/dashboard", error: "Unable to save schedule"
+    end
   end
 end
