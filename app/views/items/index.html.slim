@@ -1,36 +1,27 @@
-h2 Marketplace
-em
-  | Currently in test mode only
-- @categories.each do |category|
-  - if category.items.any?
-    h4 = category.name
+.row-fluid
+  .span4
+    a.btn.btn-space.btn-success href=new_user_item_path(current_user) + Add Item For Sale
+  .span7
+    .input-append style="float:right"
+      //input.span9#appendedInputButtons type="text"
+      //button.btn type="button" Search
+.row-fluid style="margin-top:25px"
+  .span4
+    h3 Items
+.row-fluid
     table.table
       thead
         tr
-          th width="200px"
-          th Product
-          th width="30%" Description
+          th Name
+          th width="50%" Description
           th List Price
-          th Producer
-          th Qty
-          th width="11%"
+          th Actions 
       tbody
-        - category.items.each do |item|
+        - @items.each do |item|
           tr
-            td
-              - if item.image_url && item.image_url != ""
-                = image_tag item.image_url, width:"200px"
-              - else
-                = image_tag "http://placehold.it/200x134&text=No%20image%20available"
             td = item.name
             td = item.description
-            td = number_with_precision item.price, precision: 2
-            td 
-              a href=user_profile_path(item.user, item.user.profile)
-                = item.user.company_name
+            td = number_with_precision item.price, precision:2
             td
-              input type="number" class="input-mini"
-            td
-              button.btn.btn-primary href="#" Add to Cart
-
-
+              = link_to "Edit", edit_user_item_path(current_user,item)
+                

@@ -6,31 +6,14 @@
         - @item.errors.full_messages.each do |message|
           li = message
     
-  .row-fluid
-    .span4
-      #display-image
-        -if @item.image_url && @item.image_url != ""
-          = image_tag @item.image_url
   .row-fluid style="margin-top:18px"
-    = f.input :item_type, :as => :hidden, input_html: { :value => "Available for sale" }
     = f.input :name
     = f.input :price, :label=> "Default Price",
       :as => :number, :input_html => { :step => "0.01", :min => "0",
       :style => "width:7%"}
   .row-fluid
-    .span9
-      = f.input :categories, :as => :check_boxes, 
-        input_html: {style: "margin-left:10px;"}
-  .row-fluid
     = f.input :description, :input_html => { :rows => "6" }
   .row-fluid
     = f.action :submit, :label => "Save", :button_html => { class: "btn btn-success",
       style:"margin-right:20%" } 
-
-javascript:
-  $('#prepared_image_url').val("#{@item.image_url}");
-  $('label.checkbox').addClass('inline span4');
-  $('#prepared_image_url').change( function(){
-    $('#display-image').html("<img src='"+$('#prepared_image_url').val()+"' >");
-  });
 

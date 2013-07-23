@@ -2,20 +2,7 @@ class ItemsController < ApplicationController
   before_filter :authorize
 
   def index
-    @categories = Category.includes(:items => :user).all
-  end
-
-  def my_items
-    @prepared_items = Item.prepared_goods(current_user.id)
-  end
-
-  def show
-    @item = Item.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @item }
-    end
+    @items = current_user.items
   end
 
   def new
@@ -32,15 +19,10 @@ class ItemsController < ApplicationController
   end
 
   def create
-    if params[:item][:item_type] == "Raw Goods"
-      @item = Raw.new(params[:item])
-    else
-      @item = Item.new(params[:item])
-    end
+    @item = current_user.items.create(params[:item])
 
     respond_to do |format|
-      if @item.save
-        current_user.items << @item
+      if @item.errors.empty?
         format.html { redirect_to user_items_path, notice: 'Item was successfully created.' }
         format.json { render json: @item, status: :created, location: @item }
       else
@@ -52,10 +34,11 @@ class ItemsController < ApplicationController
 
   def update
     @item = Item.find(params[:id])
+    @item.update_attributes(params[:item])
 
     respond_to do |format|
-      if @item.update_attributes(params[:item])
-        format.html { redirect_to user_item_path(current_user, @item), notice: 'Item was successfully updated.' }
+      if @item.errors.empty?
+        format.html { redirect_to user_items_path(current_user), notice: 'Item was successfully updated.' }
       else
         format.html { render action: "edit" }
       end

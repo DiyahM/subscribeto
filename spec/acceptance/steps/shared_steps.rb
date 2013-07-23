@@ -70,7 +70,7 @@ end
 
 step "I have item(s) :items" do |items|
   items.split(', ').each do |item|
-    @user.items.create!(name: item, price: "5.00", item_type: "Available for sale")
+    @user.items.create!(name: item, price: "5.00")
   end
 end
 
