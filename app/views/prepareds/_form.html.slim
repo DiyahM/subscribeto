@@ -1,4 +1,3 @@
-= filepicker_js_include_tag
 = semantic_form_for [current_user, @item] do |f|
   - if @item.errors.any?
     #error_explanation
@@ -8,9 +7,6 @@
           li = message
     
   .row-fluid
-    .span4
-      = f.label :image_url, "Upload Image"
-      = f.filepicker_field :image_url
     .span4
       #display-image
         -if @item.image_url && @item.image_url != ""

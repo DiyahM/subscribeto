@@ -16,7 +16,6 @@ gem 'pony'
 gem 'honeybadger'
 gem 'heroku'
 gem 'quickeebooks'
-gem 'filepicker-rails'
 gem 'riif'
 gem 'amoeba'
 

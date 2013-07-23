@@ -1,5 +1,5 @@
 Feature: User creates an item for sale
-  xScenario: User creates an item for sale
+  Scenario: User creates an item for sale
     Given I am logged in
     When I click 'Manage'
     And I click 'Items'

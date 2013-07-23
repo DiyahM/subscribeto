@@ -43,16 +43,13 @@ html lang="en"
             ul.nav
               - if current_user
                 li= link_to "Dashboard", dashboard_path
-                //li= link_to "Market", marketplace_path
-                li= link_to "Orders", user_orders_path(current_user)
-                li= link_to "Customers", user_customers_path(current_user)
-                li= link_to "Invoices", user_invoices_path(current_user)
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#" Manage
                   ul.dropdown-menu
-                    //li= link_to "Marketplace Profile", user_profile_path(current_user, current_user.profile)
                     li= link_to "Items For Sale", user_items_path(current_user)
-                    li= link_to "Delivery Routes", user_delivery_slots_path(current_user)
+                    li= link_to "Delivery Schedule", user_delivery_slots_path(current_user)
+                    li= link_to "Customers", user_customers_path(current_user)
+                    li= link_to "Invoices", user_invoices_path(current_user)
                 li.dropdown
                   a.dropdown-toggle data-toggle="dropdown" href="#"
                     = current_user.email
