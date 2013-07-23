@@ -53,7 +53,7 @@
     .control-group
       = label_tag nil, "Assigned Delivery Times", class: "control-label"
       .controls
-        - DeliverySlot.all.each do |slot|
+        - current_user.delivery_slots.each do |slot|
           = check_box_tag "customer[delivery_slot_ids][]", slot.id, @customer.delivery_slot_ids.include?(slot.id), id: dom_id(slot), class: "checkbox inline"
           = label_tag dom_id(slot), slot.delivery_label, class: "checkbox inline", style: "margin-left:-15px; margin-right:20px"
 
