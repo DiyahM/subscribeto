@@ -32,4 +32,10 @@ class ApplicationController < ActionController::Base
   def authorize
     redirect_to login_url, alert: "Please login" if current_user.nil?
   end
+
+  def check_if_setup_complete
+    if current_user.items.empty? || current_user.customers.empty? || current_user.delivery_slots.empty?
+      redirect_to setup_url
+    end
+  end
 end

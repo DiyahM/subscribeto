@@ -8,6 +8,7 @@
         = submit_tag("Change Week", class: "btn", style:"vertical-align:top;margin-left:3px")
 
 #main style="margin-top:50px;"
+
   #nav-buttons
     center
       .btn-group
@@ -48,7 +49,8 @@
                     td
                       //= order_quantity.object.item.name
                       .span4
-                        = order_quantity.input :quantity, label: false, input_html: { min:"0" }
+                        = order_quantity.input :quantity, label: false,
+                          input_html: { min:"0", class:order_quantity.object.item.name }
       = f.submit "Save", class: "btn btn-success btn-large pull-right"
   #invoice style="display:none;margin-top:20px;"
     - if @weekly_schedule.new_record?

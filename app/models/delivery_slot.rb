@@ -32,7 +32,7 @@ class DeliverySlot < ActiveRecord::Base
   end
 
   def delivery_label
-    day + start_time.strftime(" %l:%M %p")
+    day + start_time.strftime("%l:%M %p")
   end
 
   def self.delivery_schedule_for_day(day_of_week, id)

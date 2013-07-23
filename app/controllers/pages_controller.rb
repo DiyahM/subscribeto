@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   before_filter :authorize, :except => [:home]
+  before_filter :check_if_setup_complete, :only => [:dashboard]
 
   def home
     @layout = "home"
@@ -10,11 +11,7 @@ class PagesController < ApplicationController
     render :nothing => true
   end
 
-  def dashboard
-    if session[:first_login]
-      @first_login = true
-    end
-    
+  def dashboard 
     week_start = Date.current.beginning_of_week(:sunday)
 
     if !params[:datepicker].nil?
@@ -26,5 +23,8 @@ class PagesController < ApplicationController
     end
     
     @weekly_schedule = WeeklySchedule.find_or_initialize_by(week_start, current_user.id)
+  end
+
+  def setup
   end
 end

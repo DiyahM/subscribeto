@@ -37,7 +37,7 @@ Subscribeto::Application.routes.draw do
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'
   get "dashboard", to: 'pages#dashboard', as: 'dashboard'
-  get "quickstart", to: 'pages#quickstart', as: 'quickstart'
+  get "setup", to: 'pages#setup', as: 'setup'
   get "pages/home"
   get "quickbooks/authenticate"
   get "quickbooks/oauth_callback"

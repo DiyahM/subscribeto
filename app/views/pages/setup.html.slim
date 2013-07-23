@@ -1,0 +1,10 @@
+.row-fluid
+  #todo 
+    h2 3 Steps To Get Started 
+    ol 
+      li
+        = link_to "Add available items for sale", new_user_prepared_path(current_user)
+      li
+        = link_to "Add your delivery schedule", user_delivery_slots_path(current_user)
+      li
+        = link_to "Add one or more customers", new_user_customer_path(current_user)

@@ -5,7 +5,7 @@ class Item < ActiveRecord::Base
   has_many :orders
   has_many :categorizations
   has_many :categories, through: :categorizations
-  validates :item_type, :price, :user_id, :name, presence: :true
+  validates :price, :user_id, :name, presence: :true
   default_scope order('created_at DESC')
 
   def self.prepared_goods(id)

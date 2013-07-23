@@ -77,6 +77,8 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    childprocess (0.3.9)
+      ffi (~> 1.0, >= 1.0.11)
     cocoon (1.1.2)
     coderay (1.0.9)
     coffee-rails (3.2.2)
@@ -105,6 +107,7 @@ GEM
       factory_girl (~> 4.2.0)
       railties (>= 3.0.0)
     fastercsv (1.5.5)
+    ffi (1.6.0)
     filepicker-rails (0.1)
       multi_json (~> 1.6)
       railties (>= 3.1.0, < 5.0)
@@ -260,6 +263,11 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
+    selenium-webdriver (2.31.0)
+      childprocess (>= 0.2.5)
+      multi_json (~> 1.0)
+      rubyzip
+      websocket (~> 1.0.4)
     shoulda-matchers (2.0.0)
       activesupport (>= 3.0.0)
     slim (1.3.8)
@@ -305,6 +313,7 @@ GEM
     webmock (1.9.3)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
+    websocket (1.0.7)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -343,6 +352,7 @@ DEPENDENCIES
   riif
   rspec-rails (~> 2.0)
   sass-rails (~> 3.2.3)
+  selenium-webdriver
   shoulda-matchers
   slim
   slim-rails

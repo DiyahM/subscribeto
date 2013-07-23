@@ -1,8 +1,9 @@
 class ScheduleCreator
 
   def self.create_schedule(week_start, user_id)
+    user = User.find(user_id)
     schedule = WeeklySchedule.new(week_start: week_start, user_id: user_id)
-    DeliverySlot.all.each do |slot|
+    user.delivery_slots.each do |slot|
       delivery_date = schedule.delivery_dates.build(scheduled_for: slot.get_date_for(schedule.week_start),
                                                     delivery_slot_id: slot.id)
       slot.customers.each do |customer|

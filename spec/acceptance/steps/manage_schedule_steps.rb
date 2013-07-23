@@ -1,3 +1,3 @@
-step "I enter :value for :field for :item for :delivery_slot" do |value, field, item, delivery_slot|
-  fill_in field, with: value
+step "I enter order :quantity of :item for :customer at :delivery_slot" do |quantity,item,customer,delivery_slot|
+  page.find(:xpath, "//table//tr[contains(.,'#{delivery_slot}')]/following-sibling::tr[contains(.,'#{customer}')][1]/child::td//input[contains(@class,'#{item}')]").set(quantity)  
 end
