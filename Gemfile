@@ -15,9 +15,6 @@ gem 'newrelic_rpm'
 gem 'pony'
 gem 'honeybadger'
 gem 'heroku'
-gem 'quickeebooks'
-gem 'filepicker-rails'
-gem 'riif'
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'
@@ -34,9 +31,9 @@ end
 group :test, :development do
   gem 'launchy'
   gem 'pry'
+  gem "rspec-rails", "~> 2.0"
 end
 group :test do
-  gem "rspec-rails", "~> 2.0"
   gem 'turnip'
   gem 'capybara'
   gem 'database_cleaner'
@@ -46,6 +43,7 @@ group :test do
   gem 'vcr'
   gem 'webmock', '~> 1.9.0'
   gem 'factory_girl_rails'
+  gem 'selenium-webdriver'
 end
 gem 'bcrypt-ruby', '~> 3.0.0'
 gem 'jquery-rails'

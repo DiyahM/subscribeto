@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   before_filter :authorize, :except => [:home]
+  before_filter :check_if_setup_complete, :only => [:dashboard]
 
   def home
     @layout = "home"
@@ -10,24 +11,20 @@ class PagesController < ApplicationController
     render :nothing => true
   end
 
-  def dashboard
-    if session[:first_login]
-      @first_login = true
-    end
-    if params[:datepicker].nil?
-      date = Date.current
-    else
+  def dashboard 
+    week_start = Date.current.beginning_of_week(:sunday)
+
+    if !params[:datepicker].nil?
       begin
-        date = Date.strptime(params[:datepicker], '%m/%d/%Y')
+        week_start = Date.strptime(params[:datepicker], '%m/%d/%Y').beginning_of_week(:sunday)
       rescue
-        date = Date.current
         flash[:error]= "Invalid Date"
       end
     end
-    @date = date.strftime("%a, %b %e")
-    day = date.strftime("%A")
-    @item_summary= DeliverySlot.daily_summary(day, current_user.id)
-    @slots = DeliverySlot.delivery_schedule_for_day(day, current_user.id)    
-    @uninvoiced_items = current_user.orders.delivered
+    
+    @weekly_schedule = WeeklySchedule.find_or_initialize_by(week_start, current_user.id)
+  end
+
+  def setup
   end
 end

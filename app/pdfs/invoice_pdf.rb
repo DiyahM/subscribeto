@@ -2,7 +2,7 @@ class InvoicePdf < Prawn::Document
   def initialize(invoice, view, user)
     super(top_margin: 70)
     @invoice = invoice
-    @customer = invoice.order.customer
+    @customer = invoice.customer
     @view = view
     @user = user
     define_grid(:columns => 5, :rows => 8, :gutter => 10)
@@ -17,9 +17,9 @@ class InvoicePdf < Prawn::Document
     order_table
     move_down 30
     text "Total Amount Due: ", size: 15, style: :bold
-    text price(@invoice.order.total), size:15, style: :bold
+    text price(@invoice.amount_due), size:15, style: :bold
     move_down 30
-    text "Thank you for your business!"
+    text @invoice.memo
   end
 
   def right_header
@@ -43,14 +43,18 @@ class InvoicePdf < Prawn::Document
   def invoice_rows
     [["Date","Terms","Due Date","Invoice #"],
      [@invoice.created_at.strftime("%B %d, %Y"),
-      @invoice.order.customer.term, @invoice.print_due_date , @invoice.id]]
+      @customer.term, @invoice.due_date, @invoice.id]]
   end
   
   def line_item_rows
-    [["Qty","Item Descritption", "Price", "Total"]]+
-    @invoice.order.line_items.map do |item|
-      [item.quantity, item.item.name, item.price, price(item.total)]
+    [["Qty","Item Descritption", "Unit Price", "Total"]]+
+    @invoice.order_quantities.map do |item|
+      [item.quantity, invoice_item_desc(item), price(item.item.price), price(item.subtotal)]
     end
+  end
+
+  def invoice_item_desc(item)
+    "#{item.delivery_detail.delivery_date.scheduled_for.strftime('%m/%d')} - #{item.item.name}"
   end
 
   def left_header

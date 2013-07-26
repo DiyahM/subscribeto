@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130711091737) do
+ActiveRecord::Schema.define(:version => 20130723161138) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -45,19 +45,6 @@ ActiveRecord::Schema.define(:version => 20130711091737) do
 
   add_index "admin_users", ["email"], :name => "index_admin_users_on_email", :unique => true
   add_index "admin_users", ["reset_password_token"], :name => "index_admin_users_on_reset_password_token", :unique => true
-
-  create_table "categories", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
-  create_table "categorizations", :force => true do |t|
-    t.integer  "category_id"
-    t.integer  "item_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
 
   create_table "customers", :force => true do |t|
     t.string   "email"
@@ -94,11 +81,10 @@ ActiveRecord::Schema.define(:version => 20130711091737) do
   create_table "delivery_details", :force => true do |t|
     t.integer  "customer_id"
     t.integer  "weekly_schedule_id"
-    t.integer  "item_id"
-    t.integer  "qty_ordered"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.integer  "delivery_date_id"
+    t.integer  "invoice_id"
   end
 
   create_table "delivery_slots", :force => true do |t|
@@ -109,84 +95,30 @@ ActiveRecord::Schema.define(:version => 20130711091737) do
     t.integer  "user_id"
   end
 
-  create_table "items", :force => true do |t|
-    t.string   "image_url"
-    t.datetime "created_at",                                                  :null => false
-    t.datetime "updated_at",                                                  :null => false
+  create_table "invoices", :force => true do |t|
+    t.integer  "customer_id"
     t.integer  "user_id"
-    t.string   "item_type"
-    t.string   "spec_number"
+    t.integer  "weekly_schedule_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "memo"
+  end
+
+  create_table "items", :force => true do |t|
+    t.datetime "created_at",                                                 :null => false
+    t.datetime "updated_at",                                                 :null => false
+    t.integer  "user_id"
     t.string   "name"
     t.text     "description"
-    t.string   "pricing_unit"
-    t.integer  "vendor_id"
-    t.decimal  "price",        :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "price",       :precision => 8, :scale => 2, :default => 0.0
   end
 
-  create_table "line_items", :force => true do |t|
-    t.integer  "order_id"
-    t.integer  "delivery_slot_id"
-    t.integer  "quantity"
-    t.datetime "created_at",                                                            :null => false
-    t.datetime "updated_at",                                                            :null => false
+  create_table "order_quantities", :force => true do |t|
     t.integer  "item_id"
-    t.boolean  "delivered"
-    t.decimal  "price",                    :precision => 8, :scale => 2
-    t.integer  "qty_delivered",                                          :default => 0
-    t.integer  "qty_returned",                                           :default => 0
-    t.integer  "order_week_id"
-    t.integer  "customer_id"
-    t.datetime "scheduled_delivered_date"
-  end
-
-  create_table "order_templates", :force => true do |t|
-    t.integer  "order_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "user_id"
-  end
-
-  create_table "order_weeks", :force => true do |t|
-    t.integer  "week_number"
-    t.integer  "user_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
-  end
-
-  create_table "orders", :force => true do |t|
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
-    t.integer  "user_id"
-    t.datetime "start_date"
-    t.integer  "customer_id"
-    t.integer  "item_id"
-    t.string   "status"
-    t.decimal  "total",         :precision => 8, :scale => 2
-    t.date     "complete_date"
-    t.boolean  "recurring"
-  end
-
-  create_table "payment_dues", :force => true do |t|
-    t.integer  "amount"
-    t.boolean  "paid"
-    t.integer  "order_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-    t.datetime "bill_cycle_start"
-    t.datetime "bill_cycle_end"
-    t.datetime "due_date"
-  end
-
-  create_table "profiles", :force => true do |t|
-    t.text     "about"
-    t.text     "certifications"
-    t.string   "address"
-    t.string   "phone_number"
-    t.string   "web"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.integer  "user_id"
-    t.string   "image_url"
+    t.integer  "quantity",           :default => 0
+    t.integer  "delivery_detail_id"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -217,7 +149,6 @@ ActiveRecord::Schema.define(:version => 20130711091737) do
   create_table "weekly_schedules", :force => true do |t|
     t.integer  "user_id"
     t.datetime "week_start"
-    t.datetime "week_end"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

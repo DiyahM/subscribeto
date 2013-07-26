@@ -6,12 +6,10 @@
   table.table.table-striped
     tr
       th Delivery Route
-      th Orders Assigned
-      th
+      th Actions
     - @slots.each do |slot|
       tr
         td= slot.delivery_label
-        td= slot.orders.count
         td
           = link_to "Remove", user_delivery_slot_path(current_user,slot), :method => :delete
 
