@@ -12,7 +12,7 @@ class PagesController < ApplicationController
   end
 
   def dashboard 
-    week_start = Date.current.beginning_of_week(:sunday)
+    week_start = Time.zone.today.beginning_of_week(:sunday)
 
     if !params[:datepicker].nil?
       begin
