@@ -1,4 +1,6 @@
 class Invoice < ActiveRecord::Base
+  acts_as_archival :readonly_when_archived => true
+  default_scope Invoice.unarchived
   attr_accessible :customer_id, :user_id, :weekly_schedule_id, :memo
   belongs_to :customer
   belongs_to :user

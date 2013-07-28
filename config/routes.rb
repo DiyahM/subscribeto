@@ -9,7 +9,8 @@ Subscribeto::Application.routes.draw do
   
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]
-    resources :customers, :except => ["destroy"]
+    resources :customers, :except => ["destroy"] 
+    get "customers/:id/archive", to: 'customers#archive', as: 'archive_customer'
     resources :invoices
     get "/invoices/pdfs/:id", to: 'invoices#pdf', as: 'invoices_pdf'
     resources :weekly_schedules, :only => ["create", "update"]

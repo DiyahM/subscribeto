@@ -28,4 +28,5 @@ table.table.table-striped
         td = customer.phone_number
         td 
           = link_to 'Edit', edit_user_customer_path(current_user.id, customer.id), class: "btn btn-mini btn-space"
+          = link_to 'Archive', user_archive_customer_path(current_user, customer), class: "btn btn-mini"
 

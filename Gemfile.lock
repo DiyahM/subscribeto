@@ -57,6 +57,8 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
+    acts_as_archival (0.5.3)
+      activerecord
     addressable (2.3.4)
     afm (0.2.0)
     arbre (1.0.1)
@@ -305,6 +307,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin!
+  acts_as_archival
   bcrypt-ruby (~> 3.0.0)
   bullet
   capybara

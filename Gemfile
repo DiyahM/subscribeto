@@ -15,6 +15,7 @@ gem 'newrelic_rpm'
 gem 'pony'
 gem 'honeybadger'
 gem 'heroku'
+gem "acts_as_archival"
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'

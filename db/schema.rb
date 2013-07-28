@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130723161138) do
+ActiveRecord::Schema.define(:version => 20130728152916) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
   create_table "customers", :force => true do |t|
     t.string   "email"
     t.string   "phone_number"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.string   "address_one"
     t.string   "address_two"
     t.string   "city"
@@ -61,6 +61,8 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
     t.integer  "user_id"
     t.text     "note"
     t.string   "term"
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "customers_delivery_slots", :force => true do |t|
@@ -85,6 +87,8 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
     t.datetime "updated_at",         :null => false
     t.integer  "delivery_date_id"
     t.integer  "invoice_id"
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "delivery_slots", :force => true do |t|
@@ -102,6 +106,8 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.string   "memo"
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "items", :force => true do |t|
