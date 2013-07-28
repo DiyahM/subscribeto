@@ -54,4 +54,9 @@ class ItemsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def archive
+    Item.find(params[:id]).archive
+    redirect_to user_items_path, notice: 'Item has been archived'
+  end
 end

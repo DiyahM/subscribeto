@@ -18,3 +18,13 @@ Feature: User manages items
     And I fill in 'Price' with '1.00'
     And I click 'Save'
     Then I should see '1.00'
+
+  Scenario: User archives an item
+    Given I am logged in
+    And I have items 'Onions, Peppers'
+    When I click 'Manage'
+    And I click 'Items'
+    And I click the 'Archive' link for 'Onions'
+    Then I should see 'Item has been archived'
+    And I should see 'Peppers'
+    And I should not see 'Onions'

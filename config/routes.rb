@@ -15,6 +15,7 @@ Subscribeto::Application.routes.draw do
     get "/invoices/pdfs/:id", to: 'invoices#pdf', as: 'invoices_pdf'
     resources :weekly_schedules, :only => ["create", "update"]
     resources :items, :only => ["new", "create", "update", "index", "edit"]
+    get "items/:id/archive", to: 'items#archive', as: 'archive_item'
   end
   
   post 'email_invoice/:invoice_id', to: 'invoices#email', as: 'email_invoice'
