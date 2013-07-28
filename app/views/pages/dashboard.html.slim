@@ -24,34 +24,37 @@
         | Update order quantities in the table below and click 'Save'
     = semantic_form_for [current_user, @weekly_schedule] do |f|
       = f.input :week_start, :as => :hidden
-      table.table.table-bordered
-        thead
-          tr
-            th
-            - current_user.items.each do |item|
-              th = item.name
-        tbody
-          = f.semantic_fields_for :delivery_dates do |delivery_date|
-            = delivery_date.input :scheduled_for, :as => :hidden
-            = delivery_date.input :delivery_slot_id, :as => :hidden
-            - if delivery_date.object.delivery_details.any?
+      .outer 
+        .inner
+          table.table#dashboard-table 
+            thead
               tr
-                td colspan=current_user.items.count+1
-                  strong
-                    = delivery_date.object.delivery_slot.delivery_label
-                    = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
-              = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
-                = delivery_detail.input :customer_id, :as => :hidden
-                tr 
-                  td width="15%" = delivery_detail.object.customer.company_name
-                  = delivery_detail.semantic_fields_for :order_quantities do |order_quantity|
-                    = order_quantity.input :item_id, :as => :hidden
-                    td
-                      //= order_quantity.object.item.name
-                      .span4
-                        = order_quantity.input :quantity, label: false,
-                          input_html: { min:"0", class:order_quantity.object.item.name }
+                th.left-col 
+                - current_user.items.each do |item|
+                  th = item.name
+            tbody 
+              = f.semantic_fields_for :delivery_dates do |delivery_date|
+                = delivery_date.input :scheduled_for, :as => :hidden
+                = delivery_date.input :delivery_slot_id, :as => :hidden
+                - if delivery_date.object.delivery_details.any?
+                  tr
+                    th colspan=current_user.items.count+1
+                      = delivery_date.object.delivery_slot.delivery_label
+                      = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
+                  = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
+                    = delivery_detail.input :customer_id, :as => :hidden
+                    tr 
+                      th.left-col = delivery_detail.object.customer.company_name
+                      = delivery_detail.semantic_fields_for :order_quantities do |order_quantity|
+                        = order_quantity.input :item_id, :as => :hidden
+                        td 
+                          //= order_quantity.object.item.name
+                          .span12
+                            = order_quantity.input :quantity, label: false,
+                              input_html: { min:"0", class:order_quantity.object.item.name }
       = f.submit "Save", class: "btn btn-success btn-large pull-right"
+
+
   #invoice style="display:none;margin-top:20px;"
     - if @weekly_schedule.new_record?
       p
