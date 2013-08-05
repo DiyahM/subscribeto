@@ -14,3 +14,6 @@ h2 Reset Password
     = f.password_field :password_confirmation
   .actions
     = f.submit "Update Password", class: "btn"
+
+javascript:
+  mixpanel.track("Reset PW Edit Visit");
