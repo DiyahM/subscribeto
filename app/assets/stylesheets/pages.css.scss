@@ -19,14 +19,19 @@
   opacity: .2;
 }
 
+.extra {
+  display: none;
+}
+
 #dashboard-table {
   table-layout: fixed; 
   width: 100%;
   *margin-left: -100px;/*ie7*/
+  border:none;
 }
 #dashboard-table td, th {
   vertical-align: top;
-  border: none;
+  //border: none;
   //border-top: 1px solid #ccc;
   padding:10px;
   padding-bottom: 30px;
@@ -36,9 +41,10 @@
   *position: relative; /*ie7*/
   left:0; 
   width:150px;
+  border: none;
 }
 .table th {
-  border: none;
+  //border: none;
 }
 
 .outer {position:relative}

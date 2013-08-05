@@ -1,6 +1,6 @@
 class Customer < ActiveRecord::Base
   acts_as_archival :readonly_when_archived => true
-  default_scope Customer.unarchived
+  default_scope Customer.unarchived.order('created_at DESC')
   attr_accessible :email, :phone_number, :address_one, :address_two, :city, :state, :postal_code,
     :company_name, :poc_name, :user_id, :note, :term, :delivery_slot_ids
   belongs_to :user

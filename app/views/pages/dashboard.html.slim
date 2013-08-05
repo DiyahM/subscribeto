@@ -17,43 +17,62 @@
         button.btn.btn-large#view-btn onclick="showSchedule();" Summary Report
 
   #edit-schedule style="margin-top:20px"
+    .row-fluid style="padding:20px"
+      .span10
+        p
+          em
+            | Update order quantities in the table below and click 'Save'
+      .span2.pull-right
+        = link_to_function "Expand Table", "expandTable()", class: "expand"
+        = link_to_function "Collapse Table", "collapseTable()", class: "extra"
+    .row-fluid
+      = semantic_form_for [current_user, @weekly_schedule] do |f|
+        = f.input :week_start, :as => :hidden
+        .outer 
+          .inner
+            table.table.table-bordered.table-condensed.table-hover#dashboard-table 
+              thead
+                tr
+                  th.left-col
+                  - current_user.items.each do |item|
+                    th.item-name 
+                      center
+                        = item.name
+                tr
+                  th.left-col
+                  - (1..current_user.items.length).each do
+                    th Order Qty
+                    th.extra Qty Delivered
+                    th.extra Qty Returned
 
-
-    p
-      em
-        | Update order quantities in the table below and click 'Save'
-    = semantic_form_for [current_user, @weekly_schedule] do |f|
-      = f.input :week_start, :as => :hidden
-      .outer 
-        .inner
-          table.table#dashboard-table 
-            thead
-              tr
-                th 
-                - current_user.items.each do |item|
-                  th = item.name
-            tbody 
-              = f.semantic_fields_for :delivery_dates do |delivery_date|
-                = delivery_date.input :scheduled_for, :as => :hidden
-                = delivery_date.input :delivery_slot_id, :as => :hidden
-                - if delivery_date.object.delivery_details.any?
-                  tr
-                    th.left-col 
-                      = delivery_date.object.delivery_slot.delivery_label
-                      = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
-                    td colspan=current_user.items.count
-                  = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
-                    = delivery_detail.input :customer_id, :as => :hidden
-                    tr 
-                      th.left-col = delivery_detail.object.customer.company_name
-                      = delivery_detail.semantic_fields_for :order_quantities do |order_quantity|
-                        = order_quantity.input :item_id, :as => :hidden
-                        td 
-                          //= order_quantity.object.item.name
-                          .span5
-                            = order_quantity.input :quantity, label: false,
-                              input_html: { min:"0", class:order_quantity.object.item.name }
-      = f.submit "Save", class: "btn btn-success btn-large pull-right"
+              tbody 
+                = f.semantic_fields_for :delivery_dates do |delivery_date|
+                  = delivery_date.input :scheduled_for, :as => :hidden
+                  = delivery_date.input :delivery_slot_id, :as => :hidden
+                  - if delivery_date.object.delivery_details.any?
+                    tr
+                      th.left-col 
+                        = delivery_date.object.delivery_slot.delivery_label
+                        = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
+                      td.delivery-date colspan=current_user.items.count
+                    = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
+                      = delivery_detail.input :customer_id, :as => :hidden
+                      tr 
+                        th.left-col = delivery_detail.object.customer.company_name
+                        = delivery_detail.semantic_fields_for :order_quantities do |order_quantity|
+                          = order_quantity.input :item_id, :as => :hidden
+                          td 
+                            //= order_quantity.object.item.name
+                            .span12
+                              = order_quantity.input :quantity, label: false,
+                                input_html: { min:"0", class:order_quantity.object.item.name }
+                          td.extra
+                            = order_quantity.input :qty_delivered, label: false,
+                              input_html: { min:"0" }
+                          td.extra
+                            = order_quantity.input :qty_returned, label: false,
+                              input_html: { min:"0" }
+        = f.submit "Save", class: "btn btn-success btn-large pull-right"
 
 
   #invoice style="display:none;margin-top:20px;"
@@ -142,6 +161,20 @@ javascript:
     updateInvoice($(this));
   });
 
+  var expandTable = function() {
+    $(".item-name").attr('colspan',3);
+    $(".delivery-date").attr('colspan',"#{current_user.items.count}"*3);
+    $(".extra").show();
+    $(".expand").hide();
+  }
+
+  var collapseTable = function() {
+    $(".item-name").attr('colspan',1);
+    $(".delivery-date").attr('colspan',"#{current_user.items.count}");
+    $(".extra").hide();
+    $(".expand").show();
+
+  }
   var updateInvoice = function (input) {
     var invoiceId = input.siblings('.invoice-id-input').val();
     var invoiceMemo = input.val();
