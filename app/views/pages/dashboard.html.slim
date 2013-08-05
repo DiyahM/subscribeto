@@ -29,7 +29,7 @@
           table.table#dashboard-table 
             thead
               tr
-                th.left-col 
+                th 
                 - current_user.items.each do |item|
                   th = item.name
             tbody 
@@ -38,9 +38,10 @@
                 = delivery_date.input :delivery_slot_id, :as => :hidden
                 - if delivery_date.object.delivery_details.any?
                   tr
-                    th colspan=current_user.items.count+1
+                    th.left-col 
                       = delivery_date.object.delivery_slot.delivery_label
                       = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
+                    td colspan=current_user.items.count
                   = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
                     = delivery_detail.input :customer_id, :as => :hidden
                     tr 
@@ -49,7 +50,7 @@
                         = order_quantity.input :item_id, :as => :hidden
                         td 
                           //= order_quantity.object.item.name
-                          .span12
+                          .span5
                             = order_quantity.input :quantity, label: false,
                               input_html: { min:"0", class:order_quantity.object.item.name }
       = f.submit "Save", class: "btn btn-success btn-large pull-right"
