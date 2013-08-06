@@ -24,10 +24,15 @@
 }
 
 #dashboard-table {
-  table-layout: fixed; 
+  //table-layout: fixed; 
   width: 100%;
   *margin-left: -100px;/*ie7*/
   border:none;
+}
+
+#dashboard-table input {
+  width:50px;
+  text-align:right;
 }
 #dashboard-table td, th {
   vertical-align: top;
@@ -35,7 +40,10 @@
   //border-top: 1px solid #ccc;
   padding:10px;
   padding-bottom: 30px;
+  //white-space: nowrap;
 }
+
+
 #dashboard-table .left-col {
   position:absolute;
   *position: relative; /*ie7*/
@@ -52,5 +60,5 @@
   overflow-x:scroll;
   overflow-y:visible;
   width:90%; 
-  margin-left:100px;
+  margin-left:150px;
 }
