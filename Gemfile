@@ -47,4 +47,4 @@ group :test do
   gem 'selenium-webdriver'
 end
 gem 'bcrypt-ruby', '~> 3.0.0'
-gem 'jquery-rails'
+gem "jquery-rails", "2.3.0"
