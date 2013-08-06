@@ -68,7 +68,7 @@ class WeeklySchedule < ActiveRecord::Base
   end
 
   def end_of_week
-    week_start.localtime.end_of_week(:sunday)
+    week_start.end_of_week(:sunday).utc
   end
 
   def customer_not_invoiced?(customer_id)
