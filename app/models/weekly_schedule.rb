@@ -8,7 +8,7 @@ class WeeklySchedule < ActiveRecord::Base
   has_many :order_quantities, through: :delivery_details
   has_many :items, through: :order_quantities, :uniq => true
   has_many :invoices, :dependent => :destroy
-  validates :week_start, uniqueness: true
+  validates_uniqueness_of :week_start, scope: :user_id
   accepts_nested_attributes_for :delivery_dates
   after_save :create_invoices_for_week
 

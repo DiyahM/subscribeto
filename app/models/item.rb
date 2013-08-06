@@ -5,5 +5,6 @@ class Item < ActiveRecord::Base
    :description
   belongs_to :user
   validates :price, :user_id, :name, presence: :true
+  validates_uniqueness_of :name, scope: :user_id
   
 end

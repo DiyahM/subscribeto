@@ -8,6 +8,8 @@ class Customer < ActiveRecord::Base
   has_many :delivery_details, :dependent => :destroy
   has_many :delivery_dates, through: :delivery_details
   has_many :invoices, :dependent => :destroy
+  validates_presence_of :email, :company_name
+  validates_uniqueness_of :email, scope: :user_id
 
   def amount_due_for_week(weekly_schedule)
     my_delivery_details = delivery_details_for_week(weekly_schedule)
