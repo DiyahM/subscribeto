@@ -19,6 +19,7 @@ class WeeklySchedule < ActiveRecord::Base
       schedule = ScheduleCreator.create_schedule(week_start, user_id)
     else
       schedule.check_for_changes
+      schedule.reload
     end
     return schedule
   end
@@ -53,11 +54,10 @@ class WeeklySchedule < ActiveRecord::Base
     end
 
     new_items = user.items - items
-    puts new_items.inspect
     if new_items.any?
       new_items.each do |item|
         delivery_details.each do |delivery_detail|
-          delivery_detail.order_quantities.create(item_id: item.id)
+          delivery_detail.order_quantities.create!(item_id: item.id)
         end
       end 
     end    

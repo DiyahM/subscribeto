@@ -56,12 +56,13 @@
                         = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
                       td.delivery-date colspan=current_user.items.count
                     = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
-                      = delivery_detail.input :customer_id, :as => :hidden
                       tr 
-                        th.left-col = delivery_detail.object.customer.company_name
-                        = delivery_detail.semantic_fields_for :order_quantities do |order_quantity|
-                          = order_quantity.input :item_id, :as => :hidden
+                        th.left-col 
+                          = delivery_detail.object.customer.company_name
+                          = delivery_detail.input :customer_id, :as => :hidden
+                        = delivery_detail.inputs :for => :order_quantities do |order_quantity|
                           td 
+                            //= order_quantity.input :item_id, :as => :hidden
                             //= order_quantity.object.item.name
                             = order_quantity.input :quantity, label: false,
                               input_html: { min:"0", class:"input-mini #{order_quantity.object.item.name}" }
