@@ -34,8 +34,8 @@ step "I select :text for :field" do |text, field|
 end
 
 step "I have customer(s) named :customers" do |customers|
-  customers.split(', ').each do |customer|
-    @user.customers.create(company_name: customer)
+  customers.split(', ').each_with_index do |customer, i|
+    @user.customers.create!(company_name: customer, email: "test#{i}@test.com")
   end
 end
 
@@ -44,7 +44,8 @@ step "I have customer(s) :customers assigned to delivery slot :slot" do |custome
   time = slot.split(' at ').last
   delivery_slot = @user.delivery_slots.create(day: day, start_time: Time.utc(2013,1,1,time))
   customers.split(', ').each do |customer|
-    @user.customers.create(company_name: customer, delivery_slot_ids: [delivery_slot.id])
+    i = @user.customers.count + 1
+    @user.customers.create!(company_name: customer, delivery_slot_ids: [delivery_slot.id], email: "test#{i}@test.com")
   end
 end
 
