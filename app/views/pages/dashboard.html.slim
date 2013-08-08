@@ -134,30 +134,17 @@
             h4 Please click "Update Orders" button and click 'Save' before viewing this week's schedule
     - else
       #summary-table
-        .slate.clearfix
-          - @weekly_schedule.items.each do |item|
-            .stat-column href="#"
-              span.number= @weekly_schedule.item_count(item.id)
-              span= item.name
-      table.table.table-bordered
-        thead
-          tr
-            th
-            - current_user.items.each do |item|
-              th = item.name
-        tbody
-          - @weekly_schedule.delivery_dates.each do |delivery_date|
-            - if delivery_date.delivery_details.any?
-              tr
-                td colspan=current_user.items.count+1
-                  = delivery_date.delivery_slot.delivery_label
-                  = time_tag delivery_date.scheduled_for, format: " %m/%d"
-            - delivery_date.delivery_details.each do |delivery_detail|
-              tr 
-                td width="15%" = delivery_detail.customer.company_name
-                - delivery_detail.order_quantities.each do |order_quantity|
-                  td
-                    = order_quantity.quantity
+        .row-fluid
+          h3 Summary by Day
+          - Date::DAYNAMES.each do |day|
+            - if @weekly_schedule.items_by_day(day).any?
+              h4 = day
+              .slate.clearfix
+                - @weekly_schedule.items_by_day(day).each do |item|
+                  .stat-column
+                    span.number = item.last
+                    span = item.first
+          
 javascript:
   $('#datepicker').datepicker();
 

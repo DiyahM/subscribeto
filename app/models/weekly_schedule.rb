@@ -84,4 +84,50 @@ class WeeklySchedule < ActiveRecord::Base
     end
     return count
   end
+
+  def sunday
+    items_by_day("Sunday") 
+  end
+
+  def monday
+    items_by_day("Monday")
+  end
+
+  def tuesday
+    items_by_day("Tuesday")
+  end
+
+  def wednesday
+    items_by_day("Wednesday")
+  end
+
+  def thursday
+    items_by_day("Thursday")
+  end
+
+  def friday
+    items_by_day("Friday")
+  end
+
+  def saturday
+    items_by_day("Saturday")
+  end
+
+  def items_by_day(day)
+    delivery_slots_ids = delivery_slots.find_all_by_day(day)
+    my_dates = delivery_dates.find_all_by_delivery_slot_id(delivery_slots_ids)
+    my_items = {}
+    my_dates.each do |my_date|
+      my_date.order_quantities.each do |order|
+        if order.quantity > 0
+          if !my_items[order.item.name].nil?
+            my_items[order.item.name] += order.quantity
+          else
+            my_items[order.item.name] = order.quantity
+          end
+        end
+      end
+    end
+    return my_items
+  end
 end
