@@ -135,15 +135,31 @@
     - else
       #summary-table
         .row-fluid
-          h3 Summary by Day
+          h2 Summary by Day
           - Date::DAYNAMES.each do |day|
             - if @weekly_schedule.items_by_day(day).any?
-              h4 = day
+              h3 = day 
               .slate.clearfix
                 - @weekly_schedule.items_by_day(day).each do |item|
                   .stat-column
                     span.number = item.last
                     span = item.first
+            - @weekly_schedule.delivery_routes_for_day(day).each do |route|
+              - if route.items.any?
+                h5 = route.delivery_slot.delivery_label
+                .slate.clearfix
+                  - route.items.each do |item|
+                    .stat-column
+                      span.route-number = item.last
+                      span = item.first
+                - route.customers_with_orders.each do |customer|
+                  h6 = customer.company_name
+                  .slate.clearfix
+                    - route.items_by_customer(customer.id).each do |item|
+                      .stat-column
+                        span.route-number = item.last
+                        span = item.first
+
           
 javascript:
   $('#datepicker').datepicker();

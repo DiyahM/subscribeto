@@ -44,7 +44,7 @@ class WeeklySchedule < ActiveRecord::Base
     if new_customers.any?
       new_customers.each do |customer|
         customer.delivery_slot_ids.each do |slot_id|
-          delivery_date = delivery_dates.find_by_delivery_slot(slot_id)
+          delivery_date = delivery_dates.find_by_delivery_slot_id(slot_id)
           delivery_detail = delivery_date.delivery_details.create(customer_id: customer.id)
           user.items.each do |item|
             delivery_detail.order_quantities.create(item_id: item.id)
@@ -114,8 +114,7 @@ class WeeklySchedule < ActiveRecord::Base
   end
 
   def items_by_day(day)
-    delivery_slots_ids = delivery_slots.find_all_by_day(day)
-    my_dates = delivery_dates.find_all_by_delivery_slot_id(delivery_slots_ids)
+    my_dates = delivery_routes_for_day(day) 
     my_items = {}
     my_dates.each do |my_date|
       my_date.order_quantities.each do |order|
@@ -129,5 +128,10 @@ class WeeklySchedule < ActiveRecord::Base
       end
     end
     return my_items
+  end
+
+  def delivery_routes_for_day(day)
+    delivery_slots_ids = delivery_slots.find_all_by_day(day)
+    delivery_dates.find_all_by_delivery_slot_id(delivery_slots_ids)
   end
 end
