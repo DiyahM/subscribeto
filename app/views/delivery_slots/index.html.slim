@@ -3,15 +3,17 @@
 .row-fluid style="margin-top:25px"
   h2 Available Delivery Routes
 .row-fluid
-  table.table.table-striped
-    tr
-      th Delivery Route
-      th Actions
-    - @slots.each do |slot|
+  table.table
+    thead
       tr
-        td= slot.delivery_label
-        td
-          = link_to "Remove", user_delivery_slot_path(current_user,slot), :method => :delete
+        th Delivery Route
+        th Actions
+    tbody
+      - @slots.each do |slot|
+        tr
+          td= slot.delivery_label
+          td
+            = link_to "Remove", user_delivery_slot_path(current_user,slot), :method => :delete
 
 
 #new-slot.modal.hide.fade
