@@ -7,6 +7,7 @@ class Customer < ActiveRecord::Base
   has_and_belongs_to_many :delivery_slots
   has_many :delivery_details, :dependent => :destroy
   has_many :delivery_dates, through: :delivery_details
+  has_many :order_quantities, through: :delivery_details
   has_many :invoices, :dependent => :destroy
   validates_presence_of :email, :company_name
   validates_uniqueness_of :email, scope: :user_id
@@ -26,5 +27,14 @@ class Customer < ActiveRecord::Base
 
   def delivery_details_for_week(weekly_schedule)
     delivery_details.find_all_by_delivery_date_id(weekly_schedule.delivery_dates)
+  end
+
+  def orders
+    weekly_orders = []
+    my_orders = order_quantities.where("quantity > ?", 0)
+    my_orders.each do |my_order|
+      weekly_orders.push(my_order.week) unless weekly_orders.include? my_order.week
+    end
+    return weekly_orders
   end
 end

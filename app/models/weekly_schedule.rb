@@ -24,6 +24,19 @@ class WeeklySchedule < ActiveRecord::Base
     return schedule
   end
 
+  def line_items_for_customer(customer_id)
+    ret_line_items = []
+    my_line_items = delivery_details.find_all_by_customer_id(customer_id)
+    my_line_items.each do |my_line_item|
+      my_line_item.order_quantities.each do |order|
+        if order.quantity > 0
+          ret_line_items.push(order) unless ret_line_items.include? order
+        end
+      end
+    end
+    return ret_line_items
+  end
+
   def check_for_changes
 
     new_slots = user.delivery_slots - delivery_slots

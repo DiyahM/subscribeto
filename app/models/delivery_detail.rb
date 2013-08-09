@@ -7,5 +7,5 @@ class DeliveryDetail < ActiveRecord::Base
   belongs_to :delivery_date
   belongs_to :invoice
   accepts_nested_attributes_for :order_quantities
-  
+
 end
