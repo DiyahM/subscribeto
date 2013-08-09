@@ -66,17 +66,25 @@ class InvoicePdf < Prawn::Document
   end
 
   def bill_from
-    text @user.company_name, size: 14, style: :bold
-    next_line
-    text @user.name
-    next_line
-    text @user.phone_number
-    next_line
+    if @user.company_name && @user.company_name != ""
+      text @user.company_name, size: 14, style: :bold
+      next_line
+    end
+    if @user.name && @user.name != ""
+      text @user.name
+      next_line
+    end
+    if @user.phone_number && @user.phone_number != ""
+      text @user.phone_number
+      next_line
+    end
     text @user.email
     next_line
-    text @user.street_address
-    next_line
-    text "#{@user.city}, #{@user.state} #{@user.postal_code}"
+    if @user.street_address && @user.street_address != ""
+      text @user.street_address
+      next_line
+    end
+    text "#{@user.city} #{@user.state} #{@user.postal_code}"
   end
 
   def invoice_to
@@ -84,19 +92,25 @@ class InvoicePdf < Prawn::Document
     next_line
     text @customer.company_name
     next_line
-    text @customer.poc_name
-    next_line
-    text @customer.phone_number
-    next_line
+    if @customer.poc_name && @customer.poc_name != ""
+      text @customer.poc_name
+      next_line
+    end
+    if @customer.phone_number && @customer.phone_number != ""
+      text @customer.phone_number
+      next_line
+    end
     text @customer.email
     next_line
-    text @customer.address_one
-    if @customer.address_two != ""
+    if @customer.address_one && @customer.address_one != ""
+      text @customer.address_one
+    end
+    if @customer.address_two && @customer.address_two != ""
       next_line
       text @customer.address_two
     end
     next_line
-    text "#{@customer.city}, #{@customer.state}, #{@customer.postal_code}"
+    text "#{@customer.city} #{@customer.state} #{@customer.postal_code}"
   end
 
   def next_line
