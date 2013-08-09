@@ -110,6 +110,9 @@ input[type="submit"].btn {
   margin: 0 4%;
   padding: 12px 2%;
 }
+h4.stat-header{
+  border-bottom: 1px solid #999;
+}
 
 .stat-column span.route-number {
   font-size: 36px;

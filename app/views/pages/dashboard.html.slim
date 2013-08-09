@@ -140,25 +140,34 @@
             - if @weekly_schedule.items_by_day(day).any?
               h3 = day 
               .slate.clearfix
-                - @weekly_schedule.items_by_day(day).each do |item|
-                  .stat-column
-                    span.number = item.last
-                    span = item.first
-            - @weekly_schedule.delivery_routes_for_day(day).each do |route|
-              - if route.items.any?
-                h5 = route.delivery_slot.delivery_label
-                .slate.clearfix
-                  - route.items.each do |item|
+                .row-fluid
+                  - @weekly_schedule.items_by_day(day).each do |item|
                     .stat-column
-                      span.route-number = item.last
+                      span.number = item.last
                       span = item.first
-                - route.customers_with_orders.each do |customer|
-                  h6 = customer.company_name
-                  .slate.clearfix
-                    - route.items_by_customer(customer.id).each do |item|
-                      .stat-column
-                        span.route-number = item.last
-                        span = item.first
+                .row-fluid
+                  h4.stat-header Routes
+                  - @weekly_schedule.delivery_routes_for_day(day).each do |route|
+                    - if route.items.any?
+                      .slate.clearfix
+                        .row-fluid
+                          h6 = route.delivery_slot.delivery_label
+                        .row-fluid
+                          - route.items.each do |item|
+                            .stat-column
+                              span.route-number = item.last
+                              span = item.first
+                      .row-fluid
+                        h4.stat-header Customers
+                      - route.customers_with_orders.each do |customer|
+                        .slate.clearfix
+                          .row-fluid
+                            h6 = customer.company_name
+                            .row-fluid
+                              - route.items_by_customer(customer.id).each do |item|
+                                .stat-column
+                                  span.route-number = item.last
+                                  span = item.first
 
           
 javascript:
