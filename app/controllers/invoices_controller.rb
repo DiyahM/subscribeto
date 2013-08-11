@@ -23,10 +23,21 @@ class InvoicesController < ApplicationController
     redirect_to :back, notice: "Email sent"
   end
 
+  def export_iif
+    @invoices = Invoice.find(JSON.parse(params[:invoices]))
+    respond_to do |format|
+      format.iif { render iif: render_to_string(locals: { invoices:@invoices }), filename: "orderorchard_invoices" }
+    end
+  end
+
 
   def update
     invoice = Invoice.find(params[:id])
     invoice.update_attributes!(params[:invoice])
     render nothing: true    
+  end
+
+  def index
+    @invoices = current_user.invoices.order("invoice_number DESC")
   end
 end

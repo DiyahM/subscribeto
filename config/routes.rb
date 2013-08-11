@@ -19,6 +19,7 @@ Subscribeto::Application.routes.draw do
   end
   
   post 'email_invoice/:invoice_id', to: 'invoices#email', as: 'email_invoice'
+  post 'invoices/export_iif', to: 'invoices#export_iif'
   get 'signup', to: 'users#new', as: 'signup'
   get 'login', to: 'sessions#new', as: 'login'
   get 'logout', to: 'sessions#destroy', as: 'logout'

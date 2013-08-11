@@ -16,6 +16,7 @@ gem 'pony'
 gem 'honeybadger'
 gem 'heroku'
 gem "acts_as_archival"
+gem "riif"
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'
