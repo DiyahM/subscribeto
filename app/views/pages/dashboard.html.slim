@@ -177,8 +177,8 @@ javascript:
   $('#datepicker').datepicker();
 
   $('.qty').change(function(){
-    //$(this).parents("fieldset").find('.qty-delivered').val($(this).val());
-    console.log($(this).parents("fieldset").find);
+    var qty_delivered_class = $(this).attr("class").replace('qty', 'qty-delivered');
+    $(this).parents("tr").find("[class='"+qty_delivered_class+"']").val($(this).val());
   });
 
   $('.invoice-memo').change(function(){
