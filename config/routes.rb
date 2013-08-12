@@ -16,6 +16,7 @@ Subscribeto::Application.routes.draw do
     resources :weekly_schedules, :only => ["create", "update"]
     resources :items, :only => ["new", "create", "update", "index", "edit"]
     get "items/:id/archive", to: 'items#archive', as: 'archive_item'
+    get "delivery_slots/:id/archive", to: 'delivery_slots#archive', as: 'archive_delivery_slot'
   end
   
   post 'email_invoice/:invoice_id', to: 'invoices#email', as: 'email_invoice'

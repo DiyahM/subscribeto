@@ -1,8 +1,10 @@
 class DeliverySlot < ActiveRecord::Base
+  acts_as_archival :readonly_when_archived => true
+  default_scope DeliverySlot.unarchived
   attr_accessible :day, :start_time, :user_id
   belongs_to :user
-  has_many :items, through: :undelivered_items
   has_and_belongs_to_many :customers
+  has_many :delivery_dates, :dependent => :destroy
   validates :day, :start_time, :user_id, presence: true
 
 

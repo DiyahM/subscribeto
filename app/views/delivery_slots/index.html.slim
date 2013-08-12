@@ -13,7 +13,8 @@
         tr
           td= slot.delivery_label
           td
-            = link_to "Remove", user_delivery_slot_path(current_user,slot), :method => :delete
+            = link_to "Archive", user_archive_delivery_slot_path(current_user, slot), class: "btn btn-mini btn-space",
+              confirm: "Are you sure you want to archive this delivery_route #{slot.delivery_label}?"
 
 
 #new-slot.modal.hide.fade

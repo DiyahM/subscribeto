@@ -1,4 +1,6 @@
 class DeliveryDate < ActiveRecord::Base
+  acts_as_archival :readonly_when_archived => true
+  default_scope DeliveryDate.unarchived
   attr_accessible :scheduled_for, :weekly_schedule_id, :delivery_details_attributes, :delivery_slot_id
   has_many :delivery_details, :dependent => :destroy 
   has_many :customers, through: :delivery_details

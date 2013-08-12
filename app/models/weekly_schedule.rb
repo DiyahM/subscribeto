@@ -38,26 +38,13 @@ class WeeklySchedule < ActiveRecord::Base
   end
 
   def check_for_changes
-
-    new_slots = user.delivery_slots - delivery_slots
-    if new_slots.any?
-      new_slots.each do |slot|
+    user.delivery_slots.includes(:customers).each do |slot|
+      if delivery_dates.where(delivery_slot_id: slot.id).empty?
         delivery_date = delivery_dates.create(scheduled_for: slot.get_date_for(week_start),
                                                       delivery_slot_id: slot.id)
-        slot.customers.each do |customer|
-          delivery_detail = delivery_date.delivery_details.create(customer_id: customer.id)
-          user.items.each do |item|
-            delivery_detail.order_quantities.create(item_id: item.id)
-          end
-        end
       end
-    end
-
-    new_customers = user.customers - customers
-    if new_customers.any?
-      new_customers.each do |customer|
-        customer.delivery_slot_ids.each do |slot_id|
-          delivery_date = delivery_dates.find_by_delivery_slot_id(slot_id)
+      slot.customers.each do |customer|
+        if delivery_details.where(customer_id: customer.id).empty?
           delivery_detail = delivery_date.delivery_details.create(customer_id: customer.id)
           user.items.each do |item|
             delivery_detail.order_quantities.create(item_id: item.id)
@@ -70,10 +57,12 @@ class WeeklySchedule < ActiveRecord::Base
     if new_items.any?
       new_items.each do |item|
         delivery_details.each do |delivery_detail|
-          delivery_detail.order_quantities.create!(item_id: item.id)
+          if delivery_detail.order_quantities.where(item_id: item.id).empty?
+            delivery_detail.order_quantities.create(item_id: item.id)
+          end
         end
-      end 
-    end    
+      end
+    end
   end
 
   def create_invoices_for_week

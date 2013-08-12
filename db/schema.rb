@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130806212156) do
+ActiveRecord::Schema.define(:version => 20130812014148) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -78,6 +78,8 @@ ActiveRecord::Schema.define(:version => 20130806212156) do
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.integer  "delivery_slot_id"
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "delivery_details", :force => true do |t|
@@ -94,9 +96,11 @@ ActiveRecord::Schema.define(:version => 20130806212156) do
   create_table "delivery_slots", :force => true do |t|
     t.string   "day"
     t.time     "start_time"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.integer  "user_id"
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "invoices", :force => true do |t|
@@ -130,6 +134,8 @@ ActiveRecord::Schema.define(:version => 20130806212156) do
     t.datetime "updated_at",                        :null => false
     t.integer  "qty_delivered",      :default => 0
     t.integer  "qty_returned",       :default => 0
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "users", :force => true do |t|

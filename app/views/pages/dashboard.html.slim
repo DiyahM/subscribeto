@@ -61,17 +61,18 @@
                           = delivery_detail.object.customer.company_name
                           = delivery_detail.input :customer_id, :as => :hidden
                         = delivery_detail.inputs :for => :order_quantities do |order_quantity|
-                          td 
-                            = order_quantity.input :item_id, :as => :hidden
-                            //= order_quantity.object.item.name
-                            = order_quantity.input :quantity, label: false,
-                              input_html: { min:"0", class:"input-mini #{order_quantity.object.item.name}" }
-                          td.extra
-                            = order_quantity.input :qty_delivered, label: false,
-                              input_html: { min:"0" }
-                          td.extra
-                            = order_quantity.input :qty_returned, label: false,
-                              input_html: { min:"0" }
+                          .order-quantities
+                            td 
+                              = order_quantity.input :item_id, :as => :hidden
+                              //= order_quantity.object.item.name
+                              = order_quantity.input :quantity, label: false,
+                                input_html: { min:"0", class:"input-mini qty #{order_quantity.object.item.name}" }
+                            td.extra
+                              = order_quantity.input :qty_delivered, label: false,
+                                input_html: { min:"0", class:"input-mini qty-delivered #{order_quantity.object.item.name}" }
+                            td.extra
+                              = order_quantity.input :qty_returned, label: false,
+                                input_html: { min:"0", class:"input-mini #{order_quantity.object.item.name}" }
         div.pull-right
           = link_to "Reset", dashboard_path, class: "btn btn-large btn-space"
           = f.submit "Save", class: "btn btn-success btn-large"
@@ -174,6 +175,11 @@
           
 javascript:
   $('#datepicker').datepicker();
+
+  $('.qty').change(function(){
+    //$(this).parents("fieldset").find('.qty-delivered').val($(this).val());
+    console.log($(this).parents("fieldset").find);
+  });
 
   $('.invoice-memo').change(function(){
     updateInvoice($(this).parentsUntil("tr"));

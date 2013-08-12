@@ -20,4 +20,9 @@ class DeliverySlotsController < ApplicationController
 
     redirect_to user_delivery_slots_path(current_user), :notice => "Delivery Time Removed"
   end
+
+  def archive
+    DeliverySlot.find(params[:id]).archive
+    redirect_to user_delivery_slots_path(current_user)
+  end
 end
