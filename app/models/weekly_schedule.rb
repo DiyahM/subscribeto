@@ -42,15 +42,27 @@ class WeeklySchedule < ActiveRecord::Base
       if delivery_dates.where(delivery_slot_id: slot.id).empty?
         delivery_date = delivery_dates.create(scheduled_for: slot.get_date_for(week_start),
                                                       delivery_slot_id: slot.id)
+        slot.customers.each do |customer|
+          if delivery_details.where(customer_id: customer.id).empty?
+            delivery_detail = delivery_date.delivery_details.create(customer_id: customer.id)
+            user.items.each do |item|
+              delivery_detail.order_quantities.create(item_id: item.id)
+            end
+          end
+        end
       end
-      slot.customers.each do |customer|
-        if delivery_details.where(customer_id: customer.id).empty?
+    end
+
+    user.customers.each do |customer|
+      customer.delivery_slots.each do |slot|
+        delivery_date = delivery_dates.find_by_delivery_slot_id(slot.id)
+        if delivery_date.delivery_details.where(customer_id: customer.id).empty?
           delivery_detail = delivery_date.delivery_details.create(customer_id: customer.id)
           user.items.each do |item|
             delivery_detail.order_quantities.create(item_id: item.id)
           end
         end
-      end
+      end    
     end
 
     new_items = user.items - items
