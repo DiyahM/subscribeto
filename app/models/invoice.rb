@@ -16,6 +16,10 @@ class Invoice < ActiveRecord::Base
     end
   end
 
+  def invoice_date_iif
+    created_at.strftime("%m/%d/%y")
+  end
+
   def order_quantities
     delivery_details.flat_map{|n| n.order_quantities }.find_all{|n| n.quantity>0}
   end
@@ -28,6 +32,10 @@ class Invoice < ActiveRecord::Base
       end
     end
     return total
+  end
+
+  def amount_due_iif
+    0 - amount_due
   end
 
   def due_date

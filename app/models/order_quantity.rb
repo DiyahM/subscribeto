@@ -10,11 +10,19 @@ class OrderQuantity < ActiveRecord::Base
     item.price * quantity
   end
 
+  def quantity_iif
+    0 - quantity
+  end
+
+  def subtotal_iif
+    0 - subtotal
+  end
+
   def week
     delivery_detail.delivery_date.weekly_schedule
   end
 
   def delivery_date
-    delivery_detail.delivery_date.scheduled_for.strftime("%m/%d")
+    delivery_detail.delivery_date.scheduled_for.strftime("%m/%d/%y")
   end
 end

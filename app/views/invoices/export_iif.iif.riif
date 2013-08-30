@@ -3,10 +3,10 @@ iif.trns do
     row do
       trnsid
       trnstype 'INVOICE'
-      date invoice.created_at
+      date invoice.invoice_date_iif
       accnt 'Accounts Receivable'
       name invoice.customer.company_name
-      amount invoice.amount_due
+      amount invoice.amount_due_iif
       docnum invoice.invoice_number
       clear 'N'
       toprint 'N'
@@ -21,11 +21,11 @@ iif.trns do
           trnstype 'INVOICE'
           date line_item.delivery_date
           accnt 'Income Account'
-          amount line_item.subtotal
+          amount line_item.subtotal_iif
           clear 'N'
-          qnty line_item.quantity
+          qnty line_item.quantity_iif
           price line_item.item.price
-          invitem 'Sales Item'
+          invitem line_item.item.name
           taxable 'N'
         end
       end
