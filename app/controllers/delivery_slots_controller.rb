@@ -1,4 +1,6 @@
 class DeliverySlotsController < ApplicationController
+  before_filter :authorize
+
   def index
     @deliveryslot = DeliverySlot.new
     @slots = current_user.delivery_slots
