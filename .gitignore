@@ -6,3 +6,4 @@
 /log
 heroku_env.rb
 *.swo
+/config/database.yml
