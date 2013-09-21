@@ -8,7 +8,7 @@ gem 'formtastic'
 gem 'rails3-jquery-autocomplete'
 gem 'formtastic-bootstrap'
 gem 'cocoon'
-gem 'prawn', :git => "git://github.com/prawnpdf/prawn.git", :ref => "8028ca0cd2"
+gem 'prawn', :git => "git://github.com/prawnpdf/prawn.git"#, :ref => "8028ca0cd2"
 gem 'activeadmin', github: 'gregbell/active_admin'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'newrelic_rpm'
