@@ -8,13 +8,20 @@ gem 'formtastic'
 gem 'rails3-jquery-autocomplete'
 gem 'formtastic-bootstrap'
 gem 'cocoon'
-gem 'prawn', :git => "git://github.com/prawnpdf/prawn.git"#, :ref => "8028ca0cd2"
+
+#using prawn edge due to undefined method position bug
+#https://github.com/prawnpdf/prawn/issues/150
+#if edge ceases to work can use :ref => "8028ca0cd2"
+#as last known working commit
+gem 'prawn', github: "prawnpdf/prawn" 
 gem 'activeadmin', github: 'gregbell/active_admin'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'newrelic_rpm'
 gem 'pony'
 gem 'honeybadger'
 gem 'heroku'
+gem "acts_as_archival"
+gem "riif"
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'

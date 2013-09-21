@@ -1,17 +1,12 @@
 .row-fluid
   .span6
     a.btn.btn-success.btn-space href=new_user_customer_path(current_user) + Add Customer
-    - if current_user.qb_token
-      a.btn href=user_quickbooks_import_qb_customers_path(current_user) Import Customers from Quickbooks
-  .span1 
-    .input-append style="float:right"
-      //input.span9#appendedInputButtons type="text"
-      //button.btn type="button" Search
+
 .row-fluid style="margin-top:25px"
   .span4
     h3 Customers
 
-table.table.table-striped
+table.table style="table-layout:fixed"
   thead
     tr
       th Company
@@ -22,10 +17,13 @@ table.table.table-striped
   tbody
     - @customers.each do |customer|
       tr
-        td = link_to customer.company_name, user_customer_path(current_user, customer.id)
+        td = customer.company_name
         td = customer.poc_name
         td = link_to customer.email, "mailto:#{customer.email}"
         td = customer.phone_number
         td 
+          = link_to 'View', user_customer_path(current_user, customer.id), class: "btn btn-mini btn-space"
           = link_to 'Edit', edit_user_customer_path(current_user.id, customer.id), class: "btn btn-mini btn-space"
+          = link_to 'Archive', user_archive_customer_path(current_user, customer), class: "btn btn-mini",
+            confirm: "Are you sure you want to archive #{customer.company_name}"
 

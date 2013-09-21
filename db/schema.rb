@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130723161138) do
+ActiveRecord::Schema.define(:version => 20130812014148) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
   create_table "customers", :force => true do |t|
     t.string   "email"
     t.string   "phone_number"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.string   "address_one"
     t.string   "address_two"
     t.string   "city"
@@ -61,6 +61,8 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
     t.integer  "user_id"
     t.text     "note"
     t.string   "term"
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "customers_delivery_slots", :force => true do |t|
@@ -76,6 +78,8 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.integer  "delivery_slot_id"
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "delivery_details", :force => true do |t|
@@ -85,14 +89,18 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
     t.datetime "updated_at",         :null => false
     t.integer  "delivery_date_id"
     t.integer  "invoice_id"
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "delivery_slots", :force => true do |t|
     t.string   "day"
     t.time     "start_time"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
     t.integer  "user_id"
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "invoices", :force => true do |t|
@@ -102,15 +110,20 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.string   "memo"
+    t.string   "archive_number"
+    t.datetime "archived_at"
+    t.integer  "invoice_number"
   end
 
   create_table "items", :force => true do |t|
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at",                                                    :null => false
+    t.datetime "updated_at",                                                    :null => false
     t.integer  "user_id"
     t.string   "name"
     t.text     "description"
-    t.decimal  "price",       :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "price",          :precision => 8, :scale => 2, :default => 0.0
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "order_quantities", :force => true do |t|
@@ -119,6 +132,10 @@ ActiveRecord::Schema.define(:version => 20130723161138) do
     t.integer  "delivery_detail_id"
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
+    t.integer  "qty_delivered",      :default => 0
+    t.integer  "qty_returned",       :default => 0
+    t.string   "archive_number"
+    t.datetime "archived_at"
   end
 
   create_table "users", :force => true do |t|

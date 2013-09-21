@@ -1,16 +1,23 @@
 class Invoice < ActiveRecord::Base
-  attr_accessible :customer_id, :user_id, :weekly_schedule_id, :memo
+  acts_as_archival :readonly_when_archived => true
+  default_scope Invoice.unarchived.includes(:customer, delivery_details: [order_quantities: :item])
+  attr_accessible :customer_id, :user_id, :weekly_schedule_id, :memo, :invoice_number
   belongs_to :customer
   belongs_to :user
   belongs_to :weekly_schedule
   has_many :delivery_details
   after_initialize :default_values
+  validates_uniqueness_of :invoice_number, scope: :user_id
 
   def default_values
     if new_record?
       self.memo = "Thank you for your business!"
       self.save
     end
+  end
+
+  def invoice_date_iif
+    created_at.strftime("%m/%d/%y")
   end
 
   def order_quantities
@@ -25,6 +32,10 @@ class Invoice < ActiveRecord::Base
       end
     end
     return total
+  end
+
+  def amount_due_iif
+    0 - amount_due
   end
 
   def due_date

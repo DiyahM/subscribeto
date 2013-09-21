@@ -18,3 +18,47 @@
   text-decoration: line-through;
   opacity: .2;
 }
+
+.extra {
+  display: none;
+}
+
+#dashboard-table {
+  //table-layout: fixed; 
+  width: 100%;
+  *margin-left: -100px;/*ie7*/
+  border:none;
+}
+
+#dashboard-table input {
+  width:50px;
+  text-align:right;
+}
+#dashboard-table td, th {
+  vertical-align: top;
+  //border: none;
+  //border-top: 1px solid #ccc;
+  padding:10px;
+  padding-bottom: 30px;
+  //white-space: nowrap;
+}
+
+
+#dashboard-table .left-col {
+  position:absolute;
+  *position: relative; /*ie7*/
+  left:0; 
+  width:150px;
+  border: none;
+}
+.table th {
+  //border: none;
+}
+
+.outer {position:relative}
+.inner {
+  overflow-x:scroll;
+  overflow-y:visible;
+  width:90%; 
+  margin-left:150px;
+}

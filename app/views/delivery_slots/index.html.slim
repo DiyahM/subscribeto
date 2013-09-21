@@ -3,15 +3,18 @@
 .row-fluid style="margin-top:25px"
   h2 Available Delivery Routes
 .row-fluid
-  table.table.table-striped
-    tr
-      th Delivery Route
-      th Actions
-    - @slots.each do |slot|
+  table.table
+    thead
       tr
-        td= slot.delivery_label
-        td
-          = link_to "Remove", user_delivery_slot_path(current_user,slot), :method => :delete
+        th Delivery Route
+        th Actions
+    tbody
+      - @slots.each do |slot|
+        tr
+          td= slot.delivery_label
+          td
+            = link_to "Archive", user_archive_delivery_slot_path(current_user, slot), class: "btn btn-mini btn-space",
+              confirm: "Are you sure you want to archive this delivery_route #{slot.delivery_label}?"
 
 
 #new-slot.modal.hide.fade

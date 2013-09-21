@@ -1,0 +1,34 @@
+iif.trns do
+  invoices.each do |invoice|
+    row do
+      trnsid
+      trnstype 'INVOICE'
+      date invoice.invoice_date_iif
+      accnt 'Accounts Receivable'
+      name invoice.customer.company_name
+      amount invoice.amount_due_iif
+      docnum invoice.invoice_number
+      clear 'N'
+      toprint 'N'
+      addr1 invoice.customer.address_one
+      addr2 invoice.customer.address_two
+    end
+
+    invoice.order_quantities.map do |line_item|
+      spl do
+        row do
+          splid line_item.item.id
+          trnstype 'INVOICE'
+          date line_item.delivery_date
+          accnt 'Income Account'
+          amount line_item.subtotal_iif
+          clear 'N'
+          qnty line_item.quantity_iif
+          price line_item.item.price
+          invitem line_item.item.name
+          taxable 'N'
+        end
+      end
+    end
+  end
+end

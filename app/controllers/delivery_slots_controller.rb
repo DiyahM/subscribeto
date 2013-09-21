@@ -1,4 +1,6 @@
 class DeliverySlotsController < ApplicationController
+  before_filter :authorize
+
   def index
     @deliveryslot = DeliverySlot.new
     @slots = current_user.delivery_slots
@@ -19,5 +21,10 @@ class DeliverySlotsController < ApplicationController
     slot.destroy
 
     redirect_to user_delivery_slots_path(current_user), :notice => "Delivery Time Removed"
+  end
+
+  def archive
+    DeliverySlot.find(params[:id]).archive
+    redirect_to user_delivery_slots_path(current_user)
   end
 end

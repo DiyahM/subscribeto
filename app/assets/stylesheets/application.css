@@ -13,5 +13,6 @@
  *= require jquery.ui.datepicker
  *= require formtastic
  *= require formtastic-bootstrap
+ *= require bootstrap_and_overrides
  *= require_tree .
  */

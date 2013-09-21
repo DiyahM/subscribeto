@@ -9,11 +9,11 @@
   .span4
     h3 Items
 .row-fluid
-    table.table
+    table.table style="table-layout:fixed;"
       thead
         tr
           th Name
-          th width="50%" Description
+          th Description
           th List Price
           th Actions 
       tbody
@@ -23,5 +23,7 @@
             td = item.description
             td = number_with_precision item.price, precision:2
             td
-              = link_to "Edit", edit_user_item_path(current_user,item)
+              = link_to "Edit", edit_user_item_path(current_user,item), class: "btn btn-mini btn-space"
+              = link_to "Archive", user_archive_item_path(current_user, item), class: "btn btn-mini btn-space",
+                confirm: "Are you sure you want to archive #{item.name}?"
                 

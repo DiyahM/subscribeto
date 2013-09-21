@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/gregbell/active_admin.git
-  revision: ecd71016f8a7002a2529246a1a0027d601a47bee
+  revision: 07439545b1813c1ca096ba4ad41b22eaa8bc29f2
   specs:
     activeadmin (0.6.0)
       arbre (>= 1.0.1)
@@ -56,6 +56,8 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
+    acts_as_archival (0.5.3)
+      activerecord
     addressable (2.3.5)
     afm (0.2.0)
     arbre (1.0.1)
@@ -146,8 +148,7 @@ GEM
     jquery-rails (2.3.0)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
-    jquery-ui-rails (4.0.4)
-      jquery-rails
+    jquery-ui-rails (4.0.5)
       railties (>= 3.1.0)
     json (1.8.0)
     kaminari (0.14.1)
@@ -236,6 +237,7 @@ GEM
       railties (>= 3.2, < 5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    riif (0.6.0)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
@@ -320,6 +322,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeadmin!
+  acts_as_archival
   bcrypt-ruby (~> 3.0.0)
   bullet
   capybara
@@ -344,6 +347,7 @@ DEPENDENCIES
   rails (= 3.2.13)
   rails3-jquery-autocomplete
   rb-fsevent
+  riif
   rspec-rails (~> 2.0)
   sass-rails (~> 3.2.3)
   selenium-webdriver

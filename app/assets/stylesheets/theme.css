@@ -102,7 +102,7 @@ input[type="submit"].btn {
 }
 
 .stat-column {
-  width: 13%;
+  width: 5%;
   float: left;
   text-align: center;
   display: block;
@@ -110,7 +110,16 @@ input[type="submit"].btn {
   margin: 0 4%;
   padding: 12px 2%;
 }
+h4.stat-header{
+  border-bottom: 1px solid #999;
+}
 
+.stat-column span.route-number {
+  font-size: 36px;
+  font-weight: normal;
+  font-family: "Oxygen", sans-serif;
+  margin: 14px 0 10px 0;
+}
 .stat-column span.number{
   font-size: 50px;
   font-weight: normal;

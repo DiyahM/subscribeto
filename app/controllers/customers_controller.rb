@@ -1,5 +1,11 @@
 class CustomersController < ApplicationController
   before_filter :authorize
+  
+  def archive
+    Customer.find(params[:id]).archive
+    redirect_to user_customers_path(current_user), notice: "Customer has been archived"
+  end
+
   # GET /customers
   # GET /customers.json
   def index

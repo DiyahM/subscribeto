@@ -14,5 +14,5 @@ Feature: User manages delivery schedule
     And I have delivery slot 'Monday at 8'
     When I click 'Manage'
     And I click 'Delivery Schedule'
-    And I click the 'Remove' link for 'Monday 8:00'
+    And I click the 'Archive' link for 'Monday 8:00'
     Then I should not see 'Monday 8:00'

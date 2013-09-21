@@ -22,3 +22,14 @@ Feature: User manages customers
     And I select 'Net 10' for 'customer[term]'
     And I click 'Save'
     Then I should see 'Customer was successfully updated'
+
+  Scenario: User archives a customer
+    Given I am logged in
+    Given I have customers named 'Pear Farms, Plum Farms'
+    When I click 'Customers'
+    And I click the 'Archive' link for 'Plum Farms'
+    Then I should see 'Customer has been archived'
+    And I should see 'Pear Farms'
+    And I should not see 'Plum Farms'
+
+

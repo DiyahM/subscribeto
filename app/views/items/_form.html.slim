@@ -14,6 +14,7 @@
   .row-fluid
     = f.input :description, :input_html => { :rows => "6" }
   .row-fluid
-    = f.action :submit, :label => "Save", :button_html => { class: "btn btn-success",
-      style:"margin-right:20%" } 
+    .actions.pull-right style="margin-right:30%;" 
+      = link_to 'Cancel', :back, class: "btn btn-large btn-space"
+      = f.submit 'Save', class: "btn btn-large btn-success"
 
