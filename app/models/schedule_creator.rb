@@ -10,11 +10,11 @@ class ScheduleCreator
       slot.customers.each do |customer|
         delivery_detail = delivery_date.delivery_details.build(customer_id: customer.id)
         schedule.user.items.each do |item|
-          order = delivery_detail.order_quantities.build(item_id: item.id)
+          order = delivery_detail.order_items.build(item_id: item.id)
           if !last_week.nil?
-            last_week_slot = last_week.delivery_dates.includes(delivery_details: :order_quantities).find_by_delivery_slot_id(slot.id)
+            last_week_slot = last_week.delivery_dates.includes(delivery_details: :order_items).find_by_delivery_slot_id(slot.id)
             last_detail = last_week_slot.delivery_details.find_by_customer_id(customer.id) if last_week_slot
-            last_order = last_detail.order_quantities.find_by_item_id(item.id) if last_detail
+            last_order = last_detail.order_items.find_by_item_id(item.id) if last_detail
             order.quantity = last_order.quantity if last_order
           end
         end

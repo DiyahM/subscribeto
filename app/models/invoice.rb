@@ -1,12 +1,17 @@
 class Invoice < ActiveRecord::Base
   acts_as_archival :readonly_when_archived => true
-  default_scope Invoice.unarchived.includes(:customer, delivery_details: [order_quantities: :item])
+  default_scope Invoice.unarchived.includes(:customer, delivery_details: [order_items: :item])
+  
   attr_accessible :customer_id, :user_id, :weekly_schedule_id, :memo, :invoice_number
+  
   belongs_to :customer
   belongs_to :user
   belongs_to :weekly_schedule
+  
   has_many :delivery_details
+  
   after_initialize :default_values
+  
   validates_uniqueness_of :invoice_number, scope: :user_id
 
   def default_values
@@ -20,14 +25,14 @@ class Invoice < ActiveRecord::Base
     created_at.strftime("%m/%d/%y")
   end
 
-  def order_quantities
-    delivery_details.flat_map{|n| n.order_quantities }.find_all{|n| n.quantity>0}
+  def order_items
+    delivery_details.flat_map{|n| n.order_items }.find_all{|n| n.quantity>0}
   end
 
   def amount_due
     total = 0
     delivery_details.each do |delivery_detail|
-      delivery_detail.order_quantities.each do |order|
+      delivery_detail.order_items.each do |order|
         total += order.subtotal
       end
     end

@@ -14,7 +14,7 @@ iif.trns do
       addr2 invoice.customer.address_two
     end
 
-    invoice.order_quantities.map do |line_item|
+    invoice.order_items.map do |line_item|
       spl do
         row do
           splid line_item.item.id

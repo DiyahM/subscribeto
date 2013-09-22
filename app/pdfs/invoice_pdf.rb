@@ -48,7 +48,7 @@ class InvoicePdf < Prawn::Document
   
   def line_item_rows
     [["Qty","Item Descritption", "Unit Price", "Total"]]+
-    @invoice.order_quantities.map do |item|
+    @invoice.order_items.map do |item|
       [item.quantity, invoice_item_desc(item), price(item.item.price), price(item.subtotal)]
     end
   end
