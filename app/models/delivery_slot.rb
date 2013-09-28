@@ -11,6 +11,7 @@ class DeliverySlot < ActiveRecord::Base
   has_many :delivery_dates, :dependent => :destroy
   
   validates :day, :start_time, :user_id, presence: true
+  validates_inclusion_of :day, in: ['Sunday', 'Monday', 'Tuesday','Thursday','Friday','Saturday']
 
 
   def get_date_for(week_start)
