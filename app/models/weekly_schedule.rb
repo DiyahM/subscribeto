@@ -19,7 +19,7 @@ class WeeklySchedule < ActiveRecord::Base
   after_save :create_invoices_for_week
 
   def self.find_or_initialize_by(week_start, user_id)
-    schedule = WeeklySchedule.includes(:invoices, delivery_dates: [:delivery_slot, delivery_details: [:customer, :order_items]]).find_by_week_start_and_user_id(week_start, user_id)
+    schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
       
     if schedule.nil?
       schedule = ScheduleCreator.create_schedule(week_start, user_id)
