@@ -13,8 +13,8 @@ gem 'cocoon'
 #https://github.com/prawnpdf/prawn/issues/150
 #if edge ceases to work can use :ref => "8028ca0cd2"
 #as last known working commit
-gem 'prawn', github: "prawnpdf/prawn" 
-gem 'activeadmin', github: 'gregbell/active_admin'
+gem 'prawn',        :github => 'prawnpdf/prawn'
+gem 'activeadmin',  :github => 'gregbell/active_admin'
 gem 'sass-rails',   '~> 3.2.3'
 gem 'newrelic_rpm'
 gem 'pony'
