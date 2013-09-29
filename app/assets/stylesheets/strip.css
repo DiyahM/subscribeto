@@ -2,7 +2,30 @@ body {
   color: #5a5a5a;
     /*border-top: 3px solid #D84A38;*/
   background:whitesmoke; 
-	background-image: url("/assets/bg.png");	
+	background-image: url("/assets/bg.png");
+}
+
+.homepage {
+
+}
+
+.icon {
+  margin-bottom:20px;
+}
+.login {
+  margin-top: -80px;
+  margin-right: 20px;
+  color:white;
+}
+
+.header-row {
+  background-color: #F56C0A;
+  padding-bottom: 40px;
+  color: white;
+}
+
+.container-margin {
+  margin-top: 100px;
 }
 
 p {
@@ -82,23 +105,65 @@ h4 {
     filter:none;
 }
 
-.navbar .brand {
-  font-family: 'Exo', sans-serif;
+.brand {
   font-weight: 900;
   font-size: 30px;
-  padding: 23px 20px 27px;
+  padding: 2%;
   line-height:30px;
   color: #FA7000;
   margin-top: 0px;
   margin-bottom: 0px;
-  text-shadow: 0 1px 0 white;
-  margin-left: -20px;
+}
+
+.navbar .brand {
+  font-weight: 900;
+  font-size: 30px;
+  padding: 2%;
+  line-height:30px;
+  color: #FA7000;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.white {
+  color:white
 }
 
 .header-text {
   font-size:3.5em;
-  font-weight:bold;
-  line-height:1.5em;
+  line-height:1.3em;
+  text-align:center;
+  margin: 20px;
+  color: white;
+}
+
+.signup-button {
+  width:60%;
+  font-size:27.5px;
+  margin-left:20%;
+  margin-top:25px;
+}
+
+.subrow {
+  margin-top: 60px;
+  text-align:center;
+}
+
+.features {
+  font-size:1.7em;
+  line-height:1em;
+  font-weight:bolder;
+}
+
+.feature-text {
+  margin-top:15px;
+  font-size:18px;
+  color: #888888;
+}
+
+.header-subtext {
+  text-align:center;
+  font: 18px/30px Arial, sans-serif;
 }
 
 .navbar .nav {
@@ -116,12 +181,13 @@ h4 {
 
 .navbar .nav li a,
 .footer-box a {   
-	font: 600 12px/26px 'Open Sans', sans-serif;
+	
+   font: 600 12px/26px 'Open Sans', sans-serif;
     padding: 6px 18px;
     color: #888888;
     text-shadow: 0 1px 0 #ffffff;    
     line-height: 16px;
-    text-align: center;    
+    text-align: center; 
 }
 
 .navbar .nav .active a,
