@@ -6,6 +6,8 @@ Subscribeto::Application.routes.draw do
   resources :password_resets
   resources :sessions
   post '/invoice/:id', to: 'invoices#update'
+
+  resources :bills, as: "weekly_schedules"
   
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]

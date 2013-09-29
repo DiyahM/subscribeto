@@ -1,17 +1,16 @@
 class OrderItem < ActiveRecord::Base
   acts_as_archival :readonly_when_archived => true
-  default_scope OrderItem.unarchived.includes(:item).order('items.created_at DESC')
+  default_scope OrderItem.unarchived.includes(:item)
   
-  attr_accessible :delivery_detail_id, :item_id, :quantity, :qty_delivered, :qty_returned
+  attr_accessible :delivery_detail_id, :item_id, :quantity, :qty_delivered, :qty_returned, :price_charged
 
   belongs_to :delivery_detail
   belongs_to :item  
 
-
   validates_presence_of :item_id
 
   def subtotal
-    item.price * quantity
+    price_charged * quantity
   end
 
   def quantity_iif

@@ -88,10 +88,17 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    columnize (0.3.6)
     commonjs (0.2.7)
     crack (0.4.1)
       safe_yaml (~> 0.9.0)
     database_cleaner (1.1.1)
+    debugger (1.6.2)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.3)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.3)
     devise (3.1.0)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -200,6 +207,8 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -329,6 +338,7 @@ DEPENDENCIES
   cocoon
   coffee-rails (~> 3.2.1)
   database_cleaner
+  debugger
   factory_girl_rails
   formtastic
   formtastic-bootstrap
@@ -344,6 +354,7 @@ DEPENDENCIES
   pony
   prawn!
   pry
+  quiet_assets
   rails (= 3.2.13)
   rails3-jquery-autocomplete
   rb-fsevent

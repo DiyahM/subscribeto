@@ -1,26 +1,50 @@
 class WeeklySchedule < ActiveRecord::Base
 
-  attr_accessible :user_id, :week_start, :delivery_dates_attributes
+  attr_accessible :user_id, :week_start, :bills_attributes
   
   belongs_to :user
   
-  has_many :delivery_dates, :dependent => :destroy
-  has_many :customers, through: :delivery_dates, :uniq => true
-  has_many :delivery_slots, through: :delivery_dates, :uniq => true
-  has_many :delivery_details, through: :delivery_dates
-  has_many :order_items, through: :delivery_details
-  has_many :items, through: :order_items, :uniq => true
-  has_many :invoices, :dependent => :destroy
-  
+  # has_many :delivery_dates, :dependent => :destroy
+  # has_many :customers, through: :delivery_dates, :uniq => true
+  # has_many :delivery_slots, through: :delivery_dates, :uniq => true
+  # has_many :delivery_details, through: :delivery_dates
+  # has_many :order_items, through: :delivery_details
+  # has_many :items, through: :order_items, :uniq => true
+  # has_many :invoices, :dependent => :destroy
+
+  has_many :bills
+  accepts_nested_attributes_for :bills
+
   validates_uniqueness_of :week_start, scope: :user_id
   
-  accepts_nested_attributes_for :delivery_dates
+  # accepts_nested_attributes_for :delivery_dates
   
-  after_save :create_invoices_for_week
+  # after_save :create_invoices_for_week
+
+  def self.new_find_or_initialize_by(week_start, user_id)
+    schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
+    user = User.find(user_id)
+    unless schedule
+      logger.info "*" * 100
+      schedule = WeeklySchedule.new(week_start: week_start)
+      user.delivery_slots.each do |slot|
+        user.customers.includes(:delivery_slots).each do |customer|
+          if customer.delivery_slots.include?(slot)
+            schedule.bills.build(customer_id: customer.id, 
+                                  user_id: user_id, 
+                                  scheduled_for: slot.get_date_for(week_start), 
+                                  delivery_slot_id: slot.id)
+          end
+        end
+      end
+      schedule.bills.each { |bill| bill.build_order_items }
+    end
+    schedule
+  end
 
   def self.find_or_initialize_by(week_start, user_id)
     schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
-      
+
     if schedule.nil?
       schedule = ScheduleCreator.create_schedule(week_start, user_id)
     else

@@ -60,7 +60,7 @@
                         th.left-col 
                           = delivery_detail.object.customer.company_name
                           = delivery_detail.input :customer_id, :as => :hidden
-                        = delivery_detail.inputs :for => :order_quantities do |order_quantity|
+                        = delivery_detail.inputs :for => :order_items do |order_quantity|
                           .order-quantities
                             td 
                               = order_quantity.input :item_id, :as => :hidden
