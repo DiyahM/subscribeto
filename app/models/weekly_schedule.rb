@@ -24,6 +24,8 @@ class WeeklySchedule < ActiveRecord::Base
   def self.find_or_initialize_by(week_start, user_id)
     schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
     user = User.find(user_id)
+    puts "*" * 100
+    logger.info schedule.inspect 
     unless schedule
       schedule = WeeklySchedule.new(week_start: week_start)
       user.delivery_slots.each do |slot|
@@ -38,9 +40,9 @@ class WeeklySchedule < ActiveRecord::Base
       end
       schedule.bills.each { |bill| bill.build_order_items }
     else
-      schedule.bills.each { |bill| build_order_items }
+      schedule.bills.each { |bill| bill.build_order_items }
     end
-    
+    schedule
   end
 
   # def self.find_or_initialize_by(week_start, user_id)
