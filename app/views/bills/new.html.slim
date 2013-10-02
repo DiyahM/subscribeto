@@ -1,81 +1,151 @@
-/ -@weekly_schedule.bills.each do |bill|
-/   div Bill: #{bill.inspect}
-/   - bill.order_items.each do |order_item|
-/     div #{order_item.inspect}
-/   hr
-    
 .row-fluid
-  #dashboard-header
-    .span7
-      / {time_tag @weekly_schedule.week_start, format: "%b %d"} - #{time_tag @weekly_schedule.end_of_week, format: "%b %d"}
-    .span5.pull-right
-      = form_tag "/bills/new", :method => "get" do
-        = text_field_tag :datepicker,"", placeholder:"Select new week", class:"input-medium"
-        = submit_tag("Change Week", class: "btn", style:"vertical-align:top;margin-left:3px")
+#dashboard-header
+  .span7
+    / {time_tag @weekly_schedule.week_start, format: "%b %d"} - #{time_tag @weekly_schedule.end_of_week, format: "%b %d"}
+  .span5.pull-right
+    = form_tag "/bills/new", :method => "get" do
+      = text_field_tag :datepicker,"", placeholder:"Select new week", class:"input-medium"
+      = submit_tag("Change Week", class: "btn", style:"vertical-align:top;margin-left:3px")
 #main style="margin-top:50px;"
-  /#nav-buttons
-  / center
-  /   .btn-group
-  /     button.btn.btn-large.btn-info#edit-btn onclick="showEditSchedule();" Update Orders
-  /     button.btn.btn-large#invoice-btn onclick="showInvoices();" Send Invoices 
-  /     button.btn.btn-large#view-btn onclick="showSchedule();" Summary Report
-  / #edit-schedule style="margin-top:20px"
-  /   .row-fluid style="padding:20px"
-  /     .span10
-  /       p
+#nav-buttons
+center
+  .btn-group
+    button.btn.btn-large.btn-info#edit-btn onclick="showEditSchedule();" Update Orders
+    button.btn.btn-large#invoice-btn onclick="showInvoices();" Send Invoices 
+    button.btn.btn-large#view-btn onclick="showSchedule();" Summary Report
+#edit-schedule style="margin-top:20px"
+  .row-fluid style="padding:20px"
+    .span10
+      p
 
-  = semantic_form_for @weekly_schedule do |f|
-    = f.input :week_start, label: false, :as => :hidden
-    = f.input :user_id, label: false, :as => :hidden
-    .outer 
-        .inner
-          table.table.table-bordered.table-condensed.table-hover#dashboard-table 
-            thead
-              tr
+= semantic_form_for @weekly_schedule do |f|
+  = f.input :week_start, label: false, :as => :hidden
+  = f.input :user_id, label: false, :as => :hidden
+  .outer 
+      .inner
+        table.table.table-bordered.table-condensed.table-hover#dashboard-table 
+          thead
+            tr
+              th.left-col
+              - current_user.items.each do |item|
+                th.item-name 
+                  center
+                    = item.name
+            tr
                 th.left-col
-                - current_user.items.each do |item|
-                  th.item-name 
-                    center
-                      = item.name
+                - (1..current_user.items.length).each do
+                  th Order Qty
+                  th.extra Qty Delivered
+                  th.extra Qty Returned
+          tbody 
+            = f.semantic_fields_for :bills do |bill|
+              = bill.input :delivery_slot_id, label: false, :as => :hidden
+              = bill.input :customer_id, label: false, :as => :hidden
+              = bill.input :user_id, label: false, :as => :hidden
+              = bill.input :scheduled_for, label: false, :as => :hidden
               tr
-                  th.left-col
-                  - (1..current_user.items.length).each do
-                    th Order Qty
-                    th.extra Qty Delivered
-                    th.extra Qty Returned
-            tbody 
-              = f.semantic_fields_for :bills do |bill|
-                = bill.input :delivery_slot_id, label: false, :as => :hidden
-                = bill.input :customer_id, label: false, :as => :hidden
-                = bill.input :user_id, label: false, :as => :hidden
-                = bill.input :scheduled_for, label: false, :as => :hidden
-                tr
-                  th.left-col 
-                    = bill.object.delivery_slot.delivery_label
-                    = time_tag bill.object.scheduled_for, format: " %m/%d"
-                    td.delivery-date colspan=current_user.items.count
-                  = bill.semantic_fields_for :order_items do |order_item|
-                    = order_item.input :price_charged, label: false, :as => :hidden
-                    = order_item.input :item_id, label: false, :as => :hidden
-                    
-                    tr 
-                      th.left-col
-                        = bill.object.customer.company_name
-                        .order-quantities
-                            td
-                              = order_item.input :quantity, label: false,
-                                input_html: { min:"0", class:"input-mini qty #{order_item.object.item.name}" }
-                            td.extra
-                              = order_item.input :qty_delivered, label: false,
-                                input_html: { min:"0", class:"input-mini qty-delivered #{order_item.object.item.name}" }
-                            td.extra
-                              = order_item.input :qty_returned, label: false,
-                                input_html: { min:"0", class:"input-mini #{order_item.object.item.name}" }
-    div.pull-right
-          = link_to "Reset", "/bills/new", class: "btn btn-large btn-space"
-          = f.submit "Save", class: "btn btn-success btn-large"
+                th.left-col 
+                  = bill.object.delivery_slot.delivery_label
+                  = time_tag bill.object.scheduled_for, format: " %m/%d"
+                  td.delivery-date colspan=current_user.items.count
+              tr 
+                th.left-col
+                  = bill.object.customer.company_name
+                = bill.semantic_fields_for :order_items do |order_item|
+                  = order_item.input :price_charged, label: false, :as => :hidden
+                  = order_item.input :item_id, label: false, :as => :hidden
+                  .order-quantities
+                      td
+                        = order_item.input :quantity, label: false,
+                          input_html: { min:"0", class:"input-mini qty #{order_item.object.item.name}" }
+                        
+                      td.extra
+                        = order_item.input :qty_delivered, label: false,
+                          input_html: { min:"0", class:"input-mini qty-delivered #{order_item.object.item.name}" }
+                      td.extra
+                        = order_item.input :qty_returned, label: false,
+                          input_html: { min:"0", class:"input-mini #{order_item.object.item.name}" }
+  div.pull-right
+        = link_to "Reset", "/bills/new", class: "btn btn-large btn-space"
+        = f.submit "Save", class: "btn btn-success btn-large"
 
-                    
+                  
+javascript:
+$('#datepicker').datepicker();
 
+$('.qty').change(function(){
+  var qty_delivered_class = $(this).attr("class").replace('qty', 'qty-delivered');
+  $(this).parents("tr").find("[class='"+qty_delivered_class+"']").val($(this).val());
+});
 
-  
+$('.invoice-memo').change(function(){
+  updateInvoice($(this).parentsUntil("tr"));
+});
+
+$('.invoice-number').change(function(){
+  updateInvoice($(this).parents("tr"));
+});
+
+var expandTable = function() {
+  $(".item-name").attr('colspan',3);
+  $(".delivery-date").attr('colspan',"#{current_user.items.count}"*3);
+  $(".extra").show();
+  $(".expand").hide();
+}
+
+var collapseTable = function() {
+  $(".item-name").attr('colspan',1);
+  $(".delivery-date").attr('colspan',"#{current_user.items.count}");
+  $(".extra").hide();
+  $(".expand").show();
+
+}
+var updateInvoice = function (tr) {
+  var invoiceId = tr.find('.invoice-id-input').val();
+  var invoiceNum = tr.find('.invoice-number').val();
+  var invoiceMemo = tr.find('.invoice-memo').val();
+
+  $.ajax({
+    type: 'POST',
+    url: '/invoice/' + invoiceId,
+    data: {
+         "id": invoiceId,
+         "invoice": {
+           "invoice_number": invoiceNum,
+           "memo": invoiceMemo
+           }
+          },
+    async:false
+  });
+}
+
+var showEditSchedule = function(){
+  $('#invoice').hide();
+  $('#view-schedule').hide();
+  $('#edit-schedule').show();
+  $('#edit-btn').addClass('btn-info');
+  $('#invoice-btn').removeClass('btn-info');
+  $('#view-btn').removeClass('btn-info');
+}
+
+var showInvoices = function() {
+  $('#edit-schedule').hide();
+  $('#view-schedule').hide();
+  $('#invoice').show();
+  $('#edit-btn').removeClass('btn-info');
+  $('#invoice-btn').addClass('btn-info');
+  $('#view-btn').removeClass('btn-info');
+}
+
+var showSchedule = function(){
+  $('#invoice').hide();
+  $('#view-schedule').show();
+  $('#edit-schedule').hide();
+  $('#edit-btn').removeClass('btn-info');
+  $('#invoice-btn').removeClass('btn-info');
+  $('#view-btn').addClass('btn-info');
+}
+
+if ("#{@show_invoice}") {
+  showInvoices();
+}

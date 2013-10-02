@@ -6,26 +6,25 @@ class WeeklySchedule < ActiveRecord::Base
   
   # has_many :delivery_dates, :dependent => :destroy
   # has_many :customers, through: :delivery_dates, :uniq => true
-  # has_many :delivery_slots, through: :delivery_dates, :uniq => true
   # has_many :delivery_details, through: :delivery_dates
   # has_many :order_items, through: :delivery_details
   # has_many :items, through: :order_items, :uniq => true
-  # has_many :invoices, :dependent => :destroy
+  has_many :invoices, :dependent => :destroy
 
   has_many :bills
+  has_many :delivery_slots, through: :bills
   accepts_nested_attributes_for :bills
 
   validates_uniqueness_of :week_start, scope: :user_id
   
   # accepts_nested_attributes_for :delivery_dates
   
-  # after_save :create_invoices_for_week
+  after_save :create_invoices_for_week
 
-  def self.new_find_or_initialize_by(week_start, user_id)
+  def self.find_or_initialize_by(week_start, user_id)
     schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
     user = User.find(user_id)
     unless schedule
-      logger.info "*" * 100
       schedule = WeeklySchedule.new(week_start: week_start)
       user.delivery_slots.each do |slot|
         user.customers.includes(:delivery_slots).each do |customer|
@@ -38,21 +37,23 @@ class WeeklySchedule < ActiveRecord::Base
         end
       end
       schedule.bills.each { |bill| bill.build_order_items }
-    end
-    schedule
-  end
-
-  def self.find_or_initialize_by(week_start, user_id)
-    schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
-
-    if schedule.nil?
-      schedule = ScheduleCreator.create_schedule(week_start, user_id)
     else
-      schedule.check_for_changes
-      schedule.reload
+      schedule.bills.each { |bill| build_order_items }
     end
-    return schedule
+    
   end
+
+  # def self.find_or_initialize_by(week_start, user_id)
+  #   schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
+
+  #   if schedule.nil?
+  #     schedule = ScheduleCreator.create_schedule(week_start, user_id)
+  #   else
+  #     schedule.check_for_changes
+  #     schedule.reload
+  #   end
+  #   return schedule
+  # end
 
   def line_items_for_customer(customer_id)
     ret_line_items = []
@@ -67,45 +68,45 @@ class WeeklySchedule < ActiveRecord::Base
     return ret_line_items
   end
 
-  def check_for_changes
-    user.delivery_slots.includes(:customers).each do |slot|
-      if delivery_dates.where(delivery_slot_id: slot.id).empty?
-        delivery_date = delivery_dates.create(scheduled_for: slot.get_date_for(week_start),
-                                                      delivery_slot_id: slot.id)
-        slot.customers.each do |customer|
-          if delivery_details.where(customer_id: customer.id).empty?
-            delivery_detail = delivery_date.delivery_details.create(customer_id: customer.id)
-            user.items.each do |item|
-              delivery_detail.order_items.create(item_id: item.id)
-            end
-          end
-        end
-      end
-    end
+  # def check_for_changes
+  #   user.delivery_slots.includes(:customers).each do |slot|
+  #     if delivery_dates.where(delivery_slot_id: slot.id).empty?
+  #       delivery_date = delivery_dates.create(scheduled_for: slot.get_date_for(week_start),
+  #                                                     delivery_slot_id: slot.id)
+  #       slot.customers.each do |customer|
+  #         if delivery_details.where(customer_id: customer.id).empty?
+  #           delivery_detail = delivery_date.delivery_details.create(customer_id: customer.id)
+  #           user.items.each do |item|
+  #             delivery_detail.order_items.create(item_id: item.id)
+  #           end
+  #         end
+  #       end
+  #     end
+  #   end
 
-    user.customers.each do |customer|
-      customer.delivery_slots.each do |slot|
-        delivery_date = delivery_dates.find_by_delivery_slot_id(slot.id)
-        if delivery_date.delivery_details.where(customer_id: customer.id).empty?
-          delivery_detail = delivery_date.delivery_details.create(customer_id: customer.id)
-          user.items.each do |item|
-            delivery_detail.order_items.create(item_id: item.id)
-          end
-        end
-      end    
-    end
+  #   user.customers.each do |customer|
+  #     customer.delivery_slots.each do |slot|
+  #       delivery_date = delivery_dates.find_by_delivery_slot_id(slot.id)
+  #       if delivery_date.delivery_details.where(customer_id: customer.id).empty?
+  #         delivery_detail = delivery_date.delivery_details.create(customer_id: customer.id)
+  #         user.items.each do |item|
+  #           delivery_detail.order_items.create(item_id: item.id)
+  #         end
+  #       end
+  #     end    
+  #   end
 
-    new_items = user.items - items
-    if new_items.any?
-      new_items.each do |item|
-        delivery_details.each do |delivery_detail|
-          if delivery_detail.order_items.where(item_id: item.id).empty?
-            delivery_detail.order_items.create(item_id: item.id)
-          end
-        end
-      end
-    end
-  end
+  #   new_items = user.items - items
+  #   if new_items.any?
+  #     new_items.each do |item|
+  #       delivery_details.each do |delivery_detail|
+  #         if delivery_detail.order_items.where(item_id: item.id).empty?
+  #           delivery_detail.order_items.create(item_id: item.id)
+  #         end
+  #       end
+  #     end
+  #   end
+  # end
 
   def create_invoices_for_week
     InvoiceGenerator.create_invoices_for_week(self)
@@ -158,15 +159,15 @@ class WeeklySchedule < ActiveRecord::Base
   end
 
   def items_by_day(day)
-    my_dates = delivery_routes_for_day(day) 
+    slots = delivery_slots_for_day(day) 
     my_items = {}
-    my_dates.each do |my_date|
-      my_date.order_items.each do |order|
-        if order.quantity > 0
-          if !my_items[order.item.name].nil?
-            my_items[order.item.name] += order.quantity
+    slots.each do |slot|
+      slot.order_items.each do |order_item|
+        if order_item.quantity > 0
+          if !my_items[order_item.item.name].nil?
+            my_items[order_item.item.name] += order_item.quantity
           else
-            my_items[order.item.name] = order.quantity
+            my_items[order_item.item.name] = order_item.quantity
           end
         end
       end
@@ -174,8 +175,8 @@ class WeeklySchedule < ActiveRecord::Base
     return my_items
   end
 
-  def delivery_routes_for_day(day)
+  def delivery_slots_for_day(day)   #delivery_routes_for_day
     delivery_slots_ids = delivery_slots.find_all_by_day(day)
-    delivery_dates.find_all_by_delivery_slot_id(delivery_slots_ids)
+    # delivery_dates.find_all_by_delivery_slot_id(delivery_slots_ids)
   end
 end

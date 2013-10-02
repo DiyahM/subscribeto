@@ -8,29 +8,29 @@ class Customer < ActiveRecord::Base
   
   has_and_belongs_to_many :delivery_slots
   
-  has_many :delivery_details, :dependent => :destroy
-  has_many :delivery_dates, through: :delivery_details
-  has_many :order_items, through: :delivery_details
+  # has_many :delivery_details, :dependent => :destroy
+  # has_many :delivery_dates, through: :delivery_details
+  has_many :bills
+  has_many :order_items, through: :bills
   has_many :invoices, :dependent => :destroy
 
   validates_presence_of :email, :company_name
   validates_uniqueness_of :email, scope: :user_id
 
   def amount_due_for_week(weekly_schedule)
-    my_delivery_details = delivery_details_for_week(weekly_schedule)
+    my_order_items = order_items_for_week(weekly_schedule)
     total = 0
-    my_delivery_details.each do |delivery_detail|
-      delivery_detail.order_items.each do |order|
-        if order.quantity > 0
-          total += order.subtotal
-        end
+    logger.info order_items.inspect
+    my_order_items.each do |order_item|  
+      if order_item.quantity > 0
+        total += order_item.subtotal
       end
     end
     return total
   end
 
-  def delivery_details_for_week(weekly_schedule)
-    delivery_details.find_all_by_delivery_date_id(weekly_schedule.delivery_dates)
+  def order_items_for_week(weekly_schedule)    #delivery_details_for_week
+    bills.find_by_weekly_schedule_id(weekly_schedule.id).order_items
   end
 
   def orders
