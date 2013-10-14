@@ -36,6 +36,7 @@ group :development do
   gem 'bullet'
   gem 'debugger'
   gem 'quiet_assets'
+  gem 'mailcatcher'
 end
 group :test, :development do
   gem 'launchy'

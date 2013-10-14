@@ -1,7 +1,7 @@
 .row-fluid
   #dashboard-header
     .span7
-      / {time_tag @weekly_schedule.week_start, format: "%b %d"} - #{time_tag @weekly_schedule.end_of_week, format: "%b %d"}
+      #{time_tag @weekly_schedule.week_start, format: "%b %d"} - #{time_tag @weekly_schedule.end_of_week, format: "%b %d"}
     .span5.pull-right
       = form_tag dashboard_path, :method => "get" do
         = text_field_tag :datepicker,"", placeholder:"Select new week", class:"input-medium"

@@ -165,7 +165,7 @@ class WeeklySchedule < ActiveRecord::Base
     my_items = {}
     slots.each do |slot|
       slot.order_items.each do |order_item|
-        if order_item.quantity > 0
+        if order_item.quantity and order_item.quantity > 0
           if !my_items[order_item.item.name].nil?
             my_items[order_item.item.name] += order_item.quantity
           else

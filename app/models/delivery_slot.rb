@@ -48,7 +48,7 @@ class DeliverySlot < ActiveRecord::Base
   def customers_with_orders
     my_customers = []
     order_items.each do |order|
-      if order.quantity > 0
+      if order.quantity and order.quantity > 0
         customer = order.bill.customer
         my_customers << customer unless my_customers.include? customer
       end
@@ -58,10 +58,9 @@ class DeliverySlot < ActiveRecord::Base
 
   def items_by_customer(customer_id)
     my_items = {}
-    logger.info { bills.inspect }
     bills = self.bills.find_by_customer_id(customer_id)
     bills.order_items.each do |order_item|
-      if order_item.quantity > 0
+      if order_item.quantity and order_item.quantity > 0
         if !my_items[order_item.item.name].nil?
           my_items[order_item.item.name] += order_item.quantity
         else
@@ -75,7 +74,7 @@ class DeliverySlot < ActiveRecord::Base
   def items
     my_items = {}
     order_items.each do |order_item|
-      if order_item.quantity > 0
+      if order_item.quantity and order_item.quantity > 0
         if !my_items[order_item.item.name].nil?
           my_items[order_item.item.name] += order_item.quantity
         else

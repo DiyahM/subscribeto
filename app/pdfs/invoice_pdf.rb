@@ -54,7 +54,7 @@ class InvoicePdf < Prawn::Document
   end
 
   def invoice_item_desc(item)
-    "#{item.delivery_detail.delivery_date.scheduled_for.strftime('%m/%d')} - #{item.item.name}"
+    "#{item.bill.scheduled_for.strftime('%m/%d')} - #{item.item.name}"
   end
 
   def left_header
