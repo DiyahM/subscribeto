@@ -43,7 +43,7 @@ class InvoicePdf < Prawn::Document
   def invoice_rows
     [["Date","Terms","Due Date","Invoice #"],
      [@invoice.created_at.strftime("%B %d, %Y"),
-      @customer.term, @invoice.due_date, @invoice.invoice_number]]
+      @customer.term, @invoice.formatted_due_date, @invoice.invoice_number]]
   end
   
   def line_item_rows

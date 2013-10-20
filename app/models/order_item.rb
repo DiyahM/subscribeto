@@ -1,6 +1,6 @@
 class OrderItem < ActiveRecord::Base
   acts_as_archival :readonly_when_archived => true
-  default_scope OrderItem.unarchived.includes(:item).order('items.created_at DESC')
+  default_scope OrderItem.unarchived.includes(:item).order('items.id DESC')
   
   attr_accessible :delivery_detail_id, :item_id, :quantity, :qty_delivered, :qty_returned, :price_charged
 
@@ -10,6 +10,10 @@ class OrderItem < ActiveRecord::Base
   belongs_to :bill
 
   validates_presence_of :item_id
+
+  def item_name
+    self.item.name
+  end
 
   def subtotal
     price_charged * quantity

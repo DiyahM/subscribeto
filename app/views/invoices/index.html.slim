@@ -26,6 +26,8 @@
           td
             a.btn.btn-mini.btn-space target="blank" href=user_invoices_pdf_url(current_user, invoice, format: "pdf")
               | View Invoice as PDF
+            a.btn.btn-mini.btn-space target="blank" href=user_invoice_path(current_user, invoice)
+              | View/Edit Invoice
             a.btn.btn-mini href="#email-modal-#{invoice.id}" role="button" data-toggle="modal" Email Invoice
             div id="email-modal-#{invoice.id}" class="modal hide fade"
               .modal-header

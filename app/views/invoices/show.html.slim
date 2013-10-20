@@ -1,0 +1,52 @@
+.row-fluid style="margin-top:25px"
+  .span9
+    h3 Invoice no.#{@invoice.invoice_number}
+= semantic_form_for [current_user, @invoice] do |f|
+  table.table
+    thead
+      tr
+        th Invoice Number
+        th Invoice Due Date
+        th Customer
+        th Amount Due
+    tbody
+    
+       tr
+        td
+          =f.input :invoice_number, label: false, :input_html => { :readonly => true, style: "width: 25%"}
+        td
+          =f.input :complete_due_date, label: false, :input_html => { id: "datepicker" }, :as => :string
+        td
+          =link_to @invoice.customer.company_name, user_customer_path(current_user, @invoice.customer)
+        td
+          =f.input :amount_due, label: false, :input_html => { :readonly => true }
+        
+  .span11
+    h3 Order Items Listed in Invoice no.#{@invoice.invoice_number}
+    table.table
+      thead  
+        tr
+          th Order Item
+          th Ordererd Quantity
+          th Delivered Quantity
+          th Price Charged
+          th Destroy?
+        tbody
+          =f.semantic_fields_for :order_items do |o_item|
+             tr
+              td
+                =o_item.input :item, label: false, input_html: { readonly: true }
+              td
+                =o_item.input :quantity, label: false
+              td
+                =o_item.input :qty_delivered, label: false
+              td
+                =o_item.input :price_charged, label: false
+              td
+                =o_item.input :_destroy, :as => :boolean
+  div.pull-right
+    =f.submit "Update Invoice", class: "btn btn-success btn-large"
+    =link_to "Cancel", user_invoices_path(current_user), class: "btn btn-large"
+
+javascript:
+  $('#datepicker').datepicker();

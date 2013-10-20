@@ -24,25 +24,35 @@ class WeeklySchedule < ActiveRecord::Base
   def self.find_or_initialize_by(week_start, user_id)
     schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
     user = User.find(user_id)
-    puts "*" * 100
-    logger.info schedule.inspect 
     unless schedule
       schedule = WeeklySchedule.new(week_start: week_start)
       user.delivery_slots.each do |slot|
         user.customers.includes(:delivery_slots).each do |customer|
           if customer.delivery_slots.include?(slot)
-            schedule.bills.build(customer_id: customer.id, 
-                                  user_id: user_id, 
-                                  scheduled_for: slot.get_date_for(week_start), 
-                                  delivery_slot_id: slot.id)
+            schedule.build_bill(customer, user_id, slot)
           end
         end
       end
       schedule.bills.each { |bill| bill.build_order_items }
     else
-      schedule.bills.each { |bill| bill.build_order_items }
+      user.delivery_slots.each do |slot|
+        user.customers.includes(:delivery_slots).each do |customer|
+          if customer.delivery_slots.include?(slot) and !schedule.bills.map(&:customer_id).include?(customer.id)
+            schedule.build_bill(customer, user_id, slot)
+          end
+        end
+      end
+      schedule.bills.each { |bill| bill.build_order_items } if schedule.bills
     end
+    schedule.bills.each { |bill| bill.order_items.sort_by!{ |e| e[:item_id]} }
     schedule
+  end
+
+  def build_bill(customer, user_id, slot)
+    bills.build(customer_id: customer.id, 
+                user_id: user_id, 
+                scheduled_for: slot.get_date_for(week_start), 
+                delivery_slot_id: slot.id) 
   end
 
   # def self.find_or_initialize_by(week_start, user_id)

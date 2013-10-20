@@ -20,6 +20,8 @@ Subscribeto::Application.routes.draw do
     get "items/:id/archive", to: 'items#archive', as: 'archive_item'
     get "delivery_slots/:id/archive", to: 'delivery_slots#archive', as: 'archive_delivery_slot'
   end
+
+
   
   post 'email_invoice/:invoice_id', to: 'invoices#email', as: 'email_invoice'
   post 'invoices/export_iif', to: 'invoices#export_iif'

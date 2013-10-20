@@ -32,12 +32,20 @@ class InvoicesController < ApplicationController
 
 
   def update
-    invoice = Invoice.find(params[:id])
-    invoice.update_attributes!(params[:invoice])
-    render nothing: true    
+    invoice = current_user.invoices.find(params[:id])
+    if invoice.update_attributes(params[:invoice])
+      redirect_to user_invoice_path(current_user, invoice), notice: "Successfully updated invoice"
+    else
+      redirect_to user_invoice_path(current_user, invoice), error: "Could not update your invoice"
+    end
+    # render nothing: true    
   end
 
   def index
     @invoices = current_user.invoices.order("invoice_number DESC")
+  end
+
+  def show 
+    @invoice = current_user.invoices.find(params[:id])
   end
 end

@@ -33,10 +33,12 @@
                 thead
                   tr
                     th.left-col
-                    - current_user.items.each do |item|
+                    / = f.semantic_fields_for :bills do |bill|
+                    /   = bill.semantic_fields_for :order_items do |order_item|
+                    - f.object.bills.first.order_items.each do |order_item|
                       th.item-name 
                         center
-                          = item.name
+                          = order_item.item.name
                   tr
                       th.left-col
                       - (1..current_user.items.length).each do
@@ -64,8 +66,7 @@
                             td
                               = order_item.input :quantity, label: false,
                                 input_html: { min:"0", class:"input-mini qty #{order_item.object.item.name}" }
-                              / = order_item.input :quantity,prepend: "#{order_item.object.item.name}", label: false,
-                              /   input_html: { min:"0", class:"input-mini qty #{order_item.object.item.name}" }
+                              = order_item.object.item.name
                             td.extra
                               = order_item.input :qty_delivered, label: false,
                                 input_html: { min:"0", class:"input-mini qty-delivered #{order_item.object.item.name}" }
