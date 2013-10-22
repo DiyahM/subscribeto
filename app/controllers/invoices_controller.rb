@@ -48,4 +48,19 @@ class InvoicesController < ApplicationController
   def show 
     @invoice = current_user.invoices.find(params[:id])
   end
+
+  def create
+    @invoice = current_user.invoices.new(params[:invoice])
+    if @invoice.save
+      redirect_to user_invoices_path(current_user), notice: "Successfully created invoice"
+    else
+      render :new, error: "Could not create your invoice"
+    end
+  end
+
+  def new
+    @invoice = current_user.invoices.build
+    @invoice.build_order_items
+  end
+
 end

@@ -1,8 +1,10 @@
 .row-fluid style="margin-top:25px"
   .span9
     h3 Invoices 
-  .span2.pull-right
+  .span3.pull-right
     a.btn.btn-primary onclick="exportIif()" Export to IFF
+    =link_to "New Invoice", new_user_invoice_path(current_user), class: "btn btn-success", style: "margin-left:2px;"
+
 .row-fluid
   table.table
     thead
@@ -21,7 +23,7 @@
             input.invoice-id type="checkbox" value=invoice.id
           td = invoice.invoice_number
           td = time_tag invoice.created_at, format: "%m/%d/%y"
-          td = link_to invoice.customer.company_name, user_customer_path(current_user, invoice.customer)
+          td = link_to invoice.customer.company_name, user_customer_path(current_user, invoice.customer) if invoice.customer
           td = number_with_precision invoice.amount_due, precision: 2
           td
             a.btn.btn-mini.btn-space target="blank" href=user_invoices_pdf_url(current_user, invoice, format: "pdf")
@@ -36,11 +38,11 @@
               .modal-body
                 = form_tag email_invoice_path(invoice), method: "post", id:"#email-form" do       
                   = label_tag :to_email, "To:"
-                  = email_field_tag :to_email, "#{invoice.customer.email}"
+                  = email_field_tag :to_email, "#{invoice.customer.email}" if invoice.customer
                   = label_tag :from_email, "From:"
                   = email_field_tag :from_email, "#{current_user.email}", readonly: true
                   = label_tag :subject
-                  = text_field_tag :subject, "Invoice for #{invoice.customer.company_name}", class:"input-block-level"
+                  = text_field_tag :subject, "Invoice for #{invoice.customer.company_name}", class:"input-block-level" if invoice.customer
                   = label_tag :body, "Message"
                   = text_area_tag :body, "Attached you'll find your invoice for your recent order. Thank you for your business!",
                     rows:4, class:"input-block-level"

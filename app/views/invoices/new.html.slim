@@ -1,51 +1,51 @@
 .row-fluid style="margin-top:25px"
   .span9
-    h3 Invoice no.#{@invoice.invoice_number}
+    h3 New Invoice
 = semantic_form_for [current_user, @invoice] do |f|
   table.table
     thead
       tr
-        th Invoice Number
         th Invoice Due Date
         th Customer
-        th Amount Due
+        th Memo
     tbody
        tr
         td
-          h1 =f.object.invoice_number
-        td
           =f.input :complete_due_date, label: false, :input_html => { id: "datepicker" }, :as => :string
         td
-          =link_to @invoice.customer.company_name, user_customer_path(current_user, @invoice.customer)
+          =f.input :customer, :collection => current_user.customers.all.map{|customer| ["#{customer.poc_name} - #{customer.company_name}", customer.id]}, prompt: "Select Customer", label: false
         td
-          h1 =f.object.amount_due
+          =f.input :memo, label: false, size: '40%'
         
   .span11
-    h3 Order Items Listed in Invoice no.#{@invoice.invoice_number}
+    h3 Order Items
     table.table
       thead  
         tr
           th Order Item
           th Ordererd Quantity
           th Delivered Quantity
+          th Returned Quantity
           th Price Charged
-          th Destroy?
+          th Destroy
         tbody
           =f.semantic_fields_for :order_items do |o_item|
              tr
               td
                 h4 =o_item.object.item.name
+                =o_item.input :item, label: false, input_html: { readonly: true, style: "display: none;" }
               td
                 =o_item.input :quantity, label: false
               td
                 =o_item.input :qty_delivered, label: false
               td
+                =o_item.input :qty_returned, label: false
+              td
                 =o_item.input :price_charged, label: false
               td
-                =o_item.input :_destroy, :as => :boolean
+                =o_item.input :_destroy, :as => :boolean, label: false
   div.pull-right
-    =f.submit "Update Invoice", class: "btn btn-success btn-large"
+    =f.submit "Create", class: "btn btn-success btn-large"
     =link_to "Cancel", user_invoices_path(current_user), class: "btn btn-large"
-
 javascript:
   $('#datepicker').datepicker();

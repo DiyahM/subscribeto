@@ -1,37 +1,52 @@
 class Invoice < ActiveRecord::Base
   acts_as_archival :readonly_when_archived => true
-  default_scope Invoice.unarchived.includes(:customer, :order_items)
+  # default_scope Invoice.unarchived.includes(:customer, :order_items)
   
   attr_accessible :customer_id, :user_id, :weekly_schedule_id, :memo, :invoice_number, :due_date, :amount_due, :order_items_attributes, :complete_due_date, :amount_due
   
   belongs_to :customer
   belongs_to :user
   belongs_to :weekly_schedule
+
   has_one :bill
-  
-  # has_many :delivery_details
   has_many :order_items
   
   after_initialize :default_values
   
   validates_uniqueness_of :invoice_number, scope: :user_id
+  validates_presence_of :customer_id, message: "can't be blank"
+  validates_presence_of :complete_due_date, message: "can't be blank"
 
   accepts_nested_attributes_for :order_items, :allow_destroy => true
 
-  attr_accessor :amount_due
+  before_create :generate_invoice_number, unless: Proc.new { |invoice| invoice.invoice_number.present? }
+
+  # attr_accessor :amount_due
 
   def complete_due_date
     due_date.strftime("%m/%d/%Y") if due_date
   end
 
   def complete_due_date=(value)
-    self.due_date = Date.strptime(value, '%m/%d/%Y') if value
+    self.due_date = Date.strptime(value, '%m/%d/%Y') if value.present?
+  end
+
+  def build_order_items
+    self.user.items.each do |item|
+      self.order_items.build(item_id: item.id,
+                                price_charged: item.price,
+                                quantity: 0,
+                                qty_delivered: 0,
+                                qty_returned: 0
+                              )
+    end
+
   end
 
   def default_values
     if new_record?
       self.memo = "Thank you for your business!" if self.memo.nil?
-      self.due_date = self.due_date_with_terms if self.due_date.nil?
+      self.due_date = self.due_date_with_terms if self.due_date.nil? and !self.customer.nil?
       self.save
     end
   end
@@ -76,6 +91,16 @@ class Invoice < ActiveRecord::Base
       end
     end
     return the_due_date.strftime("%B %d, %Y")
+  end
+
+  def generate_invoice_number
+    invoice = self.user.invoices.order("id").last
+    if !invoice.nil?
+      num = invoice.invoice_number + 1
+    else
+      num = 1000
+    end
+    self.invoice_number = num
   end
 
   def due_date_with_terms
