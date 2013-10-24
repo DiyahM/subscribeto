@@ -7,15 +7,18 @@
       tr
         th Invoice Due Date
         th Customer
+        th State
         th Memo
     tbody
        tr
-        td
+        td style="width: 20%"
           =f.input :complete_due_date, label: false, :input_html => { id: "datepicker" }, :as => :string
-        td
+        td style="width: 20%"
           =f.input :customer, :collection => current_user.customers.all.map{|customer| ["#{customer.poc_name} - #{customer.company_name}", customer.id]}, prompt: "Select Customer", label: false
-        td
-          =f.input :memo, label: false, size: '40%'
+        td style="width: 20%"
+          =f.input :state, :collection => Invoice::STATES, label: false, prompt: "Select Invoice State"
+        td style="width: 40%"
+          =f.input :memo, label: false
         
   .span11
     h3 Order Items

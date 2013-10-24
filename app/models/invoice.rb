@@ -2,7 +2,7 @@ class Invoice < ActiveRecord::Base
   acts_as_archival :readonly_when_archived => true
   # default_scope Invoice.unarchived.includes(:customer, :order_items)
   
-  attr_accessible :customer_id, :user_id, :weekly_schedule_id, :memo, :invoice_number, :due_date, :amount_due, :order_items_attributes, :complete_due_date, :amount_due
+  attr_accessible :customer_id, :user_id, :weekly_schedule_id, :memo, :invoice_number, :due_date, :amount_due, :order_items_attributes, :complete_due_date, :amount_due, :state
   
   belongs_to :customer
   belongs_to :user
@@ -20,8 +20,37 @@ class Invoice < ActiveRecord::Base
   accepts_nested_attributes_for :order_items, :allow_destroy => true
 
   before_create :generate_invoice_number, unless: Proc.new { |invoice| invoice.invoice_number.present? }
+  before_create :add_default_state
 
-  # attr_accessor :amount_due
+  # scope :editable,  where(state: DRAFT) 
+
+  DRAFT     =   "draft"
+  APPROVED  =   "approved"
+  FINAL     =   "final"
+
+  STATES    = [DRAFT, APPROVED, FINAL]
+
+  def can_be_editted?
+    self.state.eql?(DRAFT) ? true : false
+  end
+
+  def state?(state)
+    my_state = self.state
+    case state
+    when DRAFT
+      my_state.eql?(DRAFT)
+    when APPROVED
+      my_state.eql?(APPROVED)
+    when FINAL
+      my_state .eql?(FINAL)
+    else
+      false
+    end
+  end
+
+  def add_default_state
+    self.state = DRAFT unless self.state.present?
+  end
 
   def complete_due_date
     due_date.strftime("%m/%d/%Y") if due_date

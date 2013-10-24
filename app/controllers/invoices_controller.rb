@@ -33,12 +33,28 @@ class InvoicesController < ApplicationController
 
   def update
     invoice = current_user.invoices.find(params[:id])
+    
+    redirect_to :back, notice: "You cannot update a non drafted invoice" and return unless invoice.can_be_editted?
+
     if invoice.update_attributes(params[:invoice])
       redirect_to user_invoice_path(current_user, invoice), notice: "Successfully updated invoice"
     else
       redirect_to user_invoice_path(current_user, invoice), error: "Could not update your invoice"
     end
-    # render nothing: true    
+  end
+
+  def change_state
+    if params[:new_state] and Invoice::STATES.include?(params[:new_state])
+      invoice = current_user.invoices.find(params[:id])
+      if invoice and invoice.update_attributes(state: params[:new_state])
+        redirect_to :back, notice: "Successfully tranisted the state of invoice to #{params[:new_state]}"
+        return
+      else
+        redirect_to :back, notice: "Something is not right! Please try again later"
+        return
+      end
+    end
+    redirect_to :back, notice: "Invalid state passed, Please make sure you are doing a valid operation"
   end
 
   def index

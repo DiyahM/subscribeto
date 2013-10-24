@@ -16,6 +16,8 @@
         th Customer
         th Amount Due
         th Actions
+        th State
+        th Transit Invoice State
     tbody
       - @invoices.each do |invoice|
         tr
@@ -52,6 +54,19 @@
                   .pull-right
                     a.btn.btn-space type="button" href="#" data-dismiss="modal" Cancel
                     = submit_tag "Send Email", class:"btn btn-primary"
+            td
+              h4 =invoice.state
+            td
+              - if invoice.state?(Invoice::APPROVED) or invoice.state?(Invoice::FINAL)
+                =link_to "Draft it", transit_invoice_state_path(invoice, new_state: Invoice::DRAFT), class: "btn btn-mini btn-space", method: :put
+              - if invoice.state?(Invoice::DRAFT) or invoice.state?(Invoice::FINAL)
+                =link_to "Approve it", transit_invoice_state_path(invoice, new_state: Invoice::APPROVED), class: "btn btn-mini btn-space", method: :put
+              - if invoice.state?(Invoice::DRAFT) or invoice.state?(Invoice::APPROVED)
+                =link_to "Finalize it", transit_invoice_state_path(invoice, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
+
+
+
+
 
 javascript:
   $("#select-all").click(function() {

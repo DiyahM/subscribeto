@@ -8,6 +8,7 @@
         th Invoice Number
         th Invoice Due Date
         th Customer
+        th State
         th Amount Due
     tbody
        tr
@@ -17,6 +18,8 @@
           =f.input :complete_due_date, label: false, :input_html => { id: "datepicker" }, :as => :string
         td
           =link_to @invoice.customer.company_name, user_customer_path(current_user, @invoice.customer)
+        td
+          =f.input :state, collection: Invoice::STATES, label: false, prompt: "Select Invoice State"
         td
           h1 =f.object.amount_due
         

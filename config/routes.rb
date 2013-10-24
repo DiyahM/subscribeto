@@ -6,6 +6,12 @@ Subscribeto::Application.routes.draw do
   resources :password_resets
   resources :sessions
   post '/invoice/:id', to: 'invoices#update'
+  put '/invoice/:id/change_state', to: 'invoices#change_state', as: :transit_invoice_state
+  # resources :invoices, only: [] do
+  #   member do
+  #     put "change_state"
+  #   end
+  # end
 
   resources :bills, as: "weekly_schedules"
   
