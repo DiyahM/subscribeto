@@ -20,7 +20,6 @@ class Customer < ActiveRecord::Base
   def amount_due_for_week(weekly_schedule)
     my_order_items = order_items_for_week(weekly_schedule)
     total = 0
-    logger.info order_items.inspect
     my_order_items.each do |order_item|  
       if order_item.quantity > 0
         total += order_item.subtotal

@@ -8,7 +8,7 @@
         th Invoice Number
         th Invoice Due Date
         th Customer
-        th State
+        th Transit State
         th Amount Due
     tbody
        tr
@@ -19,7 +19,14 @@
         td
           =link_to @invoice.customer.company_name, user_customer_path(current_user, @invoice.customer)
         td
-          =f.input :state, collection: Invoice::STATES, label: false, prompt: "Select Invoice State"
+          -if f.object.state?(Invoice::DRAFT)
+            =link_to "Approve it", transit_invoice_state_path(f.object, new_state: Invoice::APPROVED), class: "btn btn-mini btn-space", method: :put
+            =link_to "Finalize it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
+          -elsif f.object.state?(Invoice::APPROVED)
+            =link_to "Finalize it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
+          -else
+            | Invoice already finalized
+
         td
           h1 =f.object.amount_due
         
@@ -31,8 +38,9 @@
           th Order Item
           th Ordererd Quantity
           th Delivered Quantity
+          th Quantity Returned
           th Price Charged
-          th Destroy?
+          th Remove
         tbody
           =f.semantic_fields_for :order_items do |o_item|
              tr
@@ -43,12 +51,21 @@
               td
                 =o_item.input :qty_delivered, label: false
               td
+                =o_item.input :qty_returned, label: false
+              td
                 =o_item.input :price_charged, label: false
               td
                 =o_item.input :_destroy, :as => :boolean
   div.pull-right
-    =f.submit "Update Invoice", class: "btn btn-success btn-large"
-    =link_to "Cancel", user_invoices_path(current_user), class: "btn btn-large"
+    - if f.object.state?(Invoice::DRAFT)
+      =f.submit "Update Invoice", class: "btn btn-success btn-large"
+      =link_to "Cancel", user_invoices_path(current_user), class: "btn btn-large"
+    -else
+      .pull-left
+        | You cannot update a drafted invoice
+      / =f.submit "Update Invoice", class: "btn btn-success btn-large", disabled: true
+      
+    
 
 javascript:
   $('#datepicker').datepicker();

@@ -51,12 +51,14 @@
       a href="#customer-orders" data-toggle="tab" Orders
     li
       a href="#customer-invoices" data-toggle="tab" Invoices 
+    li
+      a href="#uninvoiced-orders" data-toggle="tab" Uninvoiced Items 
   .tab-content
     #customer-orders.tab-pane.active
-      - @customer.orders.each do |order|
+      - @customer.bills.each do |bill|
         strong 
           = "Week of "
-          = time_tag order.week_start, format: '%m/%d/%y'
+          = time_tag bill.weekly_schedule.week_start, format: '%m/%d/%y'
         table.table.table-condensed.table-striped.table-bordered
           thead
             tr
@@ -65,57 +67,17 @@
               th Unit Price
               th Total Amount
           tbody
-            - order.line_items_for_customer(@customer.id).each do |line_item|
+            - bill.order_items.each do |order_item|
               tr
-                td = line_item.quantity
-                td = "#{line_item.delivery_date} #{line_item.item.name}"
-                td = number_with_precision line_item.item.price, precision:2
-                td = number_with_precision line_item.subtotal, precision: 2
+                td = order_item.quantity
+                td = "#{bill.scheduled_for} #{order_item.item.name}"
+                td = number_with_precision order_item.price_charged, precision:2
+                td = number_with_precision order_item.subtotal, precision: 2
             tr
               td colspan=3 Total
-              td = number_with_precision @customer.amount_due_for_week(order), precision: 2
+              td = number_with_precision @customer.amount_due_for_week(bill.weekly_schedule), precision: 2
 
     #customer-invoices.tab-pane
-      table.table
-        thead
-          tr
-            th Invoice Number
-            th Invoice Date
-            th Amount Due
-            th Action
-        tbody
-          - @customer.invoices.each do |invoice|
-            tr
-              td = invoice.invoice_number
-              td = time_tag invoice.created_at, format: "%m/%d/%y"
-              td = number_with_precision invoice.amount_due, precision: 2
-              td
-                a.btn.btn-mini.btn-space target="blank" href=user_invoices_pdf_url(current_user, invoice, format: "pdf")
-                  | View Invoice as PDF
-                a.btn.btn-mini.btn-space target="blank" href=user_invoice_path(current_user, invoice)
-                  | View/Edit Invoice
-                a.btn.btn-mini href="#email-modal-#{invoice.id}" role="button" data-toggle="modal" Email Invoice
-                div id="email-modal-#{invoice.id}" class="modal hide fade"
-                  .modal-header
-                    button.close type="button" data-dismiss="modal" aria-hidden="true" x
-                    h3 Email Invoice
-                  .modal-body
-                    = form_tag email_invoice_path(invoice), method: "post", id:"#email-form" do       
-                      = label_tag :to_email, "To:"
-                      = email_field_tag :to_email, "#{invoice.customer.email}"
-                      = label_tag :from_email, "From:"
-                      = email_field_tag :from_email, "#{current_user.email}", readonly: true
-                      = label_tag :subject
-                      = text_field_tag :subject, "Invoice for #{invoice.customer.company_name}", class:"input-block-level"
-                      = label_tag :body, "Message"
-                      = text_area_tag :body, "Attached you'll find your invoice for your recent order. Thank you for your business!",
-                        rows:4, class:"input-block-level"
-                      em
-                        | *Invoice will be attached as PDF when sent
-                      br
-                      .pull-right
-                        a.btn.btn-space type="button" href="#" data-dismiss="modal" Cancel
-                        = submit_tag "Send Email", class:"btn btn-primary"
-
-  
-
+      =render partial: "partials/customer_invoices_view", locals: {invoices: @customer.invoices.non_drafted }
+    #uninvoiced-orders.tab-pane
+      =render partial: "partials/invoice_list_view", locals: { invoices: @customer.invoices.drafted }

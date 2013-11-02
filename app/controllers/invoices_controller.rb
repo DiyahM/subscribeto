@@ -33,7 +33,7 @@ class InvoicesController < ApplicationController
 
   def update
     invoice = current_user.invoices.find(params[:id])
-    
+
     redirect_to :back, notice: "You cannot update a non drafted invoice" and return unless invoice.can_be_editted?
 
     if invoice.update_attributes(params[:invoice])
@@ -58,25 +58,37 @@ class InvoicesController < ApplicationController
   end
 
   def index
-    @invoices = current_user.invoices.order("invoice_number DESC")
+    @drafted_invoices = current_user.invoices.drafted.order("invoice_number DESC").includes(:customer, :order_items)
+    @approved_invoices = current_user.invoices.approved.order("invoice_number DESC").includes(:customer, :order_items)
+    @finalized_invoices = current_user.invoices.finalized.order("invoice_number DESC").includes(:customer, :order_items)
   end
 
   def show 
     @invoice = current_user.invoices.find(params[:id])
+    @invoice.build_order_items
   end
 
-  def create
-    @invoice = current_user.invoices.new(params[:invoice])
-    if @invoice.save
-      redirect_to user_invoices_path(current_user), notice: "Successfully created invoice"
+  # def create
+  #   @invoice = current_user.invoices.new(params[:invoice])
+  #   if @invoice.save
+  #     redirect_to user_invoices_path(current_user), notice: "Successfully created invoice"
+  #   else
+  #     render :new, error: "Could not create your invoice"
+  #   end
+  # end
+
+  def destroy
+    @invoice = current_user.invoices.find(params[:id])
+    if @invoice.destroy
+      redirect_to :back, notice: "Successfully deleted the invoice"
     else
-      render :new, error: "Could not create your invoice"
+      redirect_to :back, notice: "You cannot delete an invoice with non draft state"
     end
   end
 
-  def new
-    @invoice = current_user.invoices.build
-    @invoice.build_order_items
-  end
+  # def new
+  #   @invoice = current_user.invoices.build
+  #   @invoice.build_order_items
+  # end
 
 end

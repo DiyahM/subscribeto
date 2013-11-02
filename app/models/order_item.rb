@@ -27,7 +27,7 @@ class OrderItem < ActiveRecord::Base
   end
 
   def week
-    delivery_detail.delivery_date.weekly_schedule
+    bill.weekly_schedule
   end
 
   def delivery_date

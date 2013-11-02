@@ -17,12 +17,16 @@ class Invoice < ActiveRecord::Base
   validates_presence_of :customer_id, message: "can't be blank"
   validates_presence_of :complete_due_date, message: "can't be blank"
 
-  accepts_nested_attributes_for :order_items, :allow_destroy => true
+  accepts_nested_attributes_for :order_items, :allow_destroy => true, reject_if: lambda { |a| a[:quantity].to_i < 1 and a[:qty_delivered].to_i < 1 and a[:qty_returned].to_i < 1 }
 
   before_create :generate_invoice_number, unless: Proc.new { |invoice| invoice.invoice_number.present? }
   before_create :add_default_state
+  before_destroy :validate_state
 
-  # scope :editable,  where(state: DRAFT) 
+  scope :drafted, -> { where(state: DRAFT) }
+  scope :approved, -> { where(state: APPROVED) }
+  scope :finalized, -> { where(state: FINAL) }
+  scope :non_drafted, -> { where("state = '#{FINAL}' or state = '#{APPROVED}'") }
 
   DRAFT     =   "draft"
   APPROVED  =   "approved"
@@ -32,6 +36,10 @@ class Invoice < ActiveRecord::Base
 
   def can_be_editted?
     self.state.eql?(DRAFT) ? true : false
+  end
+
+  def validate_state
+    return false unless self.state?(DRAFT)
   end
 
   def state?(state)
@@ -62,12 +70,14 @@ class Invoice < ActiveRecord::Base
 
   def build_order_items
     self.user.items.each do |item|
-      self.order_items.build(item_id: item.id,
-                                price_charged: item.price,
-                                quantity: 0,
-                                qty_delivered: 0,
-                                qty_returned: 0
-                              )
+      unless self.order_items.map(&:item_id).include?(item.id)
+        self.order_items.build(item_id: item.id,
+                                  price_charged: item.price,
+                                  quantity: 0,
+                                  qty_delivered: 0,
+                                  qty_returned: 0
+                                )
+      end
     end
 
   end
