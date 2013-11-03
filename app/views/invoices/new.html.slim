@@ -1,0 +1,54 @@
+.row-fluid style="margin-top:25px"
+  .span9
+    h3 New Invoice
+= semantic_form_for [current_user, @invoice] do |f|
+  table.table
+    thead
+      tr
+        th Invoice Due Date
+        th Customer
+        th State
+        th Memo
+    tbody
+       tr
+        td style="width: 20%"
+          =f.input :complete_due_date, label: false, :input_html => { id: "datepicker" }, :as => :string
+        td style="width: 20%"
+          =f.input :customer, :collection => current_user.customers.all.map{|customer| ["#{customer.poc_name} - #{customer.company_name}", customer.id]}, prompt: "Select Customer", label: false
+        td style="width: 20%"
+          =f.input :state, :collection => Invoice::STATES, label: false, prompt: "Select Invoice State"
+        td style="width: 40%"
+          =f.input :memo, label: false
+        
+  .span11
+    h3 Order Items
+    table.table
+      thead  
+        tr
+          th Order Item
+          th Ordererd Quantity
+          th Delivered Quantity
+          th Returned Quantity
+          th Price Charged
+          th Destroy
+        tbody
+          =f.semantic_fields_for :order_items do |o_item|
+             tr
+              td
+                h4 =o_item.object.item.name
+                =o_item.input :item, label: false, input_html: { readonly: true, style: "display: none;" }
+              td
+                =o_item.input :quantity, label: false
+              td
+                =o_item.input :qty_delivered, label: false
+              td
+                =o_item.input :qty_returned, label: false
+              td
+                =o_item.input :price_charged, label: false
+              td
+                =o_item.input :_destroy, :as => :boolean, label: false
+  div.pull-right
+    =f.submit "Create", class: "btn btn-success btn-large"
+    =link_to "Cancel", user_invoices_path(current_user), class: "btn btn-large"
+javascript:
+  $('#datepicker').datepicker();

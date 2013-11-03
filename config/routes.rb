@@ -6,6 +6,14 @@ Subscribeto::Application.routes.draw do
   resources :password_resets
   resources :sessions
   post '/invoice/:id', to: 'invoices#update'
+  put '/invoice/:id/change_state', to: 'invoices#change_state', as: :transit_invoice_state
+  # resources :invoices, only: [] do
+  #   member do
+  #     put "change_state"
+  #   end
+  # end
+
+  resources :bills, as: "weekly_schedules"
   
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]
@@ -18,6 +26,8 @@ Subscribeto::Application.routes.draw do
     get "items/:id/archive", to: 'items#archive', as: 'archive_item'
     get "delivery_slots/:id/archive", to: 'delivery_slots#archive', as: 'archive_delivery_slot'
   end
+
+
   
   post 'email_invoice/:invoice_id', to: 'invoices#email', as: 'email_invoice'
   post 'invoices/export_iif', to: 'invoices#export_iif'

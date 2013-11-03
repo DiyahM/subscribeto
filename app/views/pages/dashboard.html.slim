@@ -6,9 +6,7 @@
       = form_tag dashboard_path, :method => "get" do
         = text_field_tag :datepicker,"", placeholder:"Select new week", class:"input-medium"
         = submit_tag("Change Week", class: "btn", style:"vertical-align:top;margin-left:3px")
-
 #main style="margin-top:50px;"
-
   #nav-buttons
     center
       .btn-group
@@ -27,108 +25,86 @@
         = link_to_function "Collapse Table", "collapseTable()", class: "extra"
     .row-fluid
       = semantic_form_for [current_user, @weekly_schedule] do |f|
-        = f.input :week_start, :as => :hidden
+        = f.input :week_start, label: false, :as => :hidden
+        = f.input :user_id, label: false, :as => :hidden
         .outer 
-          .inner
-            table.table.table-bordered.table-condensed.table-hover#dashboard-table 
-              thead
-                tr
-                  th.left-col
-                  - current_user.items.each do |item|
-                    th.item-name 
-                      center
-                        = item.name
-                tr
-                  th.left-col
-                  - (1..current_user.items.length).each do
-                    th Order Qty
-                    th.extra Qty Delivered
-                    th.extra Qty Returned
-
-              tbody 
-                = f.semantic_fields_for :delivery_dates do |delivery_date|
-                  = delivery_date.input :scheduled_for, :as => :hidden
-                  = delivery_date.input :delivery_slot_id, :as => :hidden
-                  - if delivery_date.object.delivery_details.any?
+            .inner
+              table.table.table-bordered.table-condensed.table-hover#dashboard-table 
+                thead
+                  tr
+                    th.left-col
+                    / = f.semantic_fields_for :bills do |bill|
+                    /   = bill.semantic_fields_for :order_items do |order_item|
+                    - f.object.bills.first.order_items.each do |order_item|
+                      th.item-name 
+                        center
+                          = order_item.item.name
+                  tr
+                      th.left-col
+                      - (1..current_user.items.length).each do
+                        th Order Qty
+                        th.extra Qty Delivered
+                        th.extra Qty Returned
+                tbody 
+                  = f.semantic_fields_for :bills do |bill|
+                    = bill.input :delivery_slot_id, label: false, :as => :hidden
+                    = bill.input :customer_id, label: false, :as => :hidden
+                    = bill.input :user_id, label: false, :as => :hidden
+                    = bill.input :scheduled_for, label: false, :as => :hidden
                     tr
                       th.left-col 
-                        = delivery_date.object.delivery_slot.delivery_label
-                        = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
-                      td.delivery-date colspan=current_user.items.count
-                    = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
-                      tr 
-                        th.left-col 
-                          = delivery_detail.object.customer.company_name
-                          = delivery_detail.input :customer_id, :as => :hidden
-                        = delivery_detail.inputs :for => :order_quantities do |order_quantity|
-                          .order-quantities
-                            td 
-                              = order_quantity.input :item_id, :as => :hidden
-                              //= order_quantity.object.item.name
-                              = order_quantity.input :quantity, label: false,
-                                input_html: { min:"0", class:"input-mini qty #{order_quantity.object.item.name}" }
+                        = bill.object.delivery_slot.delivery_label
+                        = time_tag bill.object.scheduled_for, format: " %m/%d"
+                        td.delivery-date colspan=current_user.items.count
+                    tr 
+                      th.left-col
+                        = bill.object.customer.company_name
+                      = bill.semantic_fields_for :order_items do |order_item|
+                        = order_item.input :price_charged, label: false, :as => :hidden
+                        = order_item.input :item_id, label: false, :as => :hidden
+                        .order-quantities
+                            td
+                              = order_item.input :quantity, label: false,
+                                input_html: { min:"0", class:"input-mini qty #{order_item.object.item.name}" }
+                              = order_item.object.item.name
                             td.extra
-                              = order_quantity.input :qty_delivered, label: false,
-                                input_html: { min:"0", class:"input-mini qty-delivered #{order_quantity.object.item.name}" }
+                              = order_item.input :qty_delivered, label: false,
+                                input_html: { min:"0", class:"input-mini qty-delivered #{order_item.object.item.name}" }
                             td.extra
-                              = order_quantity.input :qty_returned, label: false,
-                                input_html: { min:"0", class:"input-mini #{order_quantity.object.item.name}" }
+                              = order_item.input :qty_returned, label: false,
+                                input_html: { min:"0", class:"input-mini #{order_item.object.item.name}" }
         div.pull-right
-          = link_to "Reset", dashboard_path, class: "btn btn-large btn-space"
-          = f.submit "Save", class: "btn btn-success btn-large"
-
-
+              = link_to "Reset", dashboard_path, class: "btn btn-large btn-space"
+              = f.submit "Save", class: "btn btn-success btn-large"
   #invoice style="display:none;margin-top:20px;"
-    - if @weekly_schedule.new_record?
-      p
-        center
-          .alert.alert-error
-            h4 Please click 'Update Orders' button above and click 'Save' before sending invoices
-    - else
-      table.table.table-bordered
-        thead
-          tr
-            th Invoice Number
-            th Customer
-            th Total Amount Due (for this week's period)
-            th Invoice Memo
-            th Actions
-        tbody
-          - @weekly_schedule.invoices.each do |invoice|
+      - if @weekly_schedule.new_record?
+        p
+          center
+            .alert.alert-error
+              h4 Please click 'Update Orders' button above and click 'Save' before sending invoices
+      - else
+        table.table.table-bordered
+          thead
             tr
-              td
-                input.invoice-number.input-mini type="text" value=invoice.invoice_number 
-              td
-                = invoice.customer.company_name
-                input.invoice-id-input type="hidden" value=invoice.id
-              td = "$#{number_with_precision(invoice.amount_due, precision:2)}"
-              td
-                input.invoice-memo type="text" value=invoice.memo
-              td
-                a.btn.btn-mini.btn-space target="blank" href=user_invoices_pdf_url(current_user, invoice, format: "pdf") View Invoice as PDF
-                a.btn.btn-mini href="#email-modal-#{invoice.id}" role="button" data-toggle="modal" Email Invoice
-    - @weekly_schedule.invoices.each do |invoice|
-      div id="email-modal-#{invoice.id}" class="modal hide fade"
-        .modal-header
-          button.close type="button" data-dismiss="modal" aria-hidden="true" x
-          h3 Email Invoice
-        .modal-body
-          = form_tag email_invoice_path(invoice), method: "post", id:"#email-form" do       
-            = label_tag :to_email, "To:"
-            = email_field_tag :to_email, "#{invoice.customer.email}"
-            = label_tag :from_email, "From:"
-            = email_field_tag :from_email, "#{current_user.email}", readonly: true
-            = label_tag :subject
-            = text_field_tag :subject, "Invoice for #{invoice.customer.company_name}", class:"input-block-level"
-            = label_tag :body, "Message"
-            = text_area_tag :body, "Attached you'll find your invoice for your recent order. Thank you for your business!",
-              rows:4, class:"input-block-level"
-            em
-              | *Invoice will be attached as PDF when sent
-            br
-            .pull-right
-              a.btn.btn-space type="button" href="#" data-dismiss="modal" Cancel
-              = submit_tag "Send Email", class:"btn btn-primary"
+              th Invoice Number
+              th Customer
+              th Total Amount Due (for this week's period)
+              th Invoice Memo
+              th Actions
+          tbody
+            - @weekly_schedule.invoices.each do |invoice|
+              tr
+                td
+                  input.invoice-number.input-mini type="text" value=invoice.invoice_number 
+                td
+                  = invoice.customer.company_name
+                  input.invoice-id-input type="hidden" value=invoice.id
+                td = "$#{number_with_precision(invoice.amount_due, precision:2)}"
+                td
+                  input.invoice-memo type="text" value=invoice.memo
+                td
+                  a.btn.btn-mini.btn-space target="blank" href=user_invoices_pdf_url(current_user, invoice, format: "pdf") View Invoice as PDF
+                  a.btn.btn-mini href="#email-modal-#{invoice.id}" role="button" data-toggle="modal" Email Invoice
   #view-schedule style="display:none;margin-top:20px;"
     - if @weekly_schedule.new_record?
       p
@@ -150,29 +126,28 @@
                       span = item.first
                 .row-fluid
                   h4.stat-header Summary by Route
-                  - @weekly_schedule.delivery_routes_for_day(day).each do |route|
-                    - if route.items.any?
+                  - @weekly_schedule.delivery_slots_for_day(day).each do |slot|
+                    - if slot.order_items.any?
                       .row-fluid
-                        h5 = route.delivery_slot.delivery_label
+                        h5 = slot.delivery_label
                       .slate.clearfix
                         .row-fluid
-                          - route.items.each do |item|
+                          - slot.items.each do |obj_item|
                             .stat-column
-                              span.route-number = item.last
-                              span = item.first
+                              span.route-number = obj_item.last
+                              span = obj_item.first
                       .row-fluid
-                        h5 = "Customers for #{route.delivery_slot.delivery_label}"
-                      - route.customers_with_orders.each do |customer|
+                        h5 = "Customers for #{slot.delivery_label}"
+                      - slot.customers_with_orders.each do |customer|
                         .slate.clearfix
                           .row-fluid
                             h6 = customer.company_name
                             .row-fluid
-                              - route.items_by_customer(customer.id).each do |item|
+                              - slot.items_by_customer(customer.id).each do |customer_item|
                                 .stat-column
-                                  span.route-number = item.last
-                                  span = item.first
-
-          
+                                  span.route-number = customer_item.last
+                                  span = customer_item.first
+                  
 javascript:
   $('#datepicker').datepicker();
 
@@ -248,7 +223,7 @@ javascript:
     $('#invoice-btn').removeClass('btn-info');
     $('#view-btn').addClass('btn-info');
   }
-  
+
   if ("#{@show_invoice}") {
     showInvoices();
   }

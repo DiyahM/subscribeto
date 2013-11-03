@@ -43,18 +43,18 @@ class InvoicePdf < Prawn::Document
   def invoice_rows
     [["Date","Terms","Due Date","Invoice #"],
      [@invoice.created_at.strftime("%B %d, %Y"),
-      @customer.term, @invoice.due_date, @invoice.invoice_number]]
+      @customer.term, @invoice.formatted_due_date, @invoice.invoice_number]]
   end
   
   def line_item_rows
     [["Qty","Item Descritption", "Unit Price", "Total"]]+
-    @invoice.order_quantities.map do |item|
+    @invoice.order_items.map do |item|
       [item.quantity, invoice_item_desc(item), price(item.item.price), price(item.subtotal)]
     end
   end
 
   def invoice_item_desc(item)
-    "#{item.delivery_detail.delivery_date.scheduled_for.strftime('%m/%d')} - #{item.item.name}"
+    "#{item.bill.scheduled_for.strftime('%m/%d')} - #{item.item.name}"
   end
 
   def left_header

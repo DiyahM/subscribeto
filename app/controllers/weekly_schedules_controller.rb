@@ -1,7 +1,7 @@
 class WeeklySchedulesController < ApplicationController
   def create
-    @weekly_schedule = current_user.weekly_schedules.create(params[:weekly_schedule])
-    if @weekly_schedule.errors.messages.empty?
+    @weekly_schedule = current_user.weekly_schedules.build(params[:weekly_schedule])
+    if @weekly_schedule.save
       @show_invoice = true
       render "pages/dashboard", notice: "Weekly Schedule has been saved"
     else

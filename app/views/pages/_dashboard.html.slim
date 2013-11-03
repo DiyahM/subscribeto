@@ -1,0 +1,254 @@
+.row-fluid
+  #dashboard-header
+    .span7
+      #{time_tag @weekly_schedule.week_start, format: "%b %d"} - #{time_tag @weekly_schedule.end_of_week, format: "%b %d"}
+    .span5.pull-right
+      = form_tag dashboard_path, :method => "get" do
+        = text_field_tag :datepicker,"", placeholder:"Select new week", class:"input-medium"
+        = submit_tag("Change Week", class: "btn", style:"vertical-align:top;margin-left:3px")
+
+#main style="margin-top:50px;"
+
+  #nav-buttons
+    center
+      .btn-group
+        button.btn.btn-large.btn-info#edit-btn onclick="showEditSchedule();" Update Orders
+        button.btn.btn-large#invoice-btn onclick="showInvoices();" Send Invoices 
+        button.btn.btn-large#view-btn onclick="showSchedule();" Summary Report
+
+  #edit-schedule style="margin-top:20px"
+    .row-fluid style="padding:20px"
+      .span10
+        p
+          em
+            | Update order quantities in the table below and click 'Save'
+      .span2.pull-right
+        = link_to_function "Expand Table", "expandTable()", class: "expand"
+        = link_to_function "Collapse Table", "collapseTable()", class: "extra"
+    .row-fluid
+      = semantic_form_for [current_user, @weekly_schedule] do |f|
+        = f.input :week_start, :as => :hidden
+        .outer 
+          .inner
+            table.table.table-bordered.table-condensed.table-hover#dashboard-table 
+              thead
+                tr
+                  th.left-col
+                  - current_user.items.each do |item|
+                    th.item-name 
+                      center
+                        = item.name
+                tr
+                  th.left-col
+                  - (1..current_user.items.length).each do
+                    th Order Qty
+                    th.extra Qty Delivered
+                    th.extra Qty Returned
+
+              tbody 
+                = f.semantic_fields_for :delivery_dates do |delivery_date|
+                  = delivery_date.input :scheduled_for, :as => :hidden
+                  = delivery_date.input :delivery_slot_id, :as => :hidden
+                  - if delivery_date.object.delivery_details.any?
+                    tr
+                      th.left-col 
+                        = delivery_date.object.delivery_slot.delivery_label
+                        = time_tag delivery_date.object.scheduled_for, format: " %m/%d"
+                      td.delivery-date colspan=current_user.items.count
+                    = delivery_date.semantic_fields_for :delivery_details do |delivery_detail|
+                      tr 
+                        th.left-col 
+                          = delivery_detail.object.customer.company_name
+                          = delivery_detail.input :customer_id, :as => :hidden
+                        = delivery_detail.inputs :for => :order_items do |order_quantity|
+                          .order-quantities
+                            td 
+                              = order_quantity.input :item_id, :as => :hidden
+                              //= order_quantity.object.item.name
+                              = order_quantity.input :quantity, label: false,
+                                input_html: { min:"0", class:"input-mini qty #{order_quantity.object.item.name}" }
+                            td.extra
+                              = order_quantity.input :qty_delivered, label: false,
+                                input_html: { min:"0", class:"input-mini qty-delivered #{order_quantity.object.item.name}" }
+                            td.extra
+                              = order_quantity.input :qty_returned, label: false,
+                                input_html: { min:"0", class:"input-mini #{order_quantity.object.item.name}" }
+        div.pull-right
+          = link_to "Reset", dashboard_path, class: "btn btn-large btn-space"
+          = f.submit "Save", class: "btn btn-success btn-large"
+
+
+  #invoice style="display:none;margin-top:20px;"
+    - if @weekly_schedule.new_record?
+      p
+        center
+          .alert.alert-error
+            h4 Please click 'Update Orders' button above and click 'Save' before sending invoices
+    - else
+      table.table.table-bordered
+        thead
+          tr
+            th Invoice Number
+            th Customer
+            th Total Amount Due (for this week's period)
+            th Invoice Memo
+            th Actions
+        tbody
+          - @weekly_schedule.invoices.each do |invoice|
+            tr
+              td
+                input.invoice-number.input-mini type="text" value=invoice.invoice_number 
+              td
+                = invoice.customer.company_name
+                input.invoice-id-input type="hidden" value=invoice.id
+              td = "$#{number_with_precision(invoice.amount_due, precision:2)}"
+              td
+                input.invoice-memo type="text" value=invoice.memo
+              td
+                a.btn.btn-mini.btn-space target="blank" href=user_invoices_pdf_url(current_user, invoice, format: "pdf") View Invoice as PDF
+                a.btn.btn-mini href="#email-modal-#{invoice.id}" role="button" data-toggle="modal" Email Invoice
+    - @weekly_schedule.invoices.each do |invoice|
+      div id="email-modal-#{invoice.id}" class="modal hide fade"
+        .modal-header
+          button.close type="button" data-dismiss="modal" aria-hidden="true" x
+          h3 Email Invoice
+        .modal-body
+          = form_tag email_invoice_path(invoice), method: "post", id:"#email-form" do       
+            = label_tag :to_email, "To:"
+            = email_field_tag :to_email, "#{invoice.customer.email}"
+            = label_tag :from_email, "From:"
+            = email_field_tag :from_email, "#{current_user.email}", readonly: true
+            = label_tag :subject
+            = text_field_tag :subject, "Invoice for #{invoice.customer.company_name}", class:"input-block-level"
+            = label_tag :body, "Message"
+            = text_area_tag :body, "Attached you'll find your invoice for your recent order. Thank you for your business!",
+              rows:4, class:"input-block-level"
+            em
+              | *Invoice will be attached as PDF when sent
+            br
+            .pull-right
+              a.btn.btn-space type="button" href="#" data-dismiss="modal" Cancel
+              = submit_tag "Send Email", class:"btn btn-primary"
+  #view-schedule style="display:none;margin-top:20px;"
+    - if @weekly_schedule.new_record?
+      p
+        center
+          .alert.alert-error
+            h4 Please click "Update Orders" button and click 'Save' before viewing this week's schedule
+    - else
+      #summary-table
+        .row-fluid
+          h2 Summary by Day
+          - Date::DAYNAMES.each do |day|
+            - if @weekly_schedule.items_by_day(day).any?
+              h3 = day 
+              .slate.clearfix
+                .row-fluid
+                  - @weekly_schedule.items_by_day(day).each do |item|
+                    .stat-column
+                      span.number = item.last
+                      span = item.first
+                .row-fluid
+                  h4.stat-header Summary by Route
+                  - @weekly_schedule.delivery_routes_for_day(day).each do |route|
+                    - if route.items.any?
+                      .row-fluid
+                        h5 = route.delivery_slot.delivery_label
+                      .slate.clearfix
+                        .row-fluid
+                          - route.items.each do |item|
+                            .stat-column
+                              span.route-number = item.last
+                              span = item.first
+                      .row-fluid
+                        h5 = "Customers for #{route.delivery_slot.delivery_label}"
+                      - route.customers_with_orders.each do |customer|
+                        .slate.clearfix
+                          .row-fluid
+                            h6 = customer.company_name
+                            .row-fluid
+                              - route.items_by_customer(customer.id).each do |item|
+                                .stat-column
+                                  span.route-number = item.last
+                                  span = item.first
+
+          
+javascript:
+  $('#datepicker').datepicker();
+
+  $('.qty').change(function(){
+    var qty_delivered_class = $(this).attr("class").replace('qty', 'qty-delivered');
+    $(this).parents("tr").find("[class='"+qty_delivered_class+"']").val($(this).val());
+  });
+
+  $('.invoice-memo').change(function(){
+    updateInvoice($(this).parentsUntil("tr"));
+  });
+
+  $('.invoice-number').change(function(){
+    updateInvoice($(this).parents("tr"));
+  });
+
+  var expandTable = function() {
+    $(".item-name").attr('colspan',3);
+    $(".delivery-date").attr('colspan',"#{current_user.items.count}"*3);
+    $(".extra").show();
+    $(".expand").hide();
+  }
+
+  var collapseTable = function() {
+    $(".item-name").attr('colspan',1);
+    $(".delivery-date").attr('colspan',"#{current_user.items.count}");
+    $(".extra").hide();
+    $(".expand").show();
+
+  }
+  var updateInvoice = function (tr) {
+    var invoiceId = tr.find('.invoice-id-input').val();
+    var invoiceNum = tr.find('.invoice-number').val();
+    var invoiceMemo = tr.find('.invoice-memo').val();
+
+    $.ajax({
+      type: 'POST',
+      url: '/invoice/' + invoiceId,
+      data: {
+           "id": invoiceId,
+           "invoice": {
+             "invoice_number": invoiceNum,
+             "memo": invoiceMemo
+             }
+            },
+      async:false
+    });
+  }
+
+  var showEditSchedule = function(){
+    $('#invoice').hide();
+    $('#view-schedule').hide();
+    $('#edit-schedule').show();
+    $('#edit-btn').addClass('btn-info');
+    $('#invoice-btn').removeClass('btn-info');
+    $('#view-btn').removeClass('btn-info');
+  }
+
+  var showInvoices = function() {
+    $('#edit-schedule').hide();
+    $('#view-schedule').hide();
+    $('#invoice').show();
+    $('#edit-btn').removeClass('btn-info');
+    $('#invoice-btn').addClass('btn-info');
+    $('#view-btn').removeClass('btn-info');
+  }
+
+  var showSchedule = function(){
+    $('#invoice').hide();
+    $('#view-schedule').show();
+    $('#edit-schedule').hide();
+    $('#edit-btn').removeClass('btn-info');
+    $('#invoice-btn').removeClass('btn-info');
+    $('#view-btn').addClass('btn-info');
+  }
+  
+  if ("#{@show_invoice}") {
+    showInvoices();
+  }
