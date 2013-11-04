@@ -53,9 +53,11 @@
     .control-group
       = label_tag nil, "Assigned Delivery Times", class: "control-label"
       .controls
-        - current_user.delivery_slots.each do |slot|
-          = check_box_tag "customer[delivery_slot_ids][]", slot.id, @customer.delivery_slot_ids.include?(slot.id), id: dom_id(slot), class: "checkbox inline"
-          = label_tag dom_id(slot), slot.delivery_label, class: "checkbox inline", style: "margin-left:-15px; margin-right:20px"
+        -Date::DAYNAMES.each do |day|
+          -if current_user.delivery_slots.map(&:day).include?(day)
+            - current_user.delivery_slots.where(day: day).each do |slot|
+              = check_box_tag "customer[delivery_slot_ids][]", slot.id, @customer.delivery_slot_ids.include?(slot.id), id: dom_id(slot), class: "checkbox inline"
+              = label_tag dom_id(slot), slot.delivery_label, class: "checkbox inline", style: "margin-left:-15px; margin-right:20px"
 
   .row-fluid style="border-top:1px solid #ccc;padding-top:10px;"
     .span12
