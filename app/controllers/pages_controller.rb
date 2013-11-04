@@ -3,7 +3,7 @@ class PagesController < ApplicationController
   before_filter :check_if_setup_complete, :only => [:dashboard]
 
   def home
-    @layout = "home"
+    @homepage = true
   end
 
   def mark_delivered
