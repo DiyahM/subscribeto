@@ -90,6 +90,7 @@
               th Customer
               th Total Amount Due (for this week's period)
               th Invoice Memo
+              th State
               th Actions
           tbody
             - @weekly_schedule.invoices.each do |invoice|
@@ -102,6 +103,8 @@
                 td = "$#{number_with_precision(invoice.amount_due, precision:2)}"
                 td
                   input.invoice-memo type="text" value=invoice.memo
+                td
+                  h3 =invoice.state
                 td
                   =render partial: "partials/invoice_actions", locals: { invoice: invoice }
   #view-schedule style="display:none;margin-top:20px;"
