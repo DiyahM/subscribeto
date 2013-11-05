@@ -1,0 +1,12 @@
+-if defined?(invoice)
+  -if invoice.state?(Invoice::FINAL)
+    a.btn.btn-mini.btn-space target="blank" href=user_invoices_pdf_url(current_user, invoice, format: "pdf")
+                      | View Invoice as PDF
+    a.btn.btn-mini href="#email-modal-#{invoice.id}" role="button" data-toggle="modal" Email Invoice
+    = render partial: "partials/invoice_email_form", locals: { invoice: invoice }
+  -elsif invoice.state?(Invoice::DRAFT)
+    a.btn.btn-mini.btn-space href=user_invoice_path(current_user, invoice)
+                    | View/Edit Invoice
+    =link_to "Approve it", transit_invoice_state_path(invoice, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
+    .pull-right
+      =link_to "Destroy", user_invoice_path(current_user, invoice), confirm: "Are you sure you want to delete this invoice?", class: "btn btn-mini btn-danger", method: :delete

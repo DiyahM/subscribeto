@@ -20,10 +20,10 @@
           =link_to @invoice.customer.company_name, user_customer_path(current_user, @invoice.customer)
         td
           -if f.object.state?(Invoice::DRAFT)
-            =link_to "Approve it", transit_invoice_state_path(f.object, new_state: Invoice::APPROVED), class: "btn btn-mini btn-space", method: :put
-            =link_to "Finalize it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
-          -elsif f.object.state?(Invoice::APPROVED)
-            =link_to "Finalize it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
+            =link_to "Approve it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
+            / =link_to "Finalize it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
+          / -elsif f.object.state?(Invoice::APPROVED)
+          /   =link_to "Finalize it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
           -else
             | Invoice already finalized
 
@@ -31,11 +31,12 @@
           h1 =f.object.amount_due
         
   .span11
-    h3 Order Items Listed in Invoice no.#{@invoice.invoice_number}
+    h3 Order Items in Schedule (#{time_tag @invoice.weekly_schedule.week_start, format: "%b %d"} - #{time_tag @invoice.weekly_schedule.end_of_week, format: "%b %d"})
     table.table
       thead  
         tr
           th Order Item
+          th Delivery route
           th Ordererd Quantity
           th Delivered Quantity
           th Quantity Returned
@@ -46,6 +47,8 @@
              tr
               td
                 h4 =o_item.object.item.name
+              td
+                =o_item.object.bill.delivery_slot.delivery_label
               td
                 =o_item.input :quantity, label: false
               td
@@ -62,7 +65,7 @@
       =link_to "Cancel", user_invoices_path(current_user), class: "btn btn-large"
     -else
       .pull-left
-        | You cannot update a drafted invoice
+        | You cannot update a non drafted invoice
       / =f.submit "Update Invoice", class: "btn btn-success btn-large", disabled: true
       
     

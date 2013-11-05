@@ -8,7 +8,7 @@ class Invoice < ActiveRecord::Base
   belongs_to :user
   belongs_to :weekly_schedule
 
-  has_one :bill
+  has_many :bills
   has_many :order_items
   
   after_initialize :default_values
@@ -24,15 +24,12 @@ class Invoice < ActiveRecord::Base
   before_destroy :validate_state
 
   scope :drafted, -> { where(state: DRAFT) }
-  scope :approved, -> { where(state: APPROVED) }
   scope :finalized, -> { where(state: FINAL) }
-  scope :non_drafted, -> { where("state = '#{FINAL}' or state = '#{APPROVED}'") }
 
   DRAFT     =   "draft"
-  APPROVED  =   "approved"
   FINAL     =   "final"
 
-  STATES    = [DRAFT, APPROVED, FINAL]
+  STATES    = [DRAFT, FINAL]
 
   def can_be_editted?
     self.state.eql?(DRAFT) ? true : false
@@ -47,8 +44,6 @@ class Invoice < ActiveRecord::Base
     case state
     when DRAFT
       my_state.eql?(DRAFT)
-    when APPROVED
-      my_state.eql?(APPROVED)
     when FINAL
       my_state .eql?(FINAL)
     else

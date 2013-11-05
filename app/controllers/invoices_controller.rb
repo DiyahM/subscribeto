@@ -59,13 +59,12 @@ class InvoicesController < ApplicationController
 
   def index
     @drafted_invoices = current_user.invoices.drafted.order("invoice_number DESC").includes(:customer, :order_items)
-    @approved_invoices = current_user.invoices.approved.order("invoice_number DESC").includes(:customer, :order_items)
     @finalized_invoices = current_user.invoices.finalized.order("invoice_number DESC").includes(:customer, :order_items)
   end
 
   def show 
     @invoice = current_user.invoices.find(params[:id])
-    @invoice.build_order_items
+    # @invoice.build_order_items
   end
 
   # def create

@@ -20,13 +20,12 @@ class WeeklySchedule < ActiveRecord::Base
   
   # accepts_nested_attributes_for :delivery_dates
   
-  # after_save :create_invoices_for_week
+  after_save :create_invoices_for_week
 
   def self.new_find_or_initialize_by(week_start, user_id)
     schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
     user = User.find(user_id)
     unless schedule
-      logger.info "*" * 100
       schedule = WeeklySchedule.new(week_start: week_start)
       user.delivery_slots.each do |slot|
         user.customers.includes(:delivery_slots).each do |customer|

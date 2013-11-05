@@ -55,29 +55,31 @@
       a href="#uninvoiced-orders" data-toggle="tab" Uninvoiced Items 
   .tab-content
     #customer-orders.tab-pane.active
-      - @customer.bills.each do |bill|
-        strong 
-          = "Week of "
-          = time_tag bill.weekly_schedule.week_start, format: '%m/%d/%y'
-        table.table.table-condensed.table-striped.table-bordered
-          thead
-            tr
-              th Qty
-              th Item
-              th Unit Price
-              th Total Amount
-          tbody
-            - bill.order_items.each do |order_item|
-              tr
-                td = order_item.quantity
-                td = "#{bill.scheduled_for} #{order_item.item.name}"
-                td = number_with_precision order_item.price_charged, precision:2
-                td = number_with_precision order_item.subtotal, precision: 2
-            tr
-              td colspan=3 Total
-              td = number_with_precision @customer.amount_due_for_week(bill.weekly_schedule), precision: 2
+      - @customer.user.weekly_schedules.each do |weekly_schedule|
+        -unless weekly_schedule.customer_not_invoiced?(@customer.id)
+          strong 
+            = "Week of "
+            = time_tag weekly_schedule.week_start, format: '%m/%d/%y' 
 
+            table.table.table-condensed.table-striped.table-bordered
+              thead
+                tr
+                  th Qty
+                  th Item
+                  th Unit Price
+                  th Total Amount
+              tbody
+                - weekly_schedule.bills.where(customer_id: @customer.id).each do |bill|
+                  - bill.order_items.each do |order_item|
+                    tr
+                      td = order_item.quantity
+                      td = "#{bill.scheduled_for} #{order_item.item.name}"
+                      td = number_with_precision order_item.price_charged, precision:2
+                      td = number_with_precision order_item.subtotal, precision: 2
+                tr
+                  td colspan=3 Total
+                  td = number_with_precision @customer.amount_due_for_week(weekly_schedule), precision: 2
     #customer-invoices.tab-pane
-      =render partial: "partials/customer_invoices_view", locals: {invoices: @customer.invoices.non_drafted }
+      =render partial: "partials/customer_invoices_view", locals: { invoices: @customer.invoices.finalized }
     #uninvoiced-orders.tab-pane
       =render partial: "partials/invoice_list_view", locals: { invoices: @customer.invoices.drafted }

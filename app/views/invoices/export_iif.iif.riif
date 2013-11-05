@@ -14,18 +14,18 @@ iif.trns do
       addr2 invoice.customer.address_two
     end
 
-    invoice.order_items.map do |line_item|
+    invoice.order_items.map do |order_item|
       spl do
         row do
-          splid line_item.item.id
+          splid order_item.item.id
           trnstype 'INVOICE'
-          date line_item.delivery_date
+          date order_item.bill.scheduled_for
           accnt 'Income Account'
-          amount line_item.subtotal_iif
+          amount order_item.subtotal_iif
           clear 'N'
-          qnty line_item.quantity_iif
-          price line_item.item.price
-          invitem line_item.item.name
+          qnty order_item.quantity_iif
+          price order_item.price_charged
+          invitem order_item.item.name
           taxable 'N'
         end
       end

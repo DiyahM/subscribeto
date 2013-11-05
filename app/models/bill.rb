@@ -11,7 +11,7 @@ class Bill < ActiveRecord::Base
 
   has_many :order_items
 
-  accepts_nested_attributes_for :order_items, :allow_destroy => true#, :reject_if => {|order_item| order_item[:item_id].blank? or order_item[:price_charged].blank?}
+  accepts_nested_attributes_for :order_items, :allow_destroy => true, :reject_if => lambda { |order_item| order_item[:item_id].blank? or order_item[:qty_delivered].blank? or (order_item[:qty_delivered].to_i < 1 and order_item[:qty_returned].to_i < 1 and order_item[:quantity].to_i < 1) }
 
   def build_order_items(associated_attributes={})
     user.items.all.each do |item|

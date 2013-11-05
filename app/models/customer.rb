@@ -11,6 +11,7 @@ class Customer < ActiveRecord::Base
   # has_many :delivery_details, :dependent => :destroy
   # has_many :delivery_dates, through: :delivery_details
   has_many :bills
+  has_many :weekly_schedules, through: :bills, uniq: true
   has_many :order_items, through: :bills
   has_many :invoices, :dependent => :destroy
 
@@ -29,7 +30,11 @@ class Customer < ActiveRecord::Base
   end
 
   def order_items_for_week(weekly_schedule)    #delivery_details_for_week
-    bills.find_by_weekly_schedule_id(weekly_schedule.id).order_items
+    array = []
+    self.bills.where(weekly_schedule_id: weekly_schedule.id).each do |bill|
+      array << bill.order_items
+    end
+    return array.flatten
   end
 
   def orders
