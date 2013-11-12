@@ -25,4 +25,8 @@ class Bill < ActiveRecord::Base
       end
     end
   end
+
+  def enough_items_delivered?
+    self.order_items.map(&:qty_delivered).sum > 0 ? true : false
+  end
 end

@@ -15,7 +15,7 @@ class OrderItem < ActiveRecord::Base
   end
 
   def subtotal
-    price_charged * quantity
+    price_charged * qty_delivered
   end
 
   def quantity_iif

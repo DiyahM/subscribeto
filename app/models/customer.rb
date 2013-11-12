@@ -32,7 +32,7 @@ class Customer < ActiveRecord::Base
   def order_items_for_week(weekly_schedule)    #delivery_details_for_week
     array = []
     self.bills.where(weekly_schedule_id: weekly_schedule.id).each do |bill|
-      array << bill.order_items
+      array << bill.order_items if bill.enough_items_delivered?
     end
     return array.flatten
   end

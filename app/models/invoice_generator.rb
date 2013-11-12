@@ -6,11 +6,13 @@ class InvoiceGenerator
         invoice = customer.invoices.create(user_id: customer.user_id, weekly_schedule_id: weekly_schedule.id,
                                           invoice_number: invoice_number)
         invoice.order_items << customer.order_items_for_week(weekly_schedule)
-      else
+      else        
         invoice = weekly_schedule.invoices.find_by_customer_id(customer.id)
-        invoice.order_items << customer.order_items_for_week(weekly_schedule)
+        if invoice.order_items.size != customer.order_items_for_week(weekly_schedule).size
+          invoice.order_items.delete_all
+          invoice.order_items << customer.order_items_for_week(weekly_schedule)
+        end
       end
-
     end
   end 
 
