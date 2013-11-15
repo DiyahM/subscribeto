@@ -8,7 +8,7 @@ class InvoiceGenerator
         invoice.order_items << customer.order_items_for_week(weekly_schedule)
       else        
         invoice = weekly_schedule.invoices.find_by_customer_id(customer.id)
-        if invoice.order_items.size != customer.order_items_for_week(weekly_schedule).size
+        if invoice and invoice.order_items.size != customer.order_items_for_week(weekly_schedule).size
           invoice.order_items.delete_all
           invoice.order_items << customer.order_items_for_week(weekly_schedule)
         end

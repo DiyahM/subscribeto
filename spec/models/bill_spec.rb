@@ -6,6 +6,4 @@ describe Bill do
   it { should have_db_column(:user_id) }
   it { should have_db_column(:delivery_slot_id) }
 
-  
-
 end

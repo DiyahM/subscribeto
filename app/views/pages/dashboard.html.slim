@@ -11,71 +11,81 @@
     center
       .btn-group
         button.btn.btn-large.btn-info#edit-btn onclick="showEditSchedule();" Update Orders
-        button.btn.btn-large#invoice-btn onclick="showInvoices();" Send Invoices 
+        button.btn.btn-large#invoice-btn onclick="showInvoices();" Send Invoices
         button.btn.btn-large#view-btn onclick="showSchedule();" Summary Report
 
-  #edit-schedule style="margin-top:20px"
-    .row-fluid style="padding:20px"
-      .span10
-        p
-          em
-            | Update order quantities in the table below and click 'Save'
-      .span2.pull-right
-        = link_to_function "Expand Table", "expandTable()", class: "expand"
-        = link_to_function "Collapse Table", "collapseTable()", class: "extra"
-    .row-fluid
-      = semantic_form_for [current_user, @weekly_schedule] do |f|
-        = f.input :week_start, label: false, :as => :hidden
-        = f.input :user_id, label: false, :as => :hidden
-        .outer 
-            .inner
-              table.table.table-bordered.table-condensed.table-hover#dashboard-table 
-                thead
-                  tr
-                    th.left-col
-                    / = f.semantic_fields_for :bills do |bill|
-                    /   = bill.semantic_fields_for :order_items do |order_item|
-                    - f.object.bills.first.order_items.each do |order_item|
-                      th.item-name 
-                        center
-                          = order_item.item.name
-                  tr
-                      th.left-col
-                      - (1..current_user.items.length).each do
-                        th Order Qty
-                        th.extra Qty Delivered
-                        th.extra Qty Returned
-                tbody 
-                  = f.semantic_fields_for :bills do |bill|
-                    = bill.input :delivery_slot_id, label: false, :as => :hidden
-                    = bill.input :customer_id, label: false, :as => :hidden
-                    = bill.input :user_id, label: false, :as => :hidden
-                    = bill.input :scheduled_for, label: false, :as => :hidden
+  
+  - if @weekly_schedule.bills.blank?
+    #edit-schedule style="margin-top:20px"
+      p
+        center
+          .alert.alert-error
+            h4  
+              =link_to "Please assign a delivery route to your customer(s) in order to bill them", user_customers_path(current_user)
+              
+  -else
+    #edit-schedule style="margin-top:20px"
+      .row-fluid style="padding:20px"
+        .span10
+          p
+            em
+              | Update order quantities in the table below and click 'Save'
+        .span2.pull-right
+          = link_to_function "Expand Table", "expandTable()", class: "expand"
+          = link_to_function "Collapse Table", "collapseTable()", class: "extra"
+      .row-fluid
+        = semantic_form_for [current_user, @weekly_schedule] do |f|
+          = f.input :week_start, label: false, :as => :hidden
+          = f.input :user_id, label: false, :as => :hidden
+          .outer 
+              .inner
+                table.table.table-bordered.table-condensed.table-hover#dashboard-table 
+                  thead
                     tr
-                      th.left-col 
-                        = bill.object.delivery_slot.delivery_label
-                        = time_tag bill.object.scheduled_for, format: " %m/%d"
-                        td.delivery-date colspan=current_user.items.count
-                    tr 
                       th.left-col
-                        = bill.object.customer.company_name
-                      = bill.semantic_fields_for :order_items do |order_item|
-                        = order_item.input :price_charged, label: false, :as => :hidden
-                        = order_item.input :item_id, label: false, :as => :hidden
-                        .order-quantities
-                            td
-                              = order_item.input :quantity, label: false,
-                                input_html: { min:"0", class:"input-mini qty #{order_item.object.item.name}" }
-                              = order_item.object.item.name
-                            td.extra
-                              = order_item.input :qty_delivered, label: false,
-                                input_html: { min:"0", class:"input-mini qty-delivered #{order_item.object.item.name}" }
-                            td.extra
-                              = order_item.input :qty_returned, label: false,
-                                input_html: { min:"0", class:"input-mini #{order_item.object.item.name}" }
-        div.pull-right
-              = link_to "Reset", dashboard_path, class: "btn btn-large btn-space"
-              = f.submit "Save", class: "btn btn-success btn-large"
+                      / = f.semantic_fields_for :bills do |bill|
+                      /   = bill.semantic_fields_for :order_items do |order_item|
+                      - f.object.bills.first.order_items.each do |order_item|
+                        th.item-name 
+                          center
+                            = order_item.item.name
+                    tr
+                      th.left-col
+                        - (1..current_user.items.length).each do
+                          th Order Qty
+                          th.extra Qty Delivered
+                          th.extra Qty Returned
+                  tbody 
+                    = f.semantic_fields_for :bills do |bill|
+                      tr
+                        th.left-col 
+                          = bill.object.delivery_slot.delivery_label
+                          = time_tag bill.object.scheduled_for, format: " %m/%d"
+                          td.delivery-date colspan=current_user.items.count
+                      tr 
+                        th.left-col
+                          = bill.object.customer.company_name
+                        = bill.semantic_fields_for :order_items do |order_item|
+                          = order_item.input :price_charged, label: false, :as => :hidden
+                          = order_item.input :item_id, label: false, :as => :hidden
+                          .order-quantities
+                              td.non-extra
+                                = order_item.input :quantity, label: false,
+                                  input_html: { min:"0", class:"input-mini qty #{order_item.object.item.name}" }
+                                = order_item.object.item.name
+                              td.extra
+                                = order_item.input :qty_delivered, label: false,
+                                  input_html: { min:"0", class:"input-mini qty-delivered #{order_item.object.item.name}" }
+                              td.extra
+                                = order_item.input :qty_returned, label: false,
+                                  input_html: { min:"0", class:"input-mini #{order_item.object.item.name}" }
+                        = bill.input :delivery_slot_id, label: false, :as => :hidden
+                        = bill.input :customer_id, label: false, :as => :hidden
+                        = bill.input :user_id, label: false, :as => :hidden
+                        = bill.input :scheduled_for, label: false, :as => :hidden
+          div.pull-right
+            = link_to "Reset", dashboard_path, class: "btn btn-large btn-space"
+            = f.submit "Save", class: "btn btn-success btn-large", id: 'done'
   #invoice style="display:none;margin-top:20px;"
       - if @weekly_schedule.new_record?
         p
