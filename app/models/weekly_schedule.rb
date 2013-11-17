@@ -22,30 +22,33 @@ class WeeklySchedule < ActiveRecord::Base
   
   after_save :create_invoices_for_week
 
-  def self.new_find_or_initialize_by(week_start, user_id)
-    schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
-    user = User.find(user_id)
-    unless schedule
-      schedule = WeeklySchedule.new(week_start: week_start)
-      user.delivery_slots.each do |slot|
-        user.customers.includes(:delivery_slots).each do |customer|
-          if customer.delivery_slots.include?(slot)
-            schedule.bills.build(customer_id: customer.id, 
-                                  user_id: user_id, 
-                                  scheduled_for: slot.get_date_for(week_start), 
-                                  delivery_slot_id: slot.id)
-          end
-        end
-      end
-      schedule.bills.each { |bill| bill.build_order_items }
-    end
-    schedule
-  end
+  # def self.new_find_or_initialize_by(week_start, user_id)
+  #   schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
+  #   user = User.find(user_id)
+  #   unless schedule
+  #     schedule = WeeklySchedule.new(week_start: week_start)
+  #     user.delivery_slots.each do |slot|
+  #       user.customers.includes(:delivery_slots).each do |customer|
+  #         if customer.delivery_slots.include?(slot)
+  #           schedule.bills.build(customer_id: customer.id, 
+  #                                 user_id: user_id, 
+  #                                 scheduled_for: slot.get_date_for(week_start), 
+  #                                 delivery_slot_id: slot.id)
+  #         end
+  #       end
+  #     end
+  #     schedule.bills.each { |bill| bill.build_order_items }
+  #   end
+  #   schedule
+  # end
 
   def self.find_or_initialize_by(week_start, user_id)
     schedule = WeeklySchedule.find_by_week_start_and_user_id(week_start, user_id)
     user = User.find(user_id)
+    last_schedule_id = 0 
     unless schedule
+      last_schedule = user.weekly_schedules.last
+      last_schedule_id = last_schedule.id if last_schedule
       schedule = WeeklySchedule.new(week_start: week_start)
       user.delivery_slots.each do |slot|
         user.customers.includes(:delivery_slots).each do |customer|
@@ -54,8 +57,10 @@ class WeeklySchedule < ActiveRecord::Base
           end
         end
       end
-      schedule.bills.each { |bill| bill.build_order_items }
+      schedule.bills.each { |bill| bill.build_order_items(last_schedule_id) }
     else
+      last_schedule = user.weekly_schedules.where("id < #{schedule.id}").last
+      last_schedule_id = last_schedule.id if last_schedule
       user.delivery_slots.each do |slot|
         user.customers.includes(:delivery_slots).each do |customer|
           if customer.delivery_slots.include?(slot) and !schedule.bills.map(&:customer_id).include?(customer.id)
@@ -63,7 +68,7 @@ class WeeklySchedule < ActiveRecord::Base
           end
         end
       end
-      schedule.bills.each { |bill| bill.build_order_items } if schedule.bills
+      schedule.bills.each { |bill| bill.build_order_items(last_schedule_id) } if schedule.bills
     end
     schedule.bills.each { |bill| bill.order_items.sort_by!{ |e| e[:item_id]} }
     schedule
