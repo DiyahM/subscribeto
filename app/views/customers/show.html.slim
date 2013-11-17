@@ -82,4 +82,4 @@
     #customer-invoices.tab-pane
       =render partial: "partials/customer_invoices_view", locals: { invoices: @customer.invoices.finalized }
     #uninvoiced-orders.tab-pane
-      =render partial: "partials/invoice_list_view", locals: { invoices: @customer.invoices.drafted }
+      =render partial: "partials/invoice_list_view", locals: { invoices: @customer.invoices.drafted, exporting_allowed: true }

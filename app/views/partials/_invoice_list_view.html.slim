@@ -2,8 +2,7 @@
   table.table
     thead
       tr
-        th
-          input.select-all type="checkbox"
+        = exporting_header(exporting_allowed)
         th Invoice Number
         th Invoice Date
         th Customer
@@ -17,8 +16,7 @@
       -else
         - invoices.each do |invoice|
           tr
-            td
-              input.invoice-id type="checkbox" value=invoice.id
+            = exporting_check(invoice, exporting_allowed)
             td = invoice.invoice_number
             td = time_tag invoice.created_at, format: "%m/%d/%y"
             td = link_to invoice.customer.company_name, user_customer_path(current_user, invoice.customer) if invoice.customer

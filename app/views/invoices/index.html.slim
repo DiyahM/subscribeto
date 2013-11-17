@@ -1,22 +1,17 @@
 .row-fluid style="margin-top:25px"
   .span9
     h3 Invoices in Draft
-  .pull-right
-    a.btn.btn-primary onclick="exportIif()" Export to IFF
-
-  =render partial: 'partials/invoice_list_view', locals: {invoices: @drafted_invoices }
+  =render partial: 'partials/invoice_list_view', locals: {invoices: @drafted_invoices, exporting_allowed: false }
 
 .row-fluid style="margin-top:25px"
   .span9
     h3 Finalized Invoices 
-  .pull-right
-    a.btn.btn-primary onclick="exportIif()" Export to IFF
+  = exporting_button(true)
+  / .pull-right
+  /   a.btn.btn-primary onclick="exportIif()" Export to IFF
+
     / =link_to "New Invoice", new_user_invoice_path(current_user), class: "btn btn-success", style: "margin-left:2px;"
-
-  =render partial: 'partials/invoice_list_view', locals: {invoices: @finalized_invoices }
-
-
-
+  =render partial: 'partials/invoice_list_view', locals: {invoices: @finalized_invoices, exporting_allowed: true }
 
 javascript:
   $(".select-all").click(function() {
