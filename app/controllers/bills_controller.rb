@@ -13,7 +13,7 @@ class BillsController < ApplicationController
 
   def new
     week_start = Time.zone.today.beginning_of_week(:sunday)
-    @weekly_schedule = WeeklySchedule.new_find_or_initialize_by(week_start, current_user.id)
+    @weekly_schedule = WeeklySchedule.find_or_initialize_by(week_start, current_user.id)
   end
 
   def show
