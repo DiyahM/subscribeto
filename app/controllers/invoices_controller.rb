@@ -47,13 +47,16 @@ class InvoicesController < ApplicationController
     if params[:new_state] and Invoice::STATES.include?(params[:new_state])
       invoice = current_user.invoices.find(params[:id])
       if invoice and invoice.update_attributes(state: params[:new_state])
+        redirect_to params[:back_url], notice: "Successfully tranisted the state of invoice to #{params[:new_state]}" and return unless params[:back_url].nil?
         redirect_to :back, notice: "Successfully tranisted the state of invoice to #{params[:new_state]}"
         return
       else
+        redirect_to params[:back_url], notice: "Something is not right! Please try again later" and return unless params[:back_url].nil?
         redirect_to :back, notice: "Something is not right! Please try again later"
         return
       end
     end
+    redirect_to params[:back_url], notice: "Invalid state passed, Please make sure you are doing a valid operation" and return unless params[:back_url].nil?
     redirect_to :back, notice: "Invalid state passed, Please make sure you are doing a valid operation"
   end
 

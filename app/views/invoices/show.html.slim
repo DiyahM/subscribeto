@@ -20,7 +20,7 @@
           =link_to @invoice.customer.company_name, user_customer_path(current_user, @invoice.customer)
         td
           -if f.object.state?(Invoice::DRAFT)
-            =link_to "Approve it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
+            =link_to "Approve it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL, back_url: user_invoices_path(current_user) ), class: "btn btn-mini btn-space", method: :put
             / =link_to "Finalize it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
           / -elsif f.object.state?(Invoice::APPROVED)
           /   =link_to "Finalize it", transit_invoice_state_path(f.object, new_state: Invoice::FINAL), class: "btn btn-mini btn-space", method: :put
