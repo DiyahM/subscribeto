@@ -13,17 +13,19 @@ class Bill < ActiveRecord::Base
 
   accepts_nested_attributes_for :order_items, :allow_destroy => true, :reject_if => lambda { |order_item| order_item[:item_id].blank? or order_item[:qty_delivered].blank? or (order_item[:qty_delivered].to_i < 1 and order_item[:qty_returned].to_i < 1 and order_item[:quantity].to_i < 1) }
 
+  before_save :delete_zero_delivered_items
+
   def build_order_items(last_schedule_id,associated_attributes={})
     user.items.all.each do |item|
       unless self.order_items.map(&:item_id).include?(item.id)
-        if self.last_bill(last_schedule_id).blank?
+        if !self.new_record? or self.last_bill(last_schedule_id).blank?
           self.order_items.build(item_id: item.id,
                                   price_charged: item.price,
                                   quantity: 0,
                                   qty_delivered: 0,
                                   qty_returned: 0
                                 )
-        else
+        elsif self.last_bill(last_schedule_id)
           self.order_items.build(item_id: item.id,
                                   price_charged: item.price,
                                   quantity: self.last_bill(last_schedule_id).find_item(item.id, "quantity"),
@@ -60,6 +62,12 @@ class Bill < ActiveRecord::Base
 
   def last_bill(passed_weekly_schedule_id)
     Bill.where(weekly_schedule_id: passed_weekly_schedule_id, delivery_slot_id: self.delivery_slot_id, user_id: self.user_id, customer_id: self.customer_id).first
+  end
+
+  def delete_zero_delivered_items
+    self.order_items.each do |item|
+      item.delete if item.qty_delivered < 1
+    end
   end
 
 end

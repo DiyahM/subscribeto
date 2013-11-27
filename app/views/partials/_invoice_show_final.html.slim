@@ -1,0 +1,14 @@
+=f.semantic_fields_for :order_items do |o_item|
+  tr
+    td
+      h4 =o_item.object.item.name
+    td
+      =o_item.object.bill.delivery_slot.delivery_label
+    td
+      =o_item.object.quantity
+    td
+      =o_item.object.qty_delivered
+    td
+      =o_item.object.qty_returned
+    td
+      =o_item.object.price_charged

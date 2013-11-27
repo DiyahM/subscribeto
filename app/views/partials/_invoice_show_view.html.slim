@@ -1,0 +1,25 @@
+div  
+  table.table
+    thead  
+      tr
+        th Order Item
+        th Delivery route
+        th Ordererd Quantity
+        th Delivered Quantity
+        th Quantity Returned
+        th Price Charged
+        - if f.object.state?(Invoice::DRAFT)
+          th Remove
+      tbody
+        - if f.object.state?(Invoice::DRAFT)      
+          =render partial: "partials/invoice_show_draft", locals: {f: f}
+        -else
+          =render partial: "partials/invoice_show_final", locals: {f: f}
+div.pull-right
+  - if f.object.state?(Invoice::DRAFT)
+    =f.submit "Update Invoice", class: "btn btn-success btn-large"
+    =link_to "Cancel", user_invoices_path(current_user), class: "btn btn-large"
+  -else
+    .pull-left
+      | You cannot update a non drafted invoice
+    / =f.submit "Update Invoice", class: "btn btn-success btn-large", disabled: true

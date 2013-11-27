@@ -22,6 +22,7 @@ class Invoice < ActiveRecord::Base
   before_create :generate_invoice_number, unless: Proc.new { |invoice| invoice.invoice_number.present? }
   before_create :add_default_state
   before_destroy :validate_state
+  before_save :delete_zero_delivered_items
 
   scope :drafted, -> { where(state: DRAFT) }
   scope :finalized, -> { where(state: FINAL) }
@@ -159,4 +160,10 @@ class Invoice < ActiveRecord::Base
     the_due_date
   end
   
+  def delete_zero_delivered_items
+    self.order_items.each do |item|
+      item.delete if item.qty_delivered < 1
+    end
+  end
+
 end

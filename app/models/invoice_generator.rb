@@ -12,6 +12,7 @@ class InvoiceGenerator
           invoice.order_items.delete_all
           invoice.order_items << customer.order_items_for_week(weekly_schedule)
         end
+        invoice.destroy if invoice and invoice.order_items.size == 0
       end
     end
   end 
