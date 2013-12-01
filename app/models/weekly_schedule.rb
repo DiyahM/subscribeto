@@ -63,7 +63,7 @@ class WeeklySchedule < ActiveRecord::Base
       last_schedule_id = last_schedule.id if last_schedule
       user.delivery_slots.each do |slot|
         user.customers.includes(:delivery_slots).each do |customer|
-          if customer.delivery_slots.include?(slot) and !schedule.bills.map(&:customer_id).include?(customer.id)
+          if customer.delivery_slots.map(&:id).include?(slot.id) and !schedule.bills.where(delivery_slot_id: slot.id).map(&:customer_id).include?(customer.id)
             schedule.build_bill(customer, user_id, slot)
           end
         end
@@ -75,9 +75,9 @@ class WeeklySchedule < ActiveRecord::Base
   end
 
   def build_bill(customer, user_id, slot)
-    bills.build(customer_id: customer.id, 
+    self.bills.build(customer_id: customer.id, 
                 user_id: user_id, 
-                scheduled_for: slot.get_date_for(week_start), 
+                scheduled_for: slot.get_date_for(self.week_start), 
                 delivery_slot_id: slot.id) 
   end
 
