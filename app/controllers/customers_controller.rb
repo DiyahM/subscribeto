@@ -96,4 +96,21 @@ class CustomersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def create_invoice_from_bills
+    if params[:bills] and !params[:bills].blank?
+      invoice = current_user.invoices.create(customer_id: params[:id] )
+      bills = Bill.where(id: params[:bills])
+      if !bills.blank? and bills.update_all(invoice_id: invoice.id)
+        bills.each do |bill|
+          bill.order_items.update_all(invoice_id: invoice.id)
+          # bill.invoice.destroy if bill.invoice.bills.blank?
+        end
+        redirect_to user_invoice_path(current_user, invoice), notice: "This is your new invoice for the bills"
+      else
+        redirect_to :back, notice: "Something didnt let invoice create"
+      end
+    end
+
+  end
 end

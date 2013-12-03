@@ -17,7 +17,11 @@ Subscribeto::Application.routes.draw do
   
   resources :users do
     resources :delivery_slots, :only => ["index", "create", "destroy"]
-    resources :customers, :except => ["destroy"] 
+    resources :customers, :except => ["destroy"] do
+      member do
+        post 'create_invoice_from_bills', as: :customer_bills_to_invoice
+      end
+    end 
     get "customers/:id/archive", to: 'customers#archive', as: 'archive_customer'
     resources :invoices
     get "/invoices/pdfs/:id", to: 'invoices#pdf', as: 'invoices_pdf'

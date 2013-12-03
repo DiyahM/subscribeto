@@ -31,7 +31,8 @@
           h1 =f.object.amount_due
         
   .span11
-    h3 Order Items in Schedule (#{time_tag @invoice.weekly_schedule.week_start, format: "%b %d"} - #{time_tag @invoice.weekly_schedule.end_of_week, format: "%b %d"})
+    - if @invoice.weekly_schedule
+      h3 Order Items in Schedule (#{time_tag @invoice.weekly_schedule.week_start, format: "%b %d"} - #{time_tag @invoice.weekly_schedule.end_of_week, format: "%b %d"}) 
   =render partial: "partials/invoice_show_view", locals: {f: f}
       
     

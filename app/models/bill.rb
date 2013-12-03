@@ -70,4 +70,12 @@ class Bill < ActiveRecord::Base
     end
   end
 
+  def amount_due
+    total = 0
+    order_items.each do |order_item|  
+      total += order_item.subtotal
+    end
+    return total
+  end
+
 end

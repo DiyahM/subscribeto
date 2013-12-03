@@ -82,4 +82,8 @@
     #customer-invoices.tab-pane
       =render partial: "partials/customer_invoices_view", locals: { invoices: @customer.invoices.finalized }
     #uninvoiced-orders.tab-pane
-      =render partial: "partials/invoice_list_view", locals: { invoices: @customer.invoices.drafted, exporting_allowed: true }
+      =render partial: "partials/customer_bills_view", locals: { invoices: @customer.invoices.drafted }
+javascript:
+  $(".select-all-bills").click(function() {
+    $(this).closest('table').find(':checkbox').prop('checked', this.checked); 
+  });

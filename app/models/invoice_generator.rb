@@ -6,11 +6,13 @@ class InvoiceGenerator
         invoice = customer.invoices.create(user_id: customer.user_id, weekly_schedule_id: weekly_schedule.id,
                                           invoice_number: invoice_number)
         invoice.order_items << customer.order_items_for_week(weekly_schedule)
+        Bill.where(customer_id: customer.id).where(weekly_schedule_id: weekly_schedule.id).update_all(invoice_id: invoice.id)
       else        
         invoice = weekly_schedule.invoices.find_by_customer_id(customer.id)
         if invoice and invoice.order_items.size != customer.order_items_for_week(weekly_schedule).size
           invoice.order_items.delete_all
           invoice.order_items << customer.order_items_for_week(weekly_schedule)
+          # Bill.where(customer_id: customer.id).where(weekly_schedule_id: weekly_schedule.id).update_all(invoice_id: invoice.id)
         end
         invoice.destroy if invoice and invoice.order_items.size == 0
       end
