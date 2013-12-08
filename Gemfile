@@ -22,6 +22,7 @@ gem 'honeybadger'
 gem 'heroku'
 gem "acts_as_archival"
 gem "riif"
+gem 'stripe'
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'
@@ -37,6 +38,7 @@ group :development do
   gem 'debugger'
   gem 'quiet_assets'
   gem 'mailcatcher'
+  gem 'proxylocal'
 end
 group :test, :development do
   gem 'launchy'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131024185148) do
+ActiveRecord::Schema.define(:version => 20131208194930) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -154,11 +154,22 @@ ActiveRecord::Schema.define(:version => 20131024185148) do
     t.integer  "invoice_id"
   end
 
+  create_table "subscriptions", :force => true do |t|
+    t.string   "stripe_customer_id"
+    t.string   "stripe_current_period_start"
+    t.string   "stripe_current_period_end"
+    t.string   "stripe_created_at"
+    t.string   "payment_notes"
+    t.integer  "user_id"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "password_digest"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
     t.string   "name"
     t.string   "account_type"
     t.string   "phone_number"
@@ -177,6 +188,8 @@ ActiveRecord::Schema.define(:version => 20131024185148) do
     t.boolean  "quickbooks_desktop"
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
+    t.string   "user_type"
+    t.boolean  "trial_expired",          :default => false
   end
 
   create_table "weekly_schedules", :force => true do |t|

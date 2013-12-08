@@ -1,4 +1,6 @@
 class WeeklySchedulesController < ApplicationController
+  before_filter :authorize
+  before_filter :verify_subscription
   def create
     @weekly_schedule = current_user.weekly_schedules.build(params[:weekly_schedule])
     if @weekly_schedule.save

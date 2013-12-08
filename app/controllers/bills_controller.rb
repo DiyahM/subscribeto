@@ -1,4 +1,5 @@
 class BillsController < ApplicationController
+  before_filter :authorize, :verify_subscription
   
   def create
     @weekly_schedule = current_user.weekly_schedules.build(params[:weekly_schedule])

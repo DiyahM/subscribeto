@@ -1,5 +1,5 @@
 class DeliverySlotsController < ApplicationController
-  before_filter :authorize
+  before_filter :authorize, :verify_subscription
 
   def index
     @deliveryslot = DeliverySlot.new

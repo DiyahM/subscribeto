@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_filter :authorize, :only => [:edit, :update]
+  before_filter :verify_subscription, :only => [:edit, :update]
   def new
     @user = User.new()
   end

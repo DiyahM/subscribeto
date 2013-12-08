@@ -16,6 +16,7 @@ Subscribeto::Application.routes.draw do
   resources :bills, as: "weekly_schedules"
   
   resources :users do
+    resources :subscriptions, only: [:new, :create]
     resources :delivery_slots, :only => ["index", "create", "destroy"]
     resources :customers, :except => ["destroy"] do
       member do

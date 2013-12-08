@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   before_filter :authorize, :except => [:home]
+  before_filter :verify_subscription, :except => [:home]
   before_filter :check_if_setup_complete, :only => [:dashboard]
 
   def home

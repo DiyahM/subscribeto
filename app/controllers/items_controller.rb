@@ -1,5 +1,5 @@
 class ItemsController < ApplicationController
-  before_filter :authorize
+  before_filter :authorize, :verify_subscription
 
   def index
     @items = current_user.items

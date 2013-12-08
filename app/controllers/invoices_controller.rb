@@ -1,4 +1,5 @@
 class InvoicesController < ApplicationController
+  before_filter :authorize, :verify_subscription
 
   def pdf
     @invoice = Invoice.find(params[:id])
