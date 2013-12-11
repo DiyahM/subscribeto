@@ -9,12 +9,18 @@ class Subscription < ActiveRecord::Base
 
   def save_with_payment
     if valid?
-      customer = Stripe::Customer.create(description: "#{self.user.email} is charged for monthly basic fee.", plan: "basic", card: stripe_card_token)
-      self.stripe_customer_id = customer.id
-      self.stripe_created_at = Date.strptime(customer.created.to_s,'%s')      
-      self.payment_notes = customer.description
+      # if self.user.stripe_customer_id
+      #   customer = Stripe::Customer.retrieve(self.user.stripe_customer_id)
+      #   customer.update_subscription(plan: "basic", prorate: true)
+      # else      
+        customer = Stripe::Customer.create(description: "#{self.user.email} is charged for monthly basic fee.", plan: "basic", card: stripe_card_token, email: self.user.email)
+        # self.user.update_attributes(stripe_customer_id: customer.id)
+      # end
+      self.stripe_customer_id          = customer.id
+      self.stripe_created_at           = Date.strptime(customer.created.to_s,'%s')      
+      self.payment_notes               = customer.description
       self.stripe_current_period_start = Date.strptime(customer[:subscription][:current_period_start].to_s,'%s')
-      self.stripe_current_period_end = Date.strptime(customer[:subscription][:current_period_end].to_s,'%s')
+      self.stripe_current_period_end   = Date.strptime(customer[:subscription][:current_period_end].to_s,'%s')
       save!
     end
   rescue Stripe::InvalidRequestError => e
