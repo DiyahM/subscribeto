@@ -40,11 +40,9 @@ class ApplicationController < ActionController::Base
       else
         redirect_to new_user_subscription_path(@current_user), alert: "We were unable to charge your card please provide your details again." unless Date.strptime(@current_user.subscriptions.last.stripe_current_period_end) > Date.today
       end
-    elsif @current_user and @current_user.created_at.to_i > User::FREE_TRIAL_DAYS * 24 * 3600 #Free trial days * hours * seconds
+    elsif @current_user and @current_user.trial_ended?
       @current_user.update_attributes(trial_expired: true)
       redirect_to new_user_subscription_path(@current_user), alert: "Your trial has been expired, Please pay to continue using system"
-    elsif @current_user
-
     end
   end
 
