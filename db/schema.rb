@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131208194930) do
+ActiveRecord::Schema.define(:version => 20131211182755) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -190,6 +190,7 @@ ActiveRecord::Schema.define(:version => 20131208194930) do
     t.datetime "password_reset_sent_at"
     t.string   "user_type"
     t.boolean  "trial_expired",          :default => false
+    t.string   "stripe_customer_id"
   end
 
   create_table "weekly_schedules", :force => true do |t|
