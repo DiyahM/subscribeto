@@ -14,7 +14,15 @@ Subscribeto::Application.routes.draw do
   # end
 
   resources :bills, as: "weekly_schedules"
+
   
+  #Stripe callback for failure of card payment.
+  resources :subscriptions, only: [] do 
+    collection do
+      post "stripe_callback"
+    end
+  end
+
   resources :users do
     resources :subscriptions, only: [:new, :create]
     resources :delivery_slots, :only => ["index", "create", "destroy"]
