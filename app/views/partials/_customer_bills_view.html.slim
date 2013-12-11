@@ -2,25 +2,26 @@
   -unless defined?(invoices)
    h4 No pending bills to show in this section
   -else
-    =form_tag customer_bills_to_invoice_user_customer_path(current_user, invoices.first.customer) do
-      .pull-right
-        =submit_tag "Create Invoice", class: "btn btn-primary"  
-      table.table.table-condensed.table-striped.table-bordered
-        thead
-          tr
-            th =check_box_tag nil, nil, false, class: "select-all-bills"
-            th Weekly Schedule
-            th Delivery Slot
-            th Bill Date
-            th Amount Due
-            th State
-        tbody
-          -invoices.each do |invoice|
-            - invoice.bills.each do |bill|
-              tr
-                td = check_box_tag "bills[]", bill.id, false, class: "bill-id"
-                td = time_tag bill.weekly_schedule.week_start, format: "%b %d"
-                td = bill.delivery_slot.delivery_label
-                td = link_to bill.customer.company_name, user_customer_path(current_user, bill.customer)
-                td = number_with_precision bill.amount_due, precision: 2
-                td Not Billed!
+    - if invoices.any?
+      =form_tag customer_bills_to_invoice_user_customer_path(current_user, invoices.first.customer) do
+        .pull-right
+          =submit_tag "Create Invoice", class: "btn btn-primary"  
+        table.table.table-condensed.table-striped.table-bordered
+          thead
+            tr
+              th =check_box_tag nil, nil, false, class: "select-all-bills"
+              th Weekly Schedule
+              th Delivery Slot
+              th Bill Date
+              th Amount Due
+              th State
+          tbody
+            -invoices.each do |invoice|
+              - invoice.bills.each do |bill|
+                tr
+                  td = check_box_tag "bills[]", bill.id, false, class: "bill-id"
+                  td = time_tag bill.weekly_schedule.week_start, format: "%b %d"
+                  td = bill.delivery_slot.delivery_label
+                  td = link_to bill.customer.company_name, user_customer_path(current_user, bill.customer)
+                  td = number_with_precision bill.amount_due, precision: 2
+                  td Not Billed!
