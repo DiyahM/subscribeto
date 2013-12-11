@@ -1,5 +1,5 @@
 class SubscriptionsController < ApplicationController
-  before_filter :authorize
+  before_filter :authorize, except: [:stripe_callback]
   
   def new
     @subscription = current_user.subscriptions.new
@@ -13,6 +13,10 @@ class SubscriptionsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def stripe_callback
+    render json: "COool yo!", status: :ok
   end
 
 end
