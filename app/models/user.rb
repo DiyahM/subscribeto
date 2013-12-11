@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   
   attr_accessible :company_name, :name, :email, :password, :password_confirmation, :account_type, :phone_number, 
     :tax_id, :dob, :city, :postal_code, :street_address, :state, :qb_token, :qb_secret, :qb_realm_id,
-    :quickbooks_desktop, :trial_expired
+    :quickbooks_desktop, :trial_expired, :stripe_customer_id
   
   validates :email, presence: true
   validates :password, :password_confirmation, presence: true, if: :validate_password?
@@ -33,6 +33,10 @@ class User < ActiveRecord::Base
     begin
       self[column] = SecureRandom.urlsafe_base64
     end while User.exists?(column => self[column])
+  end
+
+  def trial_ended?
+    Time.zone.now.to_i > self.created_at.to_i + FREE_TRIAL_DAYS.days.to_i ? true:false
   end
   
 end
